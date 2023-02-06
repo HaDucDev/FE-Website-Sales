@@ -23,7 +23,7 @@ const AdminCategory = () => {
     }
 
     const search = (data) =>{
-        return data.filter(row => row.categoryName.toLowerCase().indexOf(intiText.toLowerCase()) > -1 || row.categoryId.toString().includes(intiText));
+        return data.filter(row => row.categoryName.toLowerCase().indexOf(intiText.toLowerCase()) > -1 || row.categoryId.toString().includes(intiText) || row.categoryName.toLowerCase().includes(intiText.toLowerCase())) ;
     }
 
     const colunmns = [
@@ -51,10 +51,13 @@ const AdminCategory = () => {
         }
     ]
 
+    // useEffect(() => {
+    //     getCategory();
+    // }, [])
 
     useEffect(() => {
         getCategory();
-    }, [])
+    }, [intiText])
 
 
 
