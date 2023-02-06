@@ -21,7 +21,8 @@ const AdminCategory = () => {
     const colunmns = [
         {
             name: "Category id",
-            selector: row => row.categoryId
+            selector: row => row.categoryId,
+            sortable: true // nha ten cot thi sort
         },
         {
             name: "Category name",
@@ -35,8 +36,8 @@ const AdminCategory = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                    <Button variant="outline-dark">EDIT</Button>
-                    <button className="btn btn-success">DELETE</button>
+                    <Button variant="outline-dark" onClick={()=> alert(row.categoryName)}>EDIT</Button>
+                    <button className="btn btn-primary" >DELETE</button>
                 </>
             }
         }
@@ -59,6 +60,13 @@ const AdminCategory = () => {
                 fixedHeader // thanh keo cua bang
                 fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
                 highlightOnHover // dua chuot vo dong doi mau
+                paginationIconFirstPage
+                // actions={
+                //     <button className="btn btn-sm">Export</button>
+                // }
+                responsive
+                paginationPerPage={5}
+                paginationRowsPerPageOptions={[5, 15, 23, 50]}
             />
         </>
     )
