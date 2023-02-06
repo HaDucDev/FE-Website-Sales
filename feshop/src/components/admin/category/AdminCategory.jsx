@@ -8,6 +8,10 @@ const AdminCategory = () => {
 
 
     const [categoryList, setCategoryList] = useState([]);
+
+    const [intiText, setText] = useState("");
+
+
     const getCategory = async () => {
         try {
             const response = await axios.get("http://localhost:8080/api/admin/category")
@@ -16,6 +20,10 @@ const AdminCategory = () => {
         catch (error) {
             console.log(error)
         }
+    }
+
+    const search = (data) =>{
+        return data.filter(row => row.categoryName.toLowerCase().indexOf(intiText.toLowerCase()) > -1 || row.categoryId.toString().includes(intiText));
     }
 
     const colunmns = [
@@ -36,7 +44,7 @@ const AdminCategory = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                    <Button variant="outline-dark" onClick={()=> alert(row.categoryName)}>EDIT</Button>
+                    <Button variant="outline-dark" onClick={() => alert(row.categoryName)}>EDIT</Button>
                     <button className="btn btn-primary" >DELETE</button>
                 </>
             }
@@ -55,7 +63,7 @@ const AdminCategory = () => {
             <DataTable
                 title="Admin category list"
                 columns={colunmns}
-                data={categoryList}
+                data={search(categoryList)}
                 pagination
                 fixedHeader // thanh keo cua bang
                 fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
@@ -67,6 +75,12 @@ const AdminCategory = () => {
                 responsive
                 paginationPerPage={5}
                 paginationRowsPerPageOptions={[5, 15, 23, 50]}
+                subHeader
+                subHeaderComponent={
+                    <input type="text" placeholder="search here" className="w-25 form-control"
+                        value={intiText} onChange={(e) => setText(e.target.value)} />
+                }
+                subHeaderAlign="right"
             />
         </>
     )
