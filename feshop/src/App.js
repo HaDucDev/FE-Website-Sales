@@ -3,9 +3,7 @@ import AdminCategory from './components/admin/category/AdminCategory';
 
 function App() {
   return (
-    <div className="App">
       <AdminCategory/>
-    </div>
   );
 }
 
