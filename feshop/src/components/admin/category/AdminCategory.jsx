@@ -25,8 +25,9 @@ const AdminCategory = () => {
         categoryId: -1,
         categoryName: ""
     })// state getbyId
-    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal create
 
+    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
+    const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.categoryName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.categoryId.toString().includes(intiText));
@@ -54,7 +55,7 @@ const AdminCategory = () => {
                 return <>
                     <div style={{ margin: "auto" }}>
                         <Button variant="outline-dark" onClick={() => {setErrorResponse({ categoryName: "" });handleGetById(row.categoryId)}}>SỬA</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" >XÓA</button>
+                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteCategory(row.categoryId)}>XÓA</button>
                     </div>
 
                 </>
@@ -112,6 +113,25 @@ const AdminCategory = () => {
             setErrorResponse(errorShow);
         })
     }
+    // delete category
+    const comfirmDeleteCategory = (id) =>{
+        setCategoryById({...categoryById, categoryId:id});
+        console.log(categoryById.categoryId)
+        console.log(categoryById.categoryName)
+        setComfirmModal(true);
+    }
+    const handleDeleteCategory = () =>{
+        categoryService.deleteCategoryService(categoryById.categoryId).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setComfirmModal(!confirmModal);
+        }).catch((err) => {
+            let errorShow = err.response.data;
+            setErrorResponse(errorShow);
+        })
+    }
+
 
 
     const customStyles = {// css datatable
@@ -229,6 +249,23 @@ const AdminCategory = () => {
                     </Button>
                     <Button variant="primary" onClick={() => handleUpdateCategory(categoryById)}>
                         Lưu
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            {/* Modal Xác nhận category*/}
+            <Modal show={confirmModal} onHide={() => setComfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p> {`Bạn có muốn xóa sản phẩm "${categoryById.categoryId}" không?`}</p>              
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setComfirmModal(!confirmModal)}>
+                        Không
+                    </Button>
+                    <Button variant="primary" onClick={() => handleDeleteCategory()}>
+                        Có
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -22,11 +22,17 @@ const updateCategoryService = async (category) => {
     return response
 }
 
+const deleteCategoryService = async (id) =>{
+    const response = await axios.delete(API_ADMIN+ `category/${id}`)
+    return response;
+}
+
 const categoryService = {
     getAllCategoryService,
     getCategoryById,
     createCategoryService,
-    updateCategoryService
+    updateCategoryService,
+    deleteCategoryService
 }
 
 
