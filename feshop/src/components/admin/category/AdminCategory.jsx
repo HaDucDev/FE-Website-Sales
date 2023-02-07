@@ -73,8 +73,8 @@ const AdminCategory = () => {
             categoryName : ""
         }
         dataRequest.categoryName = value;// hoac dataRequest['...']=...
-        categoryService.createCategoryService(dataRequest).then((data)=>{
-            alert(" Đã tạo danh mục sản phẩm thành công");
+        categoryService.createCategoryService(dataRequest).then((dataResponse)=>dataResponse.data).then((data)=>{
+            alert(data["message"]);
             setLoadTable(true);
             setShow(false);
         }).catch()
