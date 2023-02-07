@@ -6,6 +6,11 @@ const getAllCategoryService = async () => {
         return response;
 }
 
+const getCategoryById = async (id) =>{
+    const response = await axios.get(API_ADMIN + `category/${id}`)
+    return response;
+}
+
 
 const createCategoryService = async (category) => {
     const response = await axios.post( API_ADMIN +"category",category)
@@ -14,6 +19,7 @@ const createCategoryService = async (category) => {
 
 const categoryService = {
     getAllCategoryService,
+    getCategoryById,
     createCategoryService
 }
 
