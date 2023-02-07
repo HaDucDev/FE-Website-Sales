@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import convert_vi_to_en from "./../../../utils/utils";
-import getAllCategoryService from "../../../services/admin/admin.category.service";
+import categoryService from "../../../services/admin/admin.category.service";
 
 const AdminCategory = () => {
 
@@ -13,6 +13,10 @@ const AdminCategory = () => {
     const [intiText, setText] = useState("");// state search
 
     const [show, setShow] = useState(false);// state bat/tat modal create
+
+    const [value, setValue] = useState("");// state category
+
+    const [load, setLoadTable] = useState(false);
 
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.categoryName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -39,7 +43,7 @@ const AdminCategory = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                    <div style={{margin:"auto"}}>
+                    <div style={{ margin: "auto" }}>
                         <Button variant="outline-dark" onClick={() => setShow(true)}>SỬA</Button>
                         <button style={{ marginLeft: "5px" }} className="btn btn-primary" >XÓA</button>
                     </div>
@@ -58,20 +62,34 @@ const AdminCategory = () => {
     // }, [])
 
     useEffect(() => {
-        getAllCategoryService().then((response) => {
+        categoryService.getAllCategoryService().then((response) => {
             setCategoryList(response.data)
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [intiText])
+    }, [intiText,load])
 
-    const customStyles = {
+    // them category
+    const handleAddCategory= ()=>{
+        let dataRequest = {
+            categoryName : ""
+        }
+        dataRequest.categoryName = value;// hoac dataRequest['...']=...
+        categoryService.createCategoryService(dataRequest).then((data)=>{
+            alert(" Đã tạo danh mục sản phẩm thành công");
+            setLoadTable(true);
+            setShow(false);
+        }).catch()
+    }
+
+
+    const customStyles = {// css datatable
         headCells: {
-          style: {
-            paddingLeft: '8px', // override the cell padding for head cells
-            paddingRight: '8px',
-            backgroundColor: "#C0D5FF"
-          },
+            style: {
+                paddingLeft: '8px', // override the cell padding for head cells
+                paddingRight: '8px',
+                backgroundColor: "#C0D5FF"
+            },
         },
-      };
+    };
 
     return (
         <>
@@ -107,15 +125,26 @@ const AdminCategory = () => {
 
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Thêm category</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Body>
+                    <Form.Label>Tên danh mục</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Nhập tên danh mục"
+                        onChange={(e)=> (setValue(e.target.value))}
+                    />
+                    {/* <ValidationMessage
+                        errorResponse={errorResponse}
+                        field="name"
+                    ></ValidationMessage> */}
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShow(false)}>
-                        Close
+                        Đóng
                     </Button>
-                    <Button variant="primary" onClick={() => setShow(false)}>
-                        Save Changes
+                    <Button variant="primary" onClick={() => handleAddCategory()}>
+                        Lưu
                     </Button>
                 </Modal.Footer>
             </Modal>

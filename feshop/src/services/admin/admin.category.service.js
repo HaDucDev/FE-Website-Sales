@@ -12,5 +12,10 @@ const createCategoryService = async (category) => {
     return response;
 }
 
+const categoryService = {
+    getAllCategoryService,
+    createCategoryService
+}
 
-export default getAllCategoryService;
+
+export default categoryService;
