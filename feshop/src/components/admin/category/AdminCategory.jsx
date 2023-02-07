@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import convert_vi_to_en from "./../../../utils/utils";
 import getAllCategoryService from "../../../services/admin/admin.category.service";
 
 const AdminCategory = () => {
 
 
-    const [categoryList, setCategoryList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);// state datatable
 
-    const [intiText, setText] = useState("");
+    const [intiText, setText] = useState("");// state search
 
+    const [show, setShow] = useState(false);// state bat/tat modal create
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.categoryName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -36,7 +39,7 @@ const AdminCategory = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                    <Button variant="outline-dark" onClick={() => alert(row.categoryName)}>EDIT</Button>
+                    <Button variant="outline-dark" onClick={() => setShow(true)}>EDIT</Button>
                     <button className="btn btn-primary" >DELETE</button>
                 </>
             }
@@ -48,7 +51,7 @@ const AdminCategory = () => {
     // }, [])
 
     useEffect(() => {
-        getAllCategoryService().then((response)=>{
+        getAllCategoryService().then((response) => {
             setCategoryList(response.data)
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [intiText])
@@ -77,6 +80,23 @@ const AdminCategory = () => {
                 }
                 subHeaderAlign="right"
             />
+
+            {/* Modal them category*/}
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
