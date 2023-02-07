@@ -22,6 +22,7 @@ const AdminCategory = () => {
     });//state error
 
     const [categoryById, setCategoryById] = useState({
+        "categoryId": -1,
         "categoryName": ""
     })// state getbyId
     const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal create
@@ -52,7 +53,7 @@ const AdminCategory = () => {
             cell: (row) => {
                 return <>
                     <div style={{ margin: "auto" }}>
-                        <Button variant="outline-dark" onClick={() => handleGetById(row.categoryId)}>SỬA</Button>
+                        <Button variant="outline-dark" onClick={() => {setErrorResponse({ "categoryName": "" });handleGetById(row.categoryId)}}>SỬA</Button>
                         <button style={{ marginLeft: "5px" }} className="btn btn-primary" >XÓA</button>
                     </div>
 
@@ -89,15 +90,16 @@ const AdminCategory = () => {
         })
     }
     //get category theo id
-    const handleGetById = (id) =>{
-        categoryService.getCategoryById(id).then((dataResponse) =>{
+    const handleGetById = (id) => {
+        categoryService.getCategoryById(id).then((dataResponse) => {
             let cateogryDetail = dataResponse.data;
             setCategoryById({
+                "categoryId": id,
                 "categoryName": cateogryDetail.categoryName
             });
             setShowUpdateModal(true);
-        }).catch((e)=> alert(e.response.data))
-        
+        }).catch((e) => alert(e.response.data))
+
     }
 
 
@@ -131,9 +133,9 @@ const AdminCategory = () => {
                     <>
                         <input type="text" placeholder="search here" className="w-25 form-control"
                             value={intiText} onChange={(e) => setText(e.target.value)} />
-                        <Button style={{ marginLeft: "10px" }} variant="outline-dark" onClick={() => setShowAddModal(true)}>THÊM</Button>
+                        <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                            onClick={() => { setErrorResponse({ "categoryName": "" }); setShowAddModal(true) }}>THÊM</Button>
                     </>
-
                 }
                 subHeaderAlign="right"
                 customStyles={customStyles}
@@ -153,12 +155,12 @@ const AdminCategory = () => {
                         type="text"
                         placeholder="Nhập tên danh mục"
                         onChange={(e) => {
-                                            (setValue(e.target.value));
-                                            setErrorResponse({
-                                                "categoryName": ""
-                                             })
+                            (setValue(e.target.value));
+                            setErrorResponse({
+                                "categoryName": ""
+                            })
 
-                                        }}
+                        }}
                     />
                     <ValidationMessage
                         errorResponse={errorResponse}
@@ -177,28 +179,39 @@ const AdminCategory = () => {
             {/* Modal sửa category*/}
             <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sửa category</Modal.Title>
+                    <Modal.Title>Sửa category </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Label>Tên danh mục</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Nhập tên danh mục"
-                        onChange={(e) => {
-                                            (setValue(e.target.value));
-                                            setErrorResponse({
-                                                "categoryName": ""
-                                             })
+                    <Form.Group className="mb-3">
+                        <Form.Label>Mã category</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={categoryById.categoryId}
+                            readOnly
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Tên danh mục</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập tên danh mục"
+                            onChange={(e) => {
+                                (setValue(e.target.value));
+                                setErrorResponse({
+                                    "categoryName": ""
+                                })
 
-                                        }}
-                       value = {categoryById.categoryName}
-                    />
-                    <ValidationMessage
-                        errorResponse={errorResponse}
-                        field="categoryName" />
+                            }}
+                            defaultValue={categoryById.categoryName}
+                        />
+                        <ValidationMessage
+                            errorResponse={errorResponse}
+                            field="categoryName" />
+                    </Form.Group>
+
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                    <Button variant="secondary" onClick={() => setShowUpdateModal(!showUpdateModal)}>
                         Đóng
                     </Button>
                     <Button variant="primary" onClick={() => handleAddCategory()}>
