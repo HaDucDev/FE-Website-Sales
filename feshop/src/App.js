@@ -1,22 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
+import AdminCategory from './components/admin/category/AdminCategory';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <a href='ok'>Khi naof vui leen the nhid</a>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <AdminCategory/>
   );
 }
 
