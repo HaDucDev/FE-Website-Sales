@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Button, Modal } from "react-bootstrap";
@@ -13,8 +13,6 @@ const AdminCategory = () => {
     const [intiText, setText] = useState("");// state search
 
     const [show, setShow] = useState(false);// state bat/tat modal create
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.categoryName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -25,11 +23,13 @@ const AdminCategory = () => {
         {
             name: "Category id",
             selector: row => row.categoryId,
-            sortable: true // nha ten cot thi sort
+            sortable: true, // nha ten cot thi sort
+            center: true
         },
         {
             name: "Category name",
-            selector: row => row.categoryName
+            selector: row => row.categoryName,
+            center: true
         }
         // ,{
         //     name: "image",
@@ -39,10 +39,17 @@ const AdminCategory = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                    <Button variant="outline-dark" onClick={() => setShow(true)}>EDIT</Button>
-                    <button className="btn btn-primary" >DELETE</button>
+                    <div style={{margin:"auto"}}>
+                        <Button variant="outline-dark" onClick={() => setShow(true)}>SỬA</Button>
+                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" >XÓA</button>
+                    </div>
+
                 </>
-            }
+            },
+            // style: {
+            //     backgroundColor: 'rgba(187, 204, 221, 1)',
+            // },
+            center: true
         }
     ]
 
@@ -55,6 +62,16 @@ const AdminCategory = () => {
             setCategoryList(response.data)
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [intiText])
+
+    const customStyles = {
+        headCells: {
+          style: {
+            paddingLeft: '8px', // override the cell padding for head cells
+            paddingRight: '8px',
+            backgroundColor: "#C0D5FF"
+          },
+        },
+      };
 
     return (
         <>
@@ -75,24 +92,29 @@ const AdminCategory = () => {
                 paginationRowsPerPageOptions={[5, 15, 23, 50]}
                 subHeader
                 subHeaderComponent={
-                    <input type="text" placeholder="search here" className="w-25 form-control"
-                        value={intiText} onChange={(e) => setText(e.target.value)} />
+                    <>
+                        <input type="text" placeholder="search here" className="w-25 form-control"
+                            value={intiText} onChange={(e) => setText(e.target.value)} />
+                        <Button style={{ marginLeft: "10px" }} variant="outline-dark" onClick={() => setShow(true)}>THÊM</Button>
+                    </>
+
                 }
                 subHeaderAlign="right"
+                customStyles={customStyles}
             />
 
             {/* Modal them category*/}
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={() => setShow(false)}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={() => setShow(false)}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
