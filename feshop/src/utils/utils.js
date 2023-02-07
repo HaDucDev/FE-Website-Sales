@@ -1,4 +1,6 @@
 
+export const API_ADMIN= "http://localhost:8080/api/admin/"
+
 // ham chuyen tieng viet sang tieng anh ko dau
 const convert_vi_to_en = (str) =>{
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");

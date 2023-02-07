@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Button } from "react-bootstrap";
 import convert_vi_to_en from "./../../../utils/utils";
+import getAllCategoryService from "../../../services/admin/admin.category.service";
 
 const AdminCategory = () => {
 
@@ -11,18 +11,6 @@ const AdminCategory = () => {
     const [categoryList, setCategoryList] = useState([]);
 
     const [intiText, setText] = useState("");
-
-
-    const getCategory = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/api/admin/category")
-            setCategoryList(response.data)
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }
-
 
 
     const search = (data) => {
@@ -60,10 +48,10 @@ const AdminCategory = () => {
     // }, [])
 
     useEffect(() => {
-        getCategory();
+        getAllCategoryService().then((response)=>{
+            setCategoryList(response.data)
+        }).catch(error => alert("Lỗi" + error + "hãy quay lại sau."));
     }, [intiText])
-
-
 
     return (
         <>
