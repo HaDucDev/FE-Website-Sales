@@ -20,7 +20,7 @@ const AdminCategory = () => {
     const [load, setLoadTable] = useState(false);// state load khi them thanh cong
 
     const [errorResponse, setErrorResponse] = useState({
-        "categoryName":""
+        "categoryName": ""
     });//state
 
     const search = (data) => {
@@ -70,24 +70,23 @@ const AdminCategory = () => {
         categoryService.getAllCategoryService().then((response) => {
             setCategoryList(response.data)
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [intiText,load])
+    }, [intiText, load])
 
     // them category
-    const handleAddCategory= ()=>{
+    const handleAddCategory = () => {
         let dataRequest = {
-            categoryName : ""
+            categoryName: ""
         }
         dataRequest.categoryName = value;// hoac dataRequest['...']=...
-        categoryService.createCategoryService(dataRequest).then((dataResponse)=>{
-            let dataShow=dataResponse.data;
+        categoryService.createCategoryService(dataRequest).then((dataResponse) => {
+            let dataShow = dataResponse.data;
             setValue("")
             alert(dataShow["message"]);
-            setLoadTable(true);
+            setLoadTable(!load);
             setShow(false);
-        }).catch((err) =>{
+        }).catch((err) => {
             let errorShow = err.response.data;
             setErrorResponse(errorShow);
-            //alert(errorShow["categoryName"]);
         })
     }
 
@@ -95,8 +94,6 @@ const AdminCategory = () => {
     const customStyles = {// css datatable
         headCells: {
             style: {
-                paddingLeft: '8px', // override the cell padding for head cells
-                paddingRight: '8px',
                 backgroundColor: "#C0D5FF"
             },
         },
@@ -132,6 +129,8 @@ const AdminCategory = () => {
                 customStyles={customStyles}
             />
 
+
+
             {/* Modal them category*/}
 
             <Modal show={show} onHide={() => setShow(false)}>
@@ -143,11 +142,17 @@ const AdminCategory = () => {
                     <Form.Control
                         type="text"
                         placeholder="Nhập tên danh mục"
-                        onChange={(e)=> (setValue(e.target.value))}
+                        onChange={(e) => {
+                                            (setValue(e.target.value));
+                                            setErrorResponse({
+                                                "categoryName": ""
+                                             })
+
+                                        }}
                     />
                     <ValidationMessage
                         errorResponse={errorResponse}
-                        field="categoryName"/>
+                        field="categoryName" />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShow(false)}>
