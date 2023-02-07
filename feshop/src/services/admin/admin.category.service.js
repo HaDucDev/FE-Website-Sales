@@ -1,8 +1,9 @@
 import axios from "axios";
+import { API_ADMIN } from "../../utils/utils";
 
 const getAllCategoryService = async () => {
     try {
-        const response = await axios.get("http://localhost:8080/api/admin/category")
+        const response = await axios.get( API_ADMIN +"category")
         return response;
     }
     catch (error) {
