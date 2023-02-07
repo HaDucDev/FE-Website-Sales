@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Button, Form, Modal } from "react-bootstrap";
@@ -18,12 +18,12 @@ const AdminCategory = () => {
     const [value, setValue] = useState("");// state category ban dau khi modal add
     const [load, setLoadTable] = useState(false);// state load khi them thanh cong
     const [errorResponse, setErrorResponse] = useState({
-        "categoryName": ""
+        categoryName: ""
     });//state error
 
     const [categoryById, setCategoryById] = useState({
-        "categoryId": -1,
-        "categoryName": ""
+        categoryId: -1,
+        categoryName: ""
     })// state getbyId
     const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal create
 
@@ -53,7 +53,7 @@ const AdminCategory = () => {
             cell: (row) => {
                 return <>
                     <div style={{ margin: "auto" }}>
-                        <Button variant="outline-dark" onClick={() => {setErrorResponse({ "categoryName": "" });handleGetById(row.categoryId)}}>SỬA</Button>
+                        <Button variant="outline-dark" onClick={() => {setErrorResponse({ categoryName: "" });handleGetById(row.categoryId)}}>SỬA</Button>
                         <button style={{ marginLeft: "5px" }} className="btn btn-primary" >XÓA</button>
                     </div>
 
@@ -94,12 +94,23 @@ const AdminCategory = () => {
         categoryService.getCategoryById(id).then((dataResponse) => {
             let cateogryDetail = dataResponse.data;
             setCategoryById({
-                "categoryId": id,
-                "categoryName": cateogryDetail.categoryName
+                categoryId: id,
+                categoryName: cateogryDetail.categoryName
             });
             setShowUpdateModal(true);
         }).catch((e) => alert(e.response.data))
-
+    }
+    // update category
+    const handleUpdateCategory = (category) =>{
+        categoryService.updateCategoryService(category).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setShowUpdateModal(false);
+        }).catch((err) => {
+            let errorShow = err.response.data;
+            setErrorResponse(errorShow);
+        })
     }
 
 
@@ -134,7 +145,7 @@ const AdminCategory = () => {
                         <input type="text" placeholder="search here" className="w-25 form-control"
                             value={intiText} onChange={(e) => setText(e.target.value)} />
                         <Button style={{ marginLeft: "10px" }} variant="outline-dark"
-                            onClick={() => { setErrorResponse({ "categoryName": "" }); setShowAddModal(true) }}>THÊM</Button>
+                            onClick={() => { setErrorResponse({ categoryName: "" }); setShowAddModal(true) }}>THÊM</Button>
                     </>
                 }
                 subHeaderAlign="right"
@@ -157,7 +168,7 @@ const AdminCategory = () => {
                         onChange={(e) => {
                             (setValue(e.target.value));
                             setErrorResponse({
-                                "categoryName": ""
+                                categoryName: ""
                             })
 
                         }}
@@ -196,11 +207,13 @@ const AdminCategory = () => {
                             type="text"
                             placeholder="Nhập tên danh mục"
                             onChange={(e) => {
-                                (setValue(e.target.value));
+                                (setCategoryById({
+                                    ...categoryById, 
+                                    categoryName: e.target.value
+                                }));
                                 setErrorResponse({
-                                    "categoryName": ""
-                                })
-
+                                    categoryName: ""
+                                });
                             }}
                             defaultValue={categoryById.categoryName}
                         />
@@ -214,7 +227,7 @@ const AdminCategory = () => {
                     <Button variant="secondary" onClick={() => setShowUpdateModal(!showUpdateModal)}>
                         Đóng
                     </Button>
-                    <Button variant="primary" onClick={() => handleAddCategory()}>
+                    <Button variant="primary" onClick={() => handleUpdateCategory(categoryById)}>
                         Lưu
                     </Button>
                 </Modal.Footer>

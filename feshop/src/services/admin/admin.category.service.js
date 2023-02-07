@@ -17,10 +17,16 @@ const createCategoryService = async (category) => {
     return response;
 }
 
+const updateCategoryService = async (category) => {
+    const response = await axios.put(API_ADMIN + "category",category)
+    return response
+}
+
 const categoryService = {
     getAllCategoryService,
     getCategoryById,
-    createCategoryService
+    createCategoryService,
+    updateCategoryService
 }
 
 
