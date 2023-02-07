@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Button, Form, Modal } from "react-bootstrap";
 import convert_vi_to_en from "./../../../utils/utils";
 import categoryService from "../../../services/admin/admin.category.service";
+import ValidationMessage from "../../common-component/ValidationMessage";
 
 const AdminCategory = () => {
 
@@ -16,7 +17,11 @@ const AdminCategory = () => {
 
     const [value, setValue] = useState("");// state category
 
-    const [load, setLoadTable] = useState(false);
+    const [load, setLoadTable] = useState(false);// state load khi them thanh cong
+
+    const [errorResponse, setErrorResponse] = useState({
+        "categoryName":""
+    });//state
 
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.categoryName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -73,11 +78,17 @@ const AdminCategory = () => {
             categoryName : ""
         }
         dataRequest.categoryName = value;// hoac dataRequest['...']=...
-        categoryService.createCategoryService(dataRequest).then((dataResponse)=>dataResponse.data).then((data)=>{
-            alert(data["message"]);
+        categoryService.createCategoryService(dataRequest).then((dataResponse)=>{
+            let dataShow=dataResponse.data;
+            setValue("")
+            alert(dataShow["message"]);
             setLoadTable(true);
             setShow(false);
-        }).catch()
+        }).catch((err) =>{
+            let errorShow = err.response.data;
+            setErrorResponse(errorShow);
+            //alert(errorShow["categoryName"]);
+        })
     }
 
 
@@ -134,10 +145,9 @@ const AdminCategory = () => {
                         placeholder="Nhập tên danh mục"
                         onChange={(e)=> (setValue(e.target.value))}
                     />
-                    {/* <ValidationMessage
+                    <ValidationMessage
                         errorResponse={errorResponse}
-                        field="name"
-                    ></ValidationMessage> */}
+                        field="categoryName"/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShow(false)}>
