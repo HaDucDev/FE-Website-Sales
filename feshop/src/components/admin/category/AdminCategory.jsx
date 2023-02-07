@@ -50,7 +50,7 @@ const AdminCategory = () => {
     useEffect(() => {
         getAllCategoryService().then((response)=>{
             setCategoryList(response.data)
-        }).catch(error => alert("Lỗi" + error + "hãy quay lại sau."));
+        }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [intiText])
 
     return (
