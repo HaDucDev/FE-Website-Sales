@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Button, Form, Modal } from "react-bootstrap";
 import convert_vi_to_en from "./../../../utils/utils";
 import categoryService from "../../../services/admin/admin.category.service";
-import ValidationMessage from "../../common-component/ValidationMessage";
+import ValidationMessage from "../../acommon-component/ValidationMessage";
 
 const AdminCategory = () => {
 
@@ -61,10 +61,6 @@ const AdminCategory = () => {
             center: true
         }
     ]
-
-    // useEffect(() => {
-    //     getCategory();
-    // }, [])
 
     useEffect(() => {
         categoryService.getAllCategoryService().then((response) => {
