@@ -1,9 +1,9 @@
 import './App.css';
-import AdminCategory from './components/admin/category/AdminCategory';
+import AdminSupplier from './components/admin/supplier/AdminSupplier';
 
 function App() {
   return (
-      <AdminCategory/>
+      <AdminSupplier/>
   );
 }
 
