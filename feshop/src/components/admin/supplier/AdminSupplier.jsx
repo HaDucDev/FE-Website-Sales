@@ -60,6 +60,7 @@ const AdminSupplier = () => {
             setValue("")
             alert(dataShow["message"]);
             setLoadTable(!load);
+            setSelectedFile(null)
             setShowAddModal(false);
         })
         .catch((err) => {
