@@ -7,6 +7,7 @@ import productService from "../../../services/admin/admin.product.service";
 import categoryService from "../../../services/admin/admin.category.service";
 import supplierService from "../../../services/admin/admin.supplier.service";
 import { CKEditor } from 'ckeditor4-react';
+import ValidationMessage from "../../acommon-component/ValidationMessage";
 const AdminProduct = () => {
 
     const [productList, setProductList] = useState([]);// state datatable
@@ -26,7 +27,7 @@ const AdminProduct = () => {
 
     });// state supplier ban dau khi modal add
 
-    const [descriptionProductOk,setDescriptionProduct] = useState("");
+    const [descriptionProductOk, setDescriptionProduct] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
     const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
@@ -35,6 +36,16 @@ const AdminProduct = () => {
 
     const [selectCategoryList, setSelectCategoryList] = useState([]);// luu de map du lieu
     const [selectSupplierList, setSelectSupplierList] = useState([]);// luu de map du lieu
+
+    const [errorResponse, setErrorResponse] = useState({
+        productName: "",
+        quantity: "",
+        discount: "",
+        unitPrice: "",
+        descriptionProduct: "",
+        categoryId: "",
+        supplierId: ""
+    });//state error
 
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.productName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -70,7 +81,7 @@ const AdminProduct = () => {
     //them san pham
     const handleAddProduct = () => {
         let dataRequest = value;
-        dataRequest.descriptionProduct=descriptionProductOk;
+        dataRequest.descriptionProduct = descriptionProductOk;
         let fileRequest = selectedFile;
         productService.createCProductService(dataRequest, fileRequest).then((dataResponse) => {
             let dataShow = dataResponse.data;
@@ -96,7 +107,7 @@ const AdminProduct = () => {
                 let errorShow = err.response.data;
                 console.log(errorShow);
                 setIsLoading(false);// tat spinner
-                //setErrorResponse(errorShow);
+                setErrorResponse(errorShow);
             })
     }
 
@@ -185,7 +196,15 @@ const AdminProduct = () => {
                             value={intiText} onChange={(e) => setText(e.target.value)} />
                         <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                             onClick={() => {
-                                // setErrorResponse({ supplierName: "" });
+                                setErrorResponse({
+                                    productName: "",
+                                    quantity: "",
+                                    discount: "",
+                                    unitPrice: "",
+                                    descriptionProduct: "",
+                                    categoryId: "",
+                                    supplierId: ""
+                                });
                                 getAllCategoryAndSupplier();
                                 setShowAddModal(true)
                             }}>THÊM</Button>
@@ -208,15 +227,14 @@ const AdminProduct = () => {
                             placeholder="Nhập tên sản phẩm"
                             onChange={(e) => {
                                 setValue({ ...value, productName: e.target.value });
-                                // setErrorResponse({
-                                //     supplierName: ""
-                                // })
+                                setErrorResponse({
+                                    ...errorResponse,
+                                    productName: ""
+                                })
                                 setIsSubmitting(false);// mo nut
                             }}
                         />
-                        {/* <ValidationMessage
-                            errorResponse={errorResponse}
-                            field="supplierName" /> */}
+                        <ValidationMessage errorResponse={errorResponse} field="productName" />
                     </Form.Group>
                     <div style={{ display: "flex" }}>
 
@@ -227,15 +245,14 @@ const AdminProduct = () => {
                                 placeholder="Nhập số lượng"
                                 onChange={(e) => {
                                     setValue({ ...value, quantity: e.target.value });
-                                    // setErrorResponse({
-                                    //     supplierName: ""
-                                    // })
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        quantity: ""
+                                    })
                                     setIsSubmitting(false);// mo nut
                                 }}
                             />
-                            {/* <ValidationMessage
-                            errorResponse={errorResponse}
-                            field="supplierName" /> */}
+                            <ValidationMessage errorResponse={errorResponse} field="quantity" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ marginLeft: "10px", }}>
                             <Form.Label>Giảm giá</Form.Label>
@@ -244,15 +261,14 @@ const AdminProduct = () => {
                                 placeholder="Giảm giá"
                                 onChange={(e) => {
                                     setValue({ ...value, discount: e.target.value });
-                                    // setErrorResponse({
-                                    //     supplierName: ""
-                                    // })
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        discount: ""
+                                    })
                                     setIsSubmitting(false);// mo nut
                                 }}
                             />
-                            {/* <ValidationMessage
-                            errorResponse={errorResponse}
-                            field="supplierName" /> */}
+                            <ValidationMessage errorResponse={errorResponse} field="discount" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
                             <Form.Label>Giá gốc</Form.Label>
@@ -261,15 +277,14 @@ const AdminProduct = () => {
                                 placeholder="Nhập tên hãng"
                                 onChange={(e) => {
                                     setValue({ ...value, unitPrice: e.target.value });
-                                    // setErrorResponse({
-                                    //     supplierName: ""
-                                    // })
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        unitPrice: ""
+                                    })
                                     setIsSubmitting(false);// mo nut
                                 }}
                             />
-                            {/* <ValidationMessage
-                            errorResponse={errorResponse}
-                            field="supplierName" /> */}
+                            <ValidationMessage errorResponse={errorResponse} field="unitPrice" />
                         </Form.Group>
                     </div>
 
@@ -280,9 +295,7 @@ const AdminProduct = () => {
                                 setDescriptionProduct(e.editor.getData());
                             }}
                         />
-                        {/* <ValidationMessage
-                            errorResponse={errorResponse}
-                            field="supplierName" /> */}
+                        <ValidationMessage errorResponse={errorResponse} field="descriptionProduct" />
                     </Form.Group>
                     <div style={{ display: "flex" }}>
 
@@ -294,9 +307,9 @@ const AdminProduct = () => {
                                 value={value.categoryId}
                                 onChange={(e) => {
                                     setValue({ ...value, categoryId: e.target.value });
-                                    // setErrorResponse({
-                                    //     supplierName: ""
-                                    // })
+                                    setErrorResponse({
+                                        categoryId: ""
+                                    })
                                     setIsSubmitting(false);// mo nut
                                 }}>
                                 <option value={0}>Chọn category...</option>
@@ -305,8 +318,8 @@ const AdminProduct = () => {
                                         <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
                                     ))
                                 }
-
                             </Form.Control>
+                            <ValidationMessage errorResponse={errorResponse} field="categoryId" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput7" style={{ marginLeft: "10px" }}>
                             <Form.Label>Tên hãng</Form.Label>
@@ -315,7 +328,7 @@ const AdminProduct = () => {
                                 name="categoryId"
                                 value={value.supplierId}
                                 onChange={(e) => {
-                                    setValue({...value, supplierId: e.target.value});
+                                    setValue({ ...value, supplierId: e.target.value });
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
@@ -328,6 +341,7 @@ const AdminProduct = () => {
                                     ))
                                 }
                             </Form.Control>
+                            <ValidationMessage errorResponse={errorResponse} field="supplierId" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput8" style={{ marginLeft: "10px" }}>
                             <Form.Label>Chọn ảnh cho sản phẩm</Form.Label>
