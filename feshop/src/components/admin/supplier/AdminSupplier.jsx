@@ -250,12 +250,8 @@ const AdminSupplier = () => {
                                 <img style={{ border: "1px solid black" }} src={supplierById.supplierImage} width={100} height={100} alt="lỗi ảnh" />
                             </div>
                             <div style={{margin:"auto"}}>
-                            <Form.Control type="file" 
-                                placeholder="Đổi file"
-                                style={{
-                                    //color: "rgba(0, 0, 0, 0)",
-                                    marginLeft:"5px"
-                                }} />
+                            <Form.Label >Đổi ảnh</Form.Label>
+                            <Form.Control type="file"/>
                             </div>                   
                         </div>
                     </Form.Group>
