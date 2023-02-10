@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import convert_vi_to_en from "../../../utils/utils";
 import productService from "../../../services/admin/admin.product.service";
-
+import { CKEditor } from 'ckeditor4-react';
 const AdminProduct = () => {
 
     const [productList, setProductList] = useState([]);// state datatable
@@ -18,6 +18,7 @@ const AdminProduct = () => {
     const [selectedFile, setSelectedFile] = useState(null);
 
     const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+    const [selectedSupplierId, setSelectedSupplierId] = useState(0);
 
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.productName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -121,10 +122,10 @@ const AdminProduct = () => {
                 customStyles={customStyles}
             />
 
-            {/* Modal them supplier*/}
-            <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Thêm supplier</Modal.Title>
+            {/* Modal them product*/}
+            <Modal show={showAddModal} onHide={() => setShowAddModal(false)} size="lg">
+                <Modal.Header closeButton style={{ width: "100%" }}>
+                    <Modal.Title>Thêm product</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -163,7 +164,7 @@ const AdminProduct = () => {
                             errorResponse={errorResponse}
                             field="supplierName" /> */}
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ position: "absolute", right: "15px" }}>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ marginLeft: "10px", }}>
                             <Form.Label>Giảm giá</Form.Label>
                             <Form.Control
                                 type="number"
@@ -180,36 +181,30 @@ const AdminProduct = () => {
                             errorResponse={errorResponse}
                             field="supplierName" /> */}
                         </Form.Group>
-                    </div>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label>Giá gốc</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhập tên hãng"
-                            onChange={(e) => {
-                                (setValue(e.target.value));
-                                // setErrorResponse({
-                                //     supplierName: ""
-                                // })
-                                setIsSubmitting(false);// mo nut
-                            }}
-                        />
-                        {/* <ValidationMessage
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ marginLeft: "10px", }} >
+                            <Form.Label>Giá gốc</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Nhập tên hãng"
+                                onChange={(e) => {
+                                    (setValue(e.target.value));
+                                    // setErrorResponse({
+                                    //     supplierName: ""
+                                    // })
+                                    setIsSubmitting(false);// mo nut
+                                }}
+                            />
+                            {/* <ValidationMessage
                             errorResponse={errorResponse}
                             field="supplierName" /> */}
-                    </Form.Group>
+                        </Form.Group>
+                    </div>
+
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Đặc tả</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhập tên hãng"
-                            onChange={(e) => {
-                                (setValue(e.target.value));
-                                // setErrorResponse({
-                                //     supplierName: ""
-                                // })
-                                setIsSubmitting(false);// mo nut
-                            }}
+                        <CKEditor
+                        //data={content}
+                        //onChange={handleEditorChange}
                         />
                         {/* <ValidationMessage
                             errorResponse={errorResponse}
@@ -234,17 +229,28 @@ const AdminProduct = () => {
 
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ position: "absolute", right: "15px" }}>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ marginLeft: "10px" }}>
                             <Form.Label>Tên hãng</Form.Label>
                             <Form.Control
-                                type="text"
-                                placeholder="Chọn hãng"
+                                as="select"
+                                name="categoryId"
+                                value={selectedSupplierId}
                                 onChange={(e) => {
-                                    (setValue(e.target.value));
+                                    (setSelectedSupplierId(e.target.value));
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
                                     setIsSubmitting(false);// mo nut
+                                }}>
+                                <option value="">Chọn supplier...</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ marginLeft: "10px" }}>
+                            <Form.Label>Chọn ảnh cho sản phẩm</Form.Label>
+                            <Form.Control
+                                type="file"
+                                onChange={(e) => {
+                                    (setSelectedFile(e.target.files[0]));
                                 }}
                             />
                         </Form.Group>
@@ -253,15 +259,7 @@ const AdminProduct = () => {
 
 
 
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-                        <Form.Label>Chọn ảnh cho hãng</Form.Label>
-                        <Form.Control
-                            type="file"
-                            onChange={(e) => {
-                                (setSelectedFile(e.target.files[0]));
-                            }}
-                        />
-                    </Form.Group>
+
 
                 </Modal.Body>
                 <Modal.Footer>
