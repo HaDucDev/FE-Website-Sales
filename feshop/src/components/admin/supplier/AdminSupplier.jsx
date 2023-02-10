@@ -13,7 +13,7 @@ const AdminSupplier = () => {
 
     const [showAddModal, setShowAddModal] = useState(false);// state bat/tat modal create
 
-    const [value, setValue] = useState("");// state category ban dau khi modal add
+    const [value, setValue] = useState("");// state supplier ban dau khi modal add
     const [load, setLoadTable] = useState(false);// state load khi them thanh cong
     const [errorResponse, setErrorResponse] = useState({
         supplierName: ""
@@ -21,12 +21,13 @@ const AdminSupplier = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
 
-    // const [categoryById, setCategoryById] = useState({
-    //     categoryId: -1,
-    //     categoryName: ""
-    // })// state getbyId
+    const [supplierById, setSupplierById] = useState({
+        supplierId: -1,
+        supplierName: "",
+        supplierImage: ""
+    })// state getbyId
 
-    // const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
+    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
     // const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.supplierName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -49,11 +50,11 @@ const AdminSupplier = () => {
         const json = JSON.stringify(dataRequest);
         const blob = new Blob([json], {
             type: 'application/json'
-          });
+        });
 
         const formData = new FormData();
-        formData.append('createSupplierRequest',blob);
-        formData.append('supplierFile',selectedFile)
+        formData.append('createSupplierRequest', blob);
+        formData.append('supplierFile', selectedFile)
         supplierService.createCSupplierService(formData).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setValue("")
@@ -62,11 +63,23 @@ const AdminSupplier = () => {
             setSelectedFile(null)
             setShowAddModal(false);
         })
-        .catch((err) => {
-            console.log(err)
-            let errorShow = err.response.data;
-            console.log(errorShow)
-            setErrorResponse(errorShow);
+            .catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                console.log(errorShow)
+                setErrorResponse(errorShow);
+            })
+    }
+    //
+    const handleGetById = (id) => {
+        supplierService.getSupplierById(id).then((dataResponse) => {
+            let supplierDetail = dataResponse.data;
+            setSupplierById({
+                supplierId: id,
+                supplierName: supplierDetail.supplierName,
+                supplierImage: supplierDetail.supplierImage
+            });
+            setShowUpdateModal(true);
         })
     }
 
@@ -92,8 +105,8 @@ const AdminSupplier = () => {
             cell: (row) => {
                 return <>
                     <div style={{ margin: "auto" }}>
-                        {/* <Button variant="outline-dark" onClick={() => { setErrorResponse({ categoryName: "" }); handleGetById(row.categoryId) }}>SỬA</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteCategory(row.categoryId)}>XÓA</button> */}
+                        <Button variant="outline-dark" onClick={() => { setErrorResponse({ supplierName: "" }); handleGetById(row.supplierId) }}>SỬA</Button>
+                        {/* <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteCategory(row.categoryId)}>XÓA</button>  */}
                     </div>
 
                 </>
@@ -112,6 +125,7 @@ const AdminSupplier = () => {
             },
         },
     };
+
 
     return (
         <>
@@ -136,7 +150,8 @@ const AdminSupplier = () => {
                         <input type="text" placeholder="search here" className="w-25 form-control"
                             value={intiText} onChange={(e) => setText(e.target.value)} />
                         <Button style={{ marginLeft: "10px" }} variant="outline-dark"
-                            onClick={() => { //setErrorResponse({ supplierName: "" }); 
+                            onClick={() => {
+                                setErrorResponse({ supplierName: "" });
                                 setShowAddModal(true)
                             }}>THÊM</Button>
                     </>
@@ -166,13 +181,13 @@ const AdminSupplier = () => {
                             }}
                         />
 
-                         <ValidationMessage
-                        errorResponse={errorResponse}
-                        field="supplierName" />
+                        <ValidationMessage
+                            errorResponse={errorResponse}
+                            field="supplierName" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-                    <Form.Label>Chọn ảnh cho hãng</Form.Label>
+                        <Form.Label>Chọn ảnh cho hãng</Form.Label>
                         <Form.Control
                             type="file"
                             placeholder="Chọn ảnh"
@@ -190,6 +205,69 @@ const AdminSupplier = () => {
                     <Button variant="primary" onClick={() => handleAddSupplier()}>
                         Lưu
                     </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal sửa supplier*/}
+            <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sửa supplier </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Mã supplier</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={supplierById.supplierId}
+                            readOnly
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Tên supplier</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập tên danh mục"
+                            onChange={(e) => {
+                                (setSupplierById({
+                                    ...supplierById,
+                                    supplierName: e.target.value
+                                }));
+                                setErrorResponse({
+                                    supplierName: ""
+                                });
+                            }}
+                            defaultValue={supplierById.supplierName}
+                        />
+                        <ValidationMessage
+                            errorResponse={errorResponse}
+                            field="supplierName" />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">                      
+                            <Form.Label >Ảnh hãng</Form.Label>
+                            <div style={{display:"flex" }}>
+                            <div>
+                                <img style={{ border: "1px solid black" }} src={supplierById.supplierImage} width={100} height={100} alt="lỗi ảnh" />
+                            </div>
+                            <div style={{margin:"auto"}}>
+                            <Form.Control type="file" 
+                                placeholder="Đổi file"
+                                style={{
+                                    //color: "rgba(0, 0, 0, 0)",
+                                    marginLeft:"5px"
+                                }} />
+                            </div>                   
+                        </div>
+                    </Form.Group>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowUpdateModal(!showUpdateModal)}>
+                        Đóng
+                    </Button>
+                    {/* <Button variant="primary" onClick={() => handleUpdateCategory(categoryById)}>
+                        Lưu
+                    </Button> */}
                 </Modal.Footer>
             </Modal>
 

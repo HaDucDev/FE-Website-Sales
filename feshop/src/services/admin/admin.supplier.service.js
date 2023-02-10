@@ -11,10 +11,10 @@ const getAllSupplierService = async () => {
     return response;
 }
 
-// const getSupplierById = async (id) => {
-//     const response = await axios.get(API_ADMIN + `supplier/${id}`)
-//     return response;
-// }
+const getSupplierById = async (id) => {
+    const response = await axios.get(API_ADMIN + `supplier/${id}`)
+    return response;
+}
 
 
 const createCSupplierService = async (supplier) => {
@@ -34,7 +34,7 @@ const createCSupplierService = async (supplier) => {
 
 const supplierService = {
     getAllSupplierService,
-    // getSupplierById,
+    getSupplierById,
     createCSupplierService,
     // updateSupplierService,
     // deleteSupplierService
