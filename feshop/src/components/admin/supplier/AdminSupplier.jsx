@@ -29,7 +29,7 @@ const AdminSupplier = () => {
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
 
-    //const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
+    const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
 
     // const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     const search = (data) => {
@@ -45,7 +45,7 @@ const AdminSupplier = () => {
 
     // them supplier
     const handleAddSupplier = () => {
-        //setIsSubmitting(true);// nhan
+        setIsSubmitting(true);// nhan
         let dataRequest = {
             supplierName: ""
         }
@@ -65,7 +65,7 @@ const AdminSupplier = () => {
             setSelectedFile(null)
             alert(dataShow["message"]);
             setLoadTable(!load);
-           // setIsSubmitting(false);// mo nut
+            setIsSubmitting(false);// mo nut
             setShowAddModal(false);
         })
             .catch((err) => {
@@ -230,8 +230,7 @@ const AdminSupplier = () => {
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Đóng
                     </Button>
-                    <Button variant="primary" 
-                    //disabled={isSubmitting}
+                    <Button variant="primary" disabled={isSubmitting}
                         onClick={() => handleAddSupplier()}>
                         Lưu
                     </Button>
