@@ -6,6 +6,9 @@ const config = {
         'Content-Type': 'multipart/form-data'
       }
 }
+
+
+
 const getAllSupplierService = async () => {
     const response = await axios.get(API_ADMIN + "supplier")
     return response;
@@ -17,8 +20,15 @@ const getSupplierById = async (id) => {
 }
 
 
-const createCSupplierService = async (supplier) => {
-    const response = await axios.post(API_ADMIN + "supplier", supplier,config)
+const createCSupplierService = async (dataRequest,file) => {
+    const json = JSON.stringify(dataRequest);
+        const blob = new Blob([json], {
+            type: 'application/json'
+        });
+        const formData = new FormData();
+        formData.append('createSupplierRequest', blob);
+        formData.append('supplierFile', file)
+    const response = await axios.post(API_ADMIN + "supplier", formData,config)
     return response;
 }
 

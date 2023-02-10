@@ -51,17 +51,9 @@ const AdminSupplier = () => {
         let dataRequest = {
             supplierName: ""
         }
-        dataRequest.supplierName = value;// hoac dataRequest['...']=...
-
-        const json = JSON.stringify(dataRequest);
-        const blob = new Blob([json], {
-            type: 'application/json'
-        });
-
-        const formData = new FormData();
-        formData.append('createSupplierRequest', blob);
-        formData.append('supplierFile', selectedFile)
-        supplierService.createCSupplierService(formData).then((dataResponse) => {
+        dataRequest.supplierName = value;
+        let file = selectedFile;
+        supplierService.createCSupplierService(dataRequest,file).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setValue("")
             setSelectedFile(null)
