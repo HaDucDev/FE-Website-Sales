@@ -52,8 +52,8 @@ const AdminSupplier = () => {
             supplierName: ""
         }
         dataRequest.supplierName = value;
-        let file = selectedFile;
-        supplierService.createCSupplierService(dataRequest,file).then((dataResponse) => {
+        let fileRequest = selectedFile;
+        supplierService.createCSupplierService(dataRequest,fileRequest).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setValue("")
             setSelectedFile(null)
@@ -91,16 +91,9 @@ const AdminSupplier = () => {
         }
         dataRequest.supplierId = supplierById.supplierId;
         dataRequest.supplierName = supplierById.supplierName
-        const json = JSON.stringify(dataRequest);
-        const blob = new Blob([json], {
-            type: 'application/json'
-        });
+        let fileResquest =selectedFile;
 
-        const formData = new FormData();
-        formData.append('updateSupplierRequest', blob);
-        formData.append('supplierFile', selectedFile)
-
-        supplierService.updateSupplierService(formData).then((dataResponse) => {
+        supplierService.updateSupplierService(dataRequest,fileResquest).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setSelectedFile(null);// ko can dat cac thong so con lai
             alert(dataShow["message"]);
