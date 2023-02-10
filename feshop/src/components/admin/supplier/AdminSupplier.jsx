@@ -32,7 +32,7 @@ const AdminSupplier = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
     const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
 
-    // const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
+    const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.supplierName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.supplierId.toString().includes(intiText));
@@ -117,6 +117,24 @@ const AdminSupplier = () => {
         }).catch((e) => alert(e.response.data))
     }
 
+    //delete supplier
+    const comfirmDeleteSupplier = (id) =>{
+        setSupplierById({...supplierById, supplierId:id});
+        setComfirmModal(true);
+    }
+
+    const handleDeleteSupplier =()=>{
+        supplierService.deleteSupplierService(supplierById.supplierId).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setComfirmModal(!confirmModal);
+        }).catch((err) => {
+            let errorShow = err.response.data;
+            setErrorResponse(errorShow);
+        })
+    }
+
     const colunmns = [
         {
             name: "Supplier id",
@@ -140,7 +158,7 @@ const AdminSupplier = () => {
                 return <>
                     <div style={{ margin: "auto" }}>
                         <Button variant="outline-dark" onClick={() => { setErrorResponse({ supplierName: "" }); handleGetById(row.supplierId) }}>SỬA</Button>
-                        {/* <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteCategory(row.categoryId)}>XÓA</button>  */}
+                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteSupplier(row.supplierId)}>XÓA</button> 
                     </div>
 
                 </>
@@ -306,6 +324,24 @@ const AdminSupplier = () => {
                     </Button>
                     <Button variant="primary" onClick={() => handleUpdateSupplier()}>
                         Lưu
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal Xác nhận Supplier*/}
+            <Modal show={confirmModal} onHide={() => setComfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p> {`Bạn có muốn xóa sản phẩm "${supplierById.supplierId}" không?`}</p>              
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setComfirmModal(!confirmModal)}>
+                        Không
+                    </Button>
+                    <Button variant="primary" onClick={() => handleDeleteSupplier()}>
+                        Có
                     </Button>
                 </Modal.Footer>
             </Modal>

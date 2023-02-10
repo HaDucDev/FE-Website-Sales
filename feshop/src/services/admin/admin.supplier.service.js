@@ -27,17 +27,17 @@ const updateSupplierService = async (supplier) => {
     return response
 }
 
-// const deleteSupplierService = async (id) => {
-//     const response = await axios.delete(API_ADMIN + `supplier/${id}`)
-//     return response;
-// }
+const deleteSupplierService = async (id) => {
+    const response = await axios.delete(API_ADMIN + `supplier/${id}`)
+    return response;
+}
 
 const supplierService = {
     getAllSupplierService,
     getSupplierById,
     createCSupplierService,
     updateSupplierService,
-    // deleteSupplierService
+    deleteSupplierService
 }
 
 
