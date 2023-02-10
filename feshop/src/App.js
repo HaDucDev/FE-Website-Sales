@@ -1,9 +1,9 @@
 import './App.css';
-import AdminSupplier from './components/admin/supplier/AdminSupplier';
+import AdminProduct from './components/admin/product/AdminProduct';
 
 function App() {
   return (
-      <AdminSupplier/>
+      <AdminProduct/>
   );
 }
 
