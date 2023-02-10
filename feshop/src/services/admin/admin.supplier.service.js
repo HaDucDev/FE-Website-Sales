@@ -1,20 +1,6 @@
 import axios from "axios";
-import { API_ADMIN } from "../../utils/utils";
+import { API_ADMIN, config, convertObjectBlob } from "../../utils/utils";
 
-const config = {
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
-}
-
-const convertObjectBlob = (data) => {
-
-    const json = JSON.stringify(data);
-    const blob = new Blob([json], {
-        type: 'application/json'
-    });
-    return blob;
-}
 
 const getAllSupplierService = async () => {
     const response = await axios.get(API_ADMIN + "supplier");
