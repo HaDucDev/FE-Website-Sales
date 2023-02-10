@@ -45,10 +45,6 @@ const AdminCategory = () => {
             selector: row => row.categoryName,
             center: true
         }
-        // ,{
-        //     name: "image",
-        //     selector: (row) => <img width={50} height={50} src={row.imagr}/>
-        // }
         , {
             name: "Action",
             cell: (row) => {

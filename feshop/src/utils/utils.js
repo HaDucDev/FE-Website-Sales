@@ -1,5 +1,19 @@
 export const API_ADMIN= "http://localhost:8080/api/admin/"
 
+// send file and object 
+export const config = {
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
+}
+export const convertObjectBlob = (data) => {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
+        type: 'application/json'
+    });
+    return blob;
+}
+
 // ham chuyen tieng viet sang tieng anh ko dau
 const convert_vi_to_en = (str) =>{
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
