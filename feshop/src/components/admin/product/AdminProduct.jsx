@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import convert_vi_to_en from "../../../utils/utils";
 import productService from "../../../services/admin/admin.product.service";
+import categoryService from "../../../services/admin/admin.category.service";
+import supplierService from "../../../services/admin/admin.supplier.service";
 import { CKEditor } from 'ckeditor4-react';
 const AdminProduct = () => {
 
@@ -20,6 +22,9 @@ const AdminProduct = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(0);
     const [selectedSupplierId, setSelectedSupplierId] = useState(0);
 
+    const [selectCategoryList, setSelectCategoryList] = useState([]);// luu de map du lieu
+    const [selectSupplierList, setSelectSupplierList] = useState([]);// luu de map du lieu
+
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.productName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.productId.toString().includes(intiText)
@@ -28,11 +33,29 @@ const AdminProduct = () => {
             || row.unitPrice.toString().includes(intiText));
     }
 
+
+    const getAllCategoryAndSupplier =() => {
+        categoryService
+          .getAllCategoryService()
+          .then(dataResponse => {
+            setSelectCategoryList(dataResponse.data);
+          })
+          .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+        supplierService
+          .getAllSupplierService()
+          .then(dataResponse => {
+            setSelectSupplierList(dataResponse.data);
+          })
+          .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+      };
+
+
     useEffect(() => {
         productService.getAllProductService().then((response) => {
             setProductList(response.data)
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [intiText, load])
+
 
     const colunmns = [
         {
@@ -114,6 +137,7 @@ const AdminProduct = () => {
                         <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                             onClick={() => {
                                 // setErrorResponse({ supplierName: "" });
+                                getAllCategoryAndSupplier();
                                 setShowAddModal(true)
                             }}>THÊM</Button>
                     </>
@@ -226,6 +250,11 @@ const AdminProduct = () => {
                                     setIsSubmitting(false);// mo nut
                                 }}>
                                 <option value="">Chọn category...</option>
+                                {
+                                    selectCategoryList.map((category)=>(
+                                        <option key={category.categoryId}>{category.categoryName}</option>
+                                    ))
+                                }
 
                             </Form.Control>
                         </Form.Group>
@@ -243,6 +272,11 @@ const AdminProduct = () => {
                                     setIsSubmitting(false);// mo nut
                                 }}>
                                 <option value="">Chọn supplier...</option>
+                                {
+                                    selectSupplierList.map((supplier)=>(
+                                        <option key={supplier.supplierId}>{supplier.supplierName}</option>
+                                    ))
+                                }
                             </Form.Control>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ marginLeft: "10px" }}>
