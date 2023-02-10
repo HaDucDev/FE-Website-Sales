@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
@@ -14,13 +14,24 @@ const AdminProduct = () => {
 
     const [showAddModal, setShowAddModal] = useState(false);// state bat/tat modal create
     const [load, setLoadTable] = useState(false);// state load khi them thanh cong
-    const [value, setValue] = useState("");// state supplier ban dau khi modal add
+
+    const [value, setValue] = useState({
+        productName: "",
+        quantity: -1,
+        discount: -1,
+        unitPrice: -1,
+        descriptionProduct: "",
+        categoryId: 0,
+        supplierId: 0
+
+    });// state supplier ban dau khi modal add
+
+    const [descriptionProductOk,setDescriptionProduct] = useState("");
+
     const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
     const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
     const [selectedFile, setSelectedFile] = useState(null);
 
-    const [selectedCategoryId, setSelectedCategoryId] = useState(0);
-    const [selectedSupplierId, setSelectedSupplierId] = useState(0);
 
     const [selectCategoryList, setSelectCategoryList] = useState([]);// luu de map du lieu
     const [selectSupplierList, setSelectSupplierList] = useState([]);// luu de map du lieu
@@ -34,20 +45,20 @@ const AdminProduct = () => {
     }
 
 
-    const getAllCategoryAndSupplier =() => {
+    const getAllCategoryAndSupplier = () => {
         categoryService
-          .getAllCategoryService()
-          .then(dataResponse => {
-            setSelectCategoryList(dataResponse.data);
-          })
-          .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+            .getAllCategoryService()
+            .then(dataResponse => {
+                setSelectCategoryList(dataResponse.data);
+            })
+            .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
         supplierService
-          .getAllSupplierService()
-          .then(dataResponse => {
-            setSelectSupplierList(dataResponse.data);
-          })
-          .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-      };
+            .getAllSupplierService()
+            .then(dataResponse => {
+                setSelectSupplierList(dataResponse.data);
+            })
+            .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+    };
 
 
     useEffect(() => {
@@ -56,6 +67,38 @@ const AdminProduct = () => {
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [intiText, load])
 
+    //them san pham
+    const handleAddProduct = () => {
+        let dataRequest = value;
+        dataRequest.descriptionProduct=descriptionProductOk;
+        let fileRequest = selectedFile;
+        productService.createCProductService(dataRequest, fileRequest).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            setValue({
+                productName: "",
+                quantity: -1,
+                discount: -1,
+                unitPrice: -1,
+                descriptionProduct: "",
+                categoryId: 0,
+                supplierId: 0
+
+            })
+            setSelectedFile(null)
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setIsLoading(false);//tat spiner
+            setIsSubmitting(false);// mo nut
+            setShowAddModal(false);
+        })
+            .catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                console.log(errorShow);
+                setIsLoading(false);// tat spinner
+                //setErrorResponse(errorShow);
+            })
+    }
 
     const colunmns = [
         {
@@ -66,8 +109,8 @@ const AdminProduct = () => {
         },
         {
             name: "Product name",
-            selector: row => row.productName,
-            center: true
+            selector: (row) => (<div title={row.productName}>{row.productName}</div>),
+            center: true,
         }
         ,
         {
@@ -113,6 +156,12 @@ const AdminProduct = () => {
                 backgroundColor: "#C0D5FF"
             },
         },
+        headRow: {
+            style: {
+
+            },
+        },
+
     };
 
     return (
@@ -158,7 +207,7 @@ const AdminProduct = () => {
                             type="text"
                             placeholder="Nhập tên sản phẩm"
                             onChange={(e) => {
-                                (setValue(e.target.value));
+                                setValue({ ...value, productName: e.target.value });
                                 // setErrorResponse({
                                 //     supplierName: ""
                                 // })
@@ -171,13 +220,13 @@ const AdminProduct = () => {
                     </Form.Group>
                     <div style={{ display: "flex" }}>
 
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                             <Form.Label>Số lượng</Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="Nhập số lượng"
                                 onChange={(e) => {
-                                    (setValue(e.target.value));
+                                    setValue({ ...value, quantity: e.target.value });
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
@@ -188,13 +237,13 @@ const AdminProduct = () => {
                             errorResponse={errorResponse}
                             field="supplierName" /> */}
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ marginLeft: "10px", }}>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ marginLeft: "10px", }}>
                             <Form.Label>Giảm giá</Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="Giảm giá"
                                 onChange={(e) => {
-                                    (setValue(e.target.value));
+                                    setValue({ ...value, discount: e.target.value });
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
@@ -205,13 +254,13 @@ const AdminProduct = () => {
                             errorResponse={errorResponse}
                             field="supplierName" /> */}
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ marginLeft: "10px", }} >
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
                             <Form.Label>Giá gốc</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Nhập tên hãng"
                                 onChange={(e) => {
-                                    (setValue(e.target.value));
+                                    setValue({ ...value, unitPrice: e.target.value });
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
@@ -224,11 +273,12 @@ const AdminProduct = () => {
                         </Form.Group>
                     </div>
 
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
                         <Form.Label>Đặc tả</Form.Label>
                         <CKEditor
-                        //data={content}
-                        //onChange={handleEditorChange}
+                            onChange={(e) => {
+                                setDescriptionProduct(e.editor.getData());
+                            }}
                         />
                         {/* <ValidationMessage
                             errorResponse={errorResponse}
@@ -236,50 +286,50 @@ const AdminProduct = () => {
                     </Form.Group>
                     <div style={{ display: "flex" }}>
 
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
                             <Form.Label>Chọn loại hàng</Form.Label>
                             <Form.Control
                                 as="select"
                                 name="categoryId"
-                                value={selectedCategoryId}
+                                value={value.categoryId}
                                 onChange={(e) => {
-                                    (setSelectedCategoryId(e.target.value));
+                                    setValue({ ...value, categoryId: e.target.value });
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
                                     setIsSubmitting(false);// mo nut
                                 }}>
-                                <option value="">Chọn category...</option>
+                                <option value={0}>Chọn category...</option>
                                 {
-                                    selectCategoryList.map((category)=>(
-                                        <option key={category.categoryId}>{category.categoryName}</option>
+                                    selectCategoryList.map((category) => (
+                                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
                                     ))
                                 }
 
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ marginLeft: "10px" }}>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput7" style={{ marginLeft: "10px" }}>
                             <Form.Label>Tên hãng</Form.Label>
                             <Form.Control
                                 as="select"
                                 name="categoryId"
-                                value={selectedSupplierId}
+                                value={value.supplierId}
                                 onChange={(e) => {
-                                    (setSelectedSupplierId(e.target.value));
+                                    setValue({...value, supplierId: e.target.value});
                                     // setErrorResponse({
                                     //     supplierName: ""
                                     // })
                                     setIsSubmitting(false);// mo nut
                                 }}>
-                                <option value="">Chọn supplier...</option>
+                                <option value={0}>Chọn supplier...</option>
                                 {
-                                    selectSupplierList.map((supplier)=>(
-                                        <option key={supplier.supplierId}>{supplier.supplierName}</option>
+                                    selectSupplierList.map((supplier) => (
+                                        <option key={supplier.supplierId} value={supplier.supplierId}>{supplier.supplierName}</option>
                                     ))
                                 }
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ marginLeft: "10px" }}>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput8" style={{ marginLeft: "10px" }}>
                             <Form.Label>Chọn ảnh cho sản phẩm</Form.Label>
                             <Form.Control
                                 type="file"
@@ -289,12 +339,6 @@ const AdminProduct = () => {
                             />
                         </Form.Group>
                     </div>
-
-
-
-
-
-
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
@@ -303,7 +347,7 @@ const AdminProduct = () => {
 
                     <Button variant="outline-primary" disabled={isSubmitting}
                         style={{ zIndex: "1" }}
-                        onClick={{}}>
+                        onClick={() => handleAddProduct()}>
                         {/* {isLoading && (
                             <Spinner
                                 style={{ margin: "auto", zIndex: "9" }}
