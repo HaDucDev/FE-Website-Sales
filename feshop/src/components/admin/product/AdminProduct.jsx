@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import convert_vi_to_en from "../../../utils/utils";
@@ -80,6 +80,8 @@ const AdminProduct = () => {
 
     //them san pham
     const handleAddProduct = () => {
+        setIsSubmitting(true);// khoa nut
+        setIsLoading(true);// mo quay tron
         let dataRequest = value;
         dataRequest.descriptionProduct = descriptionProductOk;
         let fileRequest = selectedFile;
@@ -292,6 +294,10 @@ const AdminProduct = () => {
                         <Form.Label>Đặc tả</Form.Label>
                         <CKEditor
                             onChange={(e) => {
+                                setErrorResponse({
+                                    ...errorResponse,
+                                    descriptionProduct: ""
+                                })
                                 setDescriptionProduct(e.editor.getData());
                             }}
                         />
@@ -308,6 +314,7 @@ const AdminProduct = () => {
                                 onChange={(e) => {
                                     setValue({ ...value, categoryId: e.target.value });
                                     setErrorResponse({
+                                        ...errorResponse,
                                         categoryId: ""
                                     })
                                     setIsSubmitting(false);// mo nut
@@ -329,9 +336,10 @@ const AdminProduct = () => {
                                 value={value.supplierId}
                                 onChange={(e) => {
                                     setValue({ ...value, supplierId: e.target.value });
-                                    // setErrorResponse({
-                                    //     supplierName: ""
-                                    // })
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        supplierId: ""
+                                    })
                                     setIsSubmitting(false);// mo nut
                                 }}>
                                 <option value={0}>Chọn supplier...</option>
@@ -362,13 +370,13 @@ const AdminProduct = () => {
                     <Button variant="outline-primary" disabled={isSubmitting}
                         style={{ zIndex: "1" }}
                         onClick={() => handleAddProduct()}>
-                        {/* {isLoading && (
+                        {isLoading && (
                             <Spinner
                                 style={{ margin: "auto", zIndex: "9" }}
                                 animation="border"
                                 variant="primary"
                             />
-                        )} */}
+                        )}
                         Lưu
                     </Button>
 
