@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal} from "react-bootstrap";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import convert_vi_to_en from "./../../../utils/utils";
@@ -30,6 +30,7 @@ const AdminSupplier = () => {
     const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
 
     const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
+    const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
 
     // const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     const search = (data) => {
@@ -45,7 +46,8 @@ const AdminSupplier = () => {
 
     // them supplier
     const handleAddSupplier = () => {
-        setIsSubmitting(true);// nhan
+        setIsSubmitting(true);// khoa nut
+        setIsLoading(true);// mo quay tron
         let dataRequest = {
             supplierName: ""
         }
@@ -65,13 +67,15 @@ const AdminSupplier = () => {
             setSelectedFile(null)
             alert(dataShow["message"]);
             setLoadTable(!load);
+            setIsLoading(false);//tat spiner
             setIsSubmitting(false);// mo nut
             setShowAddModal(false);
         })
             .catch((err) => {
                 console.log(err)
                 let errorShow = err.response.data;
-                console.log(errorShow)
+                console.log(errorShow);
+                setIsLoading(false);// tat spinner
                 setErrorResponse(errorShow);
             })
     }
@@ -168,9 +172,6 @@ const AdminSupplier = () => {
                 fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
                 highlightOnHover // dua chuot vo dong doi mau
                 paginationIconFirstPage
-                // actions={
-                //     <button className="btn btn-sm">Export</button>
-                // }
                 responsive
                 paginationPerPage={5}
                 paginationRowsPerPageOptions={[5, 15, 23, 50]}
@@ -207,7 +208,7 @@ const AdminSupplier = () => {
                                 setErrorResponse({
                                     supplierName: ""
                                 })
-
+                                setIsSubmitting(false);// mo nut
                             }}
                         />
                         <ValidationMessage
@@ -230,10 +231,21 @@ const AdminSupplier = () => {
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Đóng
                     </Button>
-                    <Button variant="primary" disabled={isSubmitting}
+
+                    <Button variant="outline-primary" disabled={isSubmitting}
+                        style={{ zIndex: "1" }}
                         onClick={() => handleAddSupplier()}>
+                        {isLoading && (
+                            <Spinner
+                                style={{ margin: "auto", zIndex: "9" }}
+                                animation="border"
+                                variant="primary"
+                            />
+                        )}
                         Lưu
                     </Button>
+
+
                 </Modal.Footer>
             </Modal>
 
