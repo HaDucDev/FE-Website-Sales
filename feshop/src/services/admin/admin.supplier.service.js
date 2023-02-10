@@ -22,10 +22,10 @@ const createCSupplierService = async (supplier) => {
     return response;
 }
 
-// const updateSupplierService = async (supplier) => {
-//     const response = await axios.put(API_ADMIN + "supplier", supplier)
-//     return response
-// }
+const updateSupplierService = async (supplier) => {
+    const response = await axios.put(API_ADMIN + "supplier", supplier,config)
+    return response
+}
 
 // const deleteSupplierService = async (id) => {
 //     const response = await axios.delete(API_ADMIN + `supplier/${id}`)
@@ -36,7 +36,7 @@ const supplierService = {
     getAllSupplierService,
     getSupplierById,
     createCSupplierService,
-    // updateSupplierService,
+    updateSupplierService,
     // deleteSupplierService
 }
 

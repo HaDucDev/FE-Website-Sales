@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import convert_vi_to_en from "./../../../utils/utils";
@@ -28,6 +28,9 @@ const AdminSupplier = () => {
     })// state getbyId
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
+
+    //const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
+
     // const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.supplierName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
@@ -42,6 +45,7 @@ const AdminSupplier = () => {
 
     // them supplier
     const handleAddSupplier = () => {
+        //setIsSubmitting(true);// nhan
         let dataRequest = {
             supplierName: ""
         }
@@ -58,9 +62,10 @@ const AdminSupplier = () => {
         supplierService.createCSupplierService(formData).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setValue("")
+            setSelectedFile(null)
             alert(dataShow["message"]);
             setLoadTable(!load);
-            setSelectedFile(null)
+           // setIsSubmitting(false);// mo nut
             setShowAddModal(false);
         })
             .catch((err) => {
@@ -70,7 +75,7 @@ const AdminSupplier = () => {
                 setErrorResponse(errorShow);
             })
     }
-    //
+    //get by id
     const handleGetById = (id) => {
         supplierService.getSupplierById(id).then((dataResponse) => {
             let supplierDetail = dataResponse.data;
@@ -80,7 +85,32 @@ const AdminSupplier = () => {
                 supplierImage: supplierDetail.supplierImage
             });
             setShowUpdateModal(true);
-        })
+        }).catch((e) => alert(e.response.data))
+    }
+
+    const handleUpdateSupplier = () => {
+        const dataRequest = {
+            supplierId: -1,
+            supplierName: ""
+        }
+        dataRequest.supplierId = supplierById.supplierId;
+        dataRequest.supplierName = supplierById.supplierName
+        const json = JSON.stringify(dataRequest);
+        const blob = new Blob([json], {
+            type: 'application/json'
+        });
+
+        const formData = new FormData();
+        formData.append('updateSupplierRequest', blob);
+        formData.append('supplierFile', selectedFile)
+
+        supplierService.updateSupplierService(formData).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            setSelectedFile(null);// ko can dat cac thong so con lai
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setShowUpdateModal(false);
+        }).catch((e) => alert(e.response.data))
     }
 
     const colunmns = [
@@ -180,7 +210,6 @@ const AdminSupplier = () => {
 
                             }}
                         />
-
                         <ValidationMessage
                             errorResponse={errorResponse}
                             field="supplierName" />
@@ -190,7 +219,6 @@ const AdminSupplier = () => {
                         <Form.Label>Chọn ảnh cho hãng</Form.Label>
                         <Form.Control
                             type="file"
-                            placeholder="Chọn ảnh"
                             onChange={(e) => {
                                 (setSelectedFile(e.target.files[0]));
                             }}
@@ -202,7 +230,9 @@ const AdminSupplier = () => {
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Đóng
                     </Button>
-                    <Button variant="primary" onClick={() => handleAddSupplier()}>
+                    <Button variant="primary" 
+                    //disabled={isSubmitting}
+                        onClick={() => handleAddSupplier()}>
                         Lưu
                     </Button>
                 </Modal.Footer>
@@ -243,16 +273,18 @@ const AdminSupplier = () => {
                             field="supplierName" />
                     </Form.Group>
 
-                    <Form.Group className="mb-3">                      
-                            <Form.Label >Ảnh hãng</Form.Label>
-                            <div style={{display:"flex" }}>
+                    <Form.Group className="mb-3">
+                        <Form.Label >Ảnh hãng</Form.Label>
+                        <div style={{ display: "flex" }}>
                             <div>
                                 <img style={{ border: "1px solid black" }} src={supplierById.supplierImage} width={100} height={100} alt="lỗi ảnh" />
                             </div>
-                            <div style={{margin:"auto"}}>
-                            <Form.Label >Đổi ảnh</Form.Label>
-                            <Form.Control type="file"/>
-                            </div>                   
+                            <div style={{ margin: "auto" }}>
+                                <Form.Label >Đổi ảnh</Form.Label>
+                                <Form.Control type="file" onChange={(e) => {
+                                    (setSelectedFile(e.target.files[0]));
+                                }} />
+                            </div>
                         </div>
                     </Form.Group>
 
@@ -261,9 +293,9 @@ const AdminSupplier = () => {
                     <Button variant="secondary" onClick={() => setShowUpdateModal(!showUpdateModal)}>
                         Đóng
                     </Button>
-                    {/* <Button variant="primary" onClick={() => handleUpdateCategory(categoryById)}>
+                    <Button variant="primary" onClick={() => handleUpdateSupplier()}>
                         Lưu
-                    </Button> */}
+                    </Button>
                 </Modal.Footer>
             </Modal>
 
