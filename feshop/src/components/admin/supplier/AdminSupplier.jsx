@@ -3,8 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import 'bootstrap/dist/css/bootstrap.css';
 import convert_vi_to_en from "./../../../utils/utils";
-//import categoryService from "../../../services/admin/admin.category.service";
-//import ValidationMessage from "../../acommon-component/ValidationMessage";
+import ValidationMessage from "../../acommon-component/ValidationMessage";
 import supplierService from "../../../services/admin/admin.supplier.service";
 const AdminSupplier = () => {
 
@@ -16,9 +15,9 @@ const AdminSupplier = () => {
 
     const [value, setValue] = useState("");// state category ban dau khi modal add
     const [load, setLoadTable] = useState(false);// state load khi them thanh cong
-    // const [errorResponse, setErrorResponse] = useState({
-    //     supplierName: ""
-    // });//state error
+    const [errorResponse, setErrorResponse] = useState({
+        supplierName: ""
+    });//state error
 
     const [selectedFile, setSelectedFile] = useState(null);
 
@@ -67,7 +66,7 @@ const AdminSupplier = () => {
             console.log(err)
             let errorShow = err.response.data;
             console.log(errorShow)
-            //setErrorResponse(errorShow);
+            setErrorResponse(errorShow);
         })
     }
 
@@ -160,16 +159,16 @@ const AdminSupplier = () => {
                             placeholder="Nhập tên hãng"
                             onChange={(e) => {
                                 (setValue(e.target.value));
-                                // setErrorResponse({
-                                //     supplierName: ""
-                                // })
+                                setErrorResponse({
+                                    supplierName: ""
+                                })
 
                             }}
                         />
 
-                         {/* <ValidationMessage
+                         <ValidationMessage
                         errorResponse={errorResponse}
-                        field="supplierName" /> */}
+                        field="supplierName" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
