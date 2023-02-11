@@ -3,7 +3,7 @@ import { API_ADMIN, config, convertObjectBlob} from "../../utils/utils";
 
 
 const getAllProductService = async () => {
-    const response = await axios.get(API_ADMIN + "product");
+    const response = await axios.get(API_ADMIN + "admin/product");
     return response;
 }
 
@@ -18,7 +18,7 @@ const createCProductService = async (dataRequest, file) => {
     const formData = new FormData();
     formData.append('createProductRequest', blob);
     formData.append('productFile', file);
-    const response = await axios.post(API_ADMIN + "product", formData, config);
+    const response = await axios.post(API_ADMIN + "admin/product", formData, config);
     return response;
 }
 

@@ -1,4 +1,4 @@
-export const API_ADMIN= "http://localhost:8080/api/admin/"
+export const API_ADMIN= "http://localhost:8080/api/"
 
 // send file and object 
 export const config = {
