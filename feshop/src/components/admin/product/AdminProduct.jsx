@@ -47,6 +47,21 @@ const AdminProduct = () => {
         supplierId: ""
     });//state error
 
+
+    const [productById, setProductById] = useState({
+        productName: "",
+        quantity: "",
+        discount: "",
+        unitPrice: "",
+        descriptionProduct: "",
+        productImage:"",
+        categoryId: "",
+        supplierId: ""
+    })// state getbyId
+
+    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
+
+
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.productName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.productId.toString().includes(intiText)
@@ -113,6 +128,25 @@ const AdminProduct = () => {
             })
     }
 
+    //xem, sua san pham
+    const handleGetById = (id) => {
+        productService.getProductById(id).then((dataResponse) => {
+            let productDetail = dataResponse.data;
+            setProductById({
+                supplierId: id,
+                productName: productDetail.productName,
+                quantity: productDetail.quantity,
+                discount: productDetail.discount,
+                unitPrice: productDetail.unitPrice,
+                descriptionProduct: productDetail.descriptionProduct,
+                productImage:productDetail.productImage,
+                categoryId: productDetail.category.categoryId,
+                supplierId: productDetail.supplier.supplierId
+            });
+            setShowUpdateModal(true);
+        }).catch((e) => alert(e.response.data))
+    }
+
     const colunmns = [
         {
             name: "Product id",
@@ -153,8 +187,23 @@ const AdminProduct = () => {
             cell: (row) => {
                 return <>
                     <div style={{ margin: "auto" }}>
-                        {/* <Button variant="outline-dark" onClick={() => { setErrorResponse({ supplierName: "" }); handleGetById(row.supplierId) }}>SỬA</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteSupplier(row.supplierId)}>XÓA</button>  */}
+                        <Button variant="outline-dark" onClick={
+                            () => {
+                                setErrorResponse({
+                                    productName: "",
+                                    quantity: "",
+                                    discount: "",
+                                    unitPrice: "",
+                                    descriptionProduct: "",
+                                    productImage:"",
+                                    categoryId: "",
+                                    supplierId: ""
+                                });
+                                getAllCategoryAndSupplier();//goi de them vo modal them
+                                handleGetById(row.productId)
+                            }
+                        }>Xem</Button>
+                        {/* <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteSupplier(row.supplierId)}>XÓA</button>  */}
                     </div>
 
                 </>
@@ -207,7 +256,7 @@ const AdminProduct = () => {
                                     categoryId: "",
                                     supplierId: ""
                                 });
-                                getAllCategoryAndSupplier();
+                                getAllCategoryAndSupplier();//goi de them vo modal them
                                 setShowAddModal(true)
                             }}>THÊM</Button>
                     </>
@@ -379,10 +428,189 @@ const AdminProduct = () => {
                         )}
                         Lưu
                     </Button>
-
-
                 </Modal.Footer>
             </Modal>
+
+            {/* Modal sửa product*/}
+            <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sửa product </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>Tên sản phẩm</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập tên sản phẩm"
+                            onChange={(e) => {
+                                setValue({ ...value, productName: e.target.value });
+                                setErrorResponse({
+                                    ...errorResponse,
+                                    productName: ""
+                                })
+                                setIsSubmitting(false);// mo nut
+                            }}
+                            defaultValue={productById.productName}
+                        />
+                        <ValidationMessage errorResponse={errorResponse} field="productName" />
+                    </Form.Group>
+                    <div style={{ display: "flex" }}>
+
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+                            <Form.Label>Số lượng</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Nhập số lượng"
+                                onChange={(e) => {
+                                    setValue({ ...value, quantity: e.target.value });
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        quantity: ""
+                                    })
+                                    setIsSubmitting(false);// mo nut
+                                }}
+                                defaultValue={productById.quantity}
+                            />
+                            <ValidationMessage errorResponse={errorResponse} field="quantity" />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ marginLeft: "10px", }}>
+                            <Form.Label>Giảm giá</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Giảm giá"
+                                onChange={(e) => {
+                                    setValue({ ...value, discount: e.target.value });
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        discount: ""
+                                    })
+                                    setIsSubmitting(false);// mo nut
+                                }}
+                                defaultValue={productById.discount}
+                            />
+                            <ValidationMessage errorResponse={errorResponse} field="discount" />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
+                            <Form.Label>Giá gốc</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Nhập giá gốc"
+                                onChange={(e) => {
+                                    setValue({ ...value, unitPrice: e.target.value });
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        unitPrice: ""
+                                    })
+                                    setIsSubmitting(false);// mo nut
+                                }}
+                                defaultValue={productById.unitPrice}
+                            />
+                            <ValidationMessage errorResponse={errorResponse} field="unitPrice" />
+                        </Form.Group>
+                    </div>
+
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
+                        <Form.Label>Đặc tả</Form.Label>
+                        <CKEditor
+                            onChange={(e) => {
+                                setErrorResponse({
+                                    ...errorResponse,
+                                    descriptionProduct: ""
+                                })
+                                setDescriptionProduct(e.editor.getData());
+                            }}
+                            initData={productById.descriptionProduct}
+                        />
+                        <ValidationMessage errorResponse={errorResponse} field="descriptionProduct" />
+                    </Form.Group>
+                    <div style={{ display: "flex" }}>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
+                            <Form.Label>Chọn loại hàng</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="categoryId"
+                                value={productById.categoryId}
+                                onChange={(e) => {
+                                    setValue({ ...value, categoryId: e.target.value });
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        categoryId: ""
+                                    })
+                                    setIsSubmitting(false);// mo nut
+                                }}>
+                                <option value={0}>Chọn category...</option>
+                                {
+                                    selectCategoryList.map((category) => (
+                                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
+                                    ))
+                                }
+                            </Form.Control>
+                            <ValidationMessage errorResponse={errorResponse} field="categoryId" />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput7" style={{ marginLeft: "10px" }}>
+                            <Form.Label>Tên hãng</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="categoryId"
+                                value={productById.supplierId}
+                                onChange={(e) => {
+                                    setValue({ ...value, supplierId: e.target.value });
+                                    setErrorResponse({
+                                        ...errorResponse,
+                                        supplierId: ""
+                                    })
+                                    setIsSubmitting(false);// mo nut
+                                }}>
+                                <option value={0}>Chọn supplier...</option>
+                                {
+                                    selectSupplierList.map((supplier) => (
+                                        <option key={supplier.supplierId} value={supplier.supplierId}>{supplier.supplierName}</option>
+                                    ))
+                                }
+                            </Form.Control>
+                            <ValidationMessage errorResponse={errorResponse} field="supplierId" />
+                        </Form.Group>                
+                    </div>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput8" style={{ marginLeft: "10px" }}>
+                            <Form.Label>Ảnh cho sản phẩm</Form.Label>
+                            <div style={{ display: "flex" }}>
+                            <div>
+                                <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
+                            </div>
+                            <div style={{ margin: "auto" }}>
+                                <Form.Label >Đổi ảnh</Form.Label>
+                                <Form.Control
+                                type="file"
+                                onChange={(e) => {
+                                    (setSelectedFile(e.target.files[0]));
+                                }}
+                            />
+                            </div>
+                        </div>
+                        </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                        Đóng
+                    </Button>
+
+                    <Button variant="outline-primary" disabled={isSubmitting}
+                        style={{ zIndex: "1" }}
+                        onClick={() => handleAddProduct()}>
+                        {isLoading && (
+                            <Spinner
+                                style={{ margin: "auto", zIndex: "9" }}
+                                animation="border"
+                                variant="primary"
+                            />
+                        )}
+                        Lưu
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
+
         </>
     )
 }
