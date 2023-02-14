@@ -32,17 +32,17 @@ const updateProductService = async (dataRequest, file) => {
     const response = await axios.put(API_ADMIN + "product/admin", formData, config);
     return response;
 }
-// const deleteProductService = async (id) => {
-//     const response = await axios.delete(API_ADMIN + `supplier/${id}`)
-//     return response;
-// }
+const deleteProductService = async (id) => {
+    const response = await axios.delete(API_ADMIN + `product/admin/${id}`)
+    return response;
+}
 
 const productService = {
     getAllProductService,
     getProductById,
     createCProductService,
     updateProductService,
-    // deleteProductService
+    deleteProductService
 }
 
 

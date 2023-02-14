@@ -67,6 +67,8 @@ const AdminProduct = () => {
     const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
 
 
+    const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
+
     const search = (data) => {
         return data.filter(row => convert_vi_to_en(row.productName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.productId.toString().includes(intiText)
@@ -192,6 +194,24 @@ const AdminProduct = () => {
             })
     }
 
+    // xoa san pham
+    const comfirmDeleteProduct = (id) =>{
+        setProductById({...productById, productId: id})
+        setComfirmModal(true);
+    }
+
+    const handleDeleteProduct = () =>{
+        productService.deleteProductService(productById.productId).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setComfirmModal(!confirmModal);
+        }).catch((err) => {
+            let errorShow = err.response.data;
+            setErrorResponse(errorShow);
+        })
+    }
+
     const colunmns = [
         {
             name: "Product id",
@@ -248,7 +268,7 @@ const AdminProduct = () => {
                                 handleGetById(row.productId)
                             }
                         }>Xem</Button>
-                        {/* <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteSupplier(row.supplierId)}>XÓA</button>  */}
+                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteProduct(row.productId)}>XÓA</button> 
                     </div>
 
                 </>
@@ -708,6 +728,24 @@ const AdminProduct = () => {
                             Lưu
                         </Button>)
                     }
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal Xác nhận product*/}
+            <Modal show={confirmModal} onHide={() => setComfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p> {`Bạn có muốn xóa sản phẩm "${productById.productId}" không?`}</p>              
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setComfirmModal(!confirmModal)}>
+                        Không
+                    </Button>
+                    <Button variant="primary" onClick={() => handleDeleteProduct()}>
+                        Có
+                    </Button>
                 </Modal.Footer>
             </Modal>
 
