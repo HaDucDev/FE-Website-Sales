@@ -49,7 +49,7 @@ const AdminProduct = () => {
 
 
     const [productById, setProductById] = useState({
-        productId: "",
+        productId: 0,
         productName: "",
         quantity: "",
         discount: "",
@@ -57,7 +57,9 @@ const AdminProduct = () => {
         descriptionProduct: "",
         productImage: "",
         category: "",
-        supplier: ""
+        supplier: "",
+        categoryId: 0,
+        supplierId: 0
     })// state getbyId
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal xem/sua
@@ -144,7 +146,9 @@ const AdminProduct = () => {
                 descriptionProduct: productDetail.descriptionProduct,
                 productImage: productDetail.productImage,
                 category: productDetail.category,
-                supplier: productDetail.supplier
+                supplier: productDetail.supplier,
+                categoryId: productDetail.category.categoryId,
+                supplierId:productDetail.supplier.supplierId
             });
             setShowUpdateModal(true);
         }).catch((e) => alert(e.response.data))
@@ -437,7 +441,7 @@ const AdminProduct = () => {
             {/* Modal sửa product*/}
             <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sửa product </Modal.Title>
+                    <Modal.Title> {openInputUpdate ? "Chi tiết sản phẩm" : "Sửa Product"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -528,7 +532,7 @@ const AdminProduct = () => {
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
                         <Form.Label>Đặc tả</Form.Label>
                         {
-                            openInputUpdate ? (<div style={{border :"1px solid blue", padding:"10px"}}
+                            openInputUpdate ? (<div style={{ border: "1px solid blue", padding: "10px" }}
                                 dangerouslySetInnerHTML={{
                                     __html: productById.descriptionProduct,
                                 }}
@@ -562,9 +566,9 @@ const AdminProduct = () => {
                                     <Form.Control
                                         as="select"
                                         name="categoryId"
-                                        value={productById.category.categoryId}
+                                        value={productById.categoryId}
                                         onChange={(e) => {
-                                            setValue({ ...value, categoryId: e.target.value });
+                                            setProductById({ ...productById, categoryId: e.target.value });
                                             setErrorResponse({
                                                 ...errorResponse,
                                                 categoryId: ""
@@ -596,9 +600,9 @@ const AdminProduct = () => {
                                         <Form.Control
                                             as="select"
                                             name="categoryId"
-                                            value={productById.supplier.supplierId}
+                                            value={productById.supplierId}
                                             onChange={(e) => {
-                                                setValue({ ...value, supplierId: e.target.value });
+                                                setProductById({ ...productById, supplierId: e.target.value });
                                                 setErrorResponse({
                                                     ...errorResponse,
                                                     supplierId: ""
@@ -625,15 +629,22 @@ const AdminProduct = () => {
                             {
                                 openInputUpdate ? (<div>
                                     <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
-                                </div>) : (<div style={{ margin: "auto" }}>
-                                    <Form.Label >Đổi ảnh</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        onChange={(e) => {
-                                            (setSelectedFile(e.target.files[0]));
-                                        }}
-                                    />
-                                </div>)
+                                </div>) : (
+                                    <>
+                                        (<div>
+                                            <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
+                                        </div>)
+                                        <div style={{ margin: "auto" }}>
+                                            <Form.Label >Đổi ảnh</Form.Label>
+                                            <Form.Control
+                                                type="file"
+                                                onChange={(e) => {
+                                                    (setSelectedFile(e.target.files[0]));
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                )
                             }
                         </div>
                     </Form.Group>
@@ -642,19 +653,24 @@ const AdminProduct = () => {
                     <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
                         Đóng
                     </Button>
-
-                    <Button variant="outline-primary" disabled={isSubmitting}
-                        style={{ zIndex: "1" }}
-                        onClick={() => handleAddProduct()}>
-                        {isLoading && (
-                            <Spinner
-                                style={{ margin: "auto", zIndex: "9" }}
-                                animation="border"
-                                variant="primary"
-                            />
-                        )}
-                        Lưu
-                    </Button>
+                    {
+                        openInputUpdate ? (<Button variant="outline-primary" disabled={isSubmitting}
+                            style={{ zIndex: "1" }}
+                            onClick={() => setopenInputUpdate(!openInputUpdate)}>
+                            Sửa
+                        </Button>) : (<Button variant="outline-primary" disabled={isSubmitting}
+                            style={{ zIndex: "1" }}
+                            onClick={() => handleAddProduct()}>
+                            {isLoading && (
+                                <Spinner
+                                    style={{ margin: "auto", zIndex: "9" }}
+                                    animation="border"
+                                    variant="primary"
+                                />
+                            )}
+                            Lưu
+                        </Button>)
+                    }
                 </Modal.Footer>
             </Modal>
 
