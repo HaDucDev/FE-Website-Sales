@@ -24,14 +24,14 @@ const createCProductService = async (dataRequest, file) => {
     return response;
 }
 
-// const updateProductService = async (dataRequest, file) => {
-//     const blob = convertObjectBlob(dataRequest);
-//     const formData = new FormData();
-//     formData.append('updateProductRequestRequest', blob);
-//     formData.append('productFile', file);
-//     const response = await axios.put(API_ADMIN + "supplier", formData, config);
-//     return response;
-// }
+const updateProductService = async (dataRequest, file) => {
+    const blob = convertObjectBlob(dataRequest);
+    const formData = new FormData();
+    formData.append('updateProductRequest', blob);
+    formData.append('productFile', file);
+    const response = await axios.put(API_ADMIN + "product/admin", formData, config);
+    return response;
+}
 // const deleteProductService = async (id) => {
 //     const response = await axios.delete(API_ADMIN + `supplier/${id}`)
 //     return response;
@@ -41,7 +41,7 @@ const productService = {
     getAllProductService,
     getProductById,
     createCProductService,
-    // updateProductService,
+    updateProductService,
     // deleteProductService
 }
 

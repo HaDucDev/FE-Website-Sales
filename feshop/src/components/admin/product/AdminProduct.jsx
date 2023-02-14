@@ -119,6 +119,7 @@ const AdminProduct = () => {
             })
             setSelectedFile(null)
             alert(dataShow["message"]);
+            setDescriptionProduct("");
             setLoadTable(!load);
             setIsLoading(false);//tat spiner
             setIsSubmitting(false);// mo nut
@@ -135,6 +136,7 @@ const AdminProduct = () => {
 
     //xem, sua san pham
     const handleGetById = (id) => {
+        setopenInputUpdate(true);
         productService.getProductById(id).then((dataResponse) => {
             let productDetail = dataResponse.data;
             setProductById({
@@ -150,8 +152,44 @@ const AdminProduct = () => {
                 categoryId: productDetail.category.categoryId,
                 supplierId:productDetail.supplier.supplierId
             });
+            setDescriptionProduct(productDetail.descriptionProduct)
             setShowUpdateModal(true);
         }).catch((e) => alert(e.response.data))
+    }
+
+    //update san pham
+    const handleUpdateProduct =() =>{
+        setIsSubmitting(true);// khoa nut
+        setIsLoading(true);// mo quay tron
+        let dataRequest = {
+            productId: productById.productId,
+            productName: productById.productName,
+            quantity: productById.quantity,
+            discount: productById.discount,
+            unitPrice: productById.unitPrice,
+            descriptionProduct: descriptionProductOk,
+            categoryId: productById.categoryId,
+            supplierId: productById.supplierId
+        };
+        let fileRequest = selectedFile;
+        productService.updateProductService(dataRequest, fileRequest).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            //ko can dat lai gia tri producById do khi nhat get thi no cx load lai thoi
+            setSelectedFile(null)
+            alert(dataShow["message"]);
+            setDescriptionProduct("");
+            setLoadTable(!load);
+            setIsLoading(false);//tat spiner
+            setIsSubmitting(false);// mo nut
+            setShowUpdateModal(false);
+        })
+            .catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                console.log(errorShow);
+                setIsLoading(false);// tat spinner
+                setErrorResponse(errorShow);
+            })
     }
 
     const colunmns = [
@@ -438,7 +476,7 @@ const AdminProduct = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal sửa product*/}
+            {/* Modal sửa product==================================================================================================*/}
             <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title> {openInputUpdate ? "Chi tiết sản phẩm" : "Sửa Product"}</Modal.Title>
@@ -450,8 +488,7 @@ const AdminProduct = () => {
                             type="text"
                             defaultValue={productById.productId}
                             readOnly
-                        />
-                        <ValidationMessage errorResponse={errorResponse} field="productName" />
+                        />                   
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Tên sản phẩm</Form.Label>
@@ -459,7 +496,7 @@ const AdminProduct = () => {
                             type="text"
                             placeholder="Nhập tên sản phẩm"
                             onChange={(e) => {
-                                setValue({ ...value, productName: e.target.value });
+                                setProductById({ ...productById, productName: e.target.value });
                                 setErrorResponse({
                                     ...errorResponse,
                                     productName: ""
@@ -479,7 +516,7 @@ const AdminProduct = () => {
                                 type="number"
                                 placeholder="Nhập số lượng"
                                 onChange={(e) => {
-                                    setValue({ ...value, quantity: e.target.value });
+                                    setProductById({ ...productById, quantity: e.target.value });
                                     setErrorResponse({
                                         ...errorResponse,
                                         quantity: ""
@@ -497,7 +534,7 @@ const AdminProduct = () => {
                                 type="number"
                                 placeholder="Giảm giá"
                                 onChange={(e) => {
-                                    setValue({ ...value, discount: e.target.value });
+                                    setProductById({ ...productById, discount: e.target.value });
                                     setErrorResponse({
                                         ...errorResponse,
                                         discount: ""
@@ -515,7 +552,7 @@ const AdminProduct = () => {
                                 type="text"
                                 placeholder="Nhập giá gốc"
                                 onChange={(e) => {
-                                    setValue({ ...value, unitPrice: e.target.value });
+                                    setProductById({ ...productById, unitPrice: e.target.value });
                                     setErrorResponse({
                                         ...errorResponse,
                                         unitPrice: ""
@@ -631,9 +668,9 @@ const AdminProduct = () => {
                                     <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
                                 </div>) : (
                                     <>
-                                        (<div>
+                                        <div>
                                             <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
-                                        </div>)
+                                        </div>
                                         <div style={{ margin: "auto" }}>
                                             <Form.Label >Đổi ảnh</Form.Label>
                                             <Form.Control
@@ -660,7 +697,7 @@ const AdminProduct = () => {
                             Sửa
                         </Button>) : (<Button variant="outline-primary" disabled={isSubmitting}
                             style={{ zIndex: "1" }}
-                            onClick={() => handleAddProduct()}>
+                            onClick={() => handleUpdateProduct()}>
                             {isLoading && (
                                 <Spinner
                                     style={{ margin: "auto", zIndex: "9" }}
