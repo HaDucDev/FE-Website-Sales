@@ -13,17 +13,17 @@ const getCategoryById = async (id) =>{
 
 
 const createCategoryService = async (category) => {
-    const response = await axios.post( API_ADMIN +"category",category)
+    const response = await axios.post( API_ADMIN +"category/admin",category)
     return response;
 }
 
 const updateCategoryService = async (category) => {
-    const response = await axios.put(API_ADMIN + "category",category)
+    const response = await axios.put(API_ADMIN + "category/admin",category)
     return response
 }
 
 const deleteCategoryService = async (id) =>{
-    const response = await axios.delete(API_ADMIN+ `category/${id}`)
+    const response = await axios.delete(API_ADMIN+ `category/admin/${id}`)
     return response;
 }
 
