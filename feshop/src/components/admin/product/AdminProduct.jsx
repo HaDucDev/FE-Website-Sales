@@ -527,17 +527,25 @@ const AdminProduct = () => {
 
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
                         <Form.Label>Đặc tả</Form.Label>
-                        <CKEditor
-                            onChange={(e) => {
-                                setErrorResponse({
-                                    ...errorResponse,
-                                    descriptionProduct: ""
-                                })
-                                setDescriptionProduct(e.editor.getData());
-                            }}
-                            initData={productById.descriptionProduct}
-                        />
-                        <ValidationMessage errorResponse={errorResponse} field="descriptionProduct" />
+                        {
+                            openInputUpdate ? (<div style={{border :"1px solid blue", padding:"10px"}}
+                                dangerouslySetInnerHTML={{
+                                    __html: productById.descriptionProduct,
+                                }}
+                            />) : (<>
+                                <CKEditor
+                                    onChange={(e) => {
+                                        setErrorResponse({
+                                            ...errorResponse,
+                                            descriptionProduct: ""
+                                        })
+                                        setDescriptionProduct(e.editor.getData());
+                                    }}
+                                    initData={productById.descriptionProduct}
+                                />
+                                <ValidationMessage errorResponse={errorResponse} field="descriptionProduct" />
+                            </>)
+                        }
                     </Form.Group>
                     <div style={{ display: "flex" }}>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
