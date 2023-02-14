@@ -49,17 +49,20 @@ const AdminProduct = () => {
 
 
     const [productById, setProductById] = useState({
+        productId:"",
         productName: "",
         quantity: "",
         discount: "",
         unitPrice: "",
         descriptionProduct: "",
         productImage:"",
-        categoryId: "",
-        supplierId: ""
+        category: "",
+        supplier: ""
     })// state getbyId
 
-    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
+    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal xem/sua
+
+    const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
 
 
     const search = (data) => {
@@ -133,15 +136,15 @@ const AdminProduct = () => {
         productService.getProductById(id).then((dataResponse) => {
             let productDetail = dataResponse.data;
             setProductById({
-                supplierId: id,
+                productId: id,
                 productName: productDetail.productName,
                 quantity: productDetail.quantity,
                 discount: productDetail.discount,
                 unitPrice: productDetail.unitPrice,
                 descriptionProduct: productDetail.descriptionProduct,
                 productImage:productDetail.productImage,
-                categoryId: productDetail.category.categoryId,
-                supplierId: productDetail.supplier.supplierId
+                category: productDetail.category,
+                supplier: productDetail.supplier
             });
             setShowUpdateModal(true);
         }).catch((e) => alert(e.response.data))
@@ -438,6 +441,15 @@ const AdminProduct = () => {
                 </Modal.Header>
                 <Modal.Body>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>Mã sản phẩm</Form.Label>
+                        <Form.Control
+                            type="text"
+                            defaultValue={productById.productId}
+                            readOnly
+                        />
+                        <ValidationMessage errorResponse={errorResponse} field="productName" />
+                    </Form.Group>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Tên sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
@@ -451,6 +463,7 @@ const AdminProduct = () => {
                                 setIsSubmitting(false);// mo nut
                             }}
                             defaultValue={productById.productName}
+                            readOnly={openInputUpdate}
                         />
                         <ValidationMessage errorResponse={errorResponse} field="productName" />
                     </Form.Group>
@@ -470,6 +483,7 @@ const AdminProduct = () => {
                                     setIsSubmitting(false);// mo nut
                                 }}
                                 defaultValue={productById.quantity}
+                                readOnly={openInputUpdate}
                             />
                             <ValidationMessage errorResponse={errorResponse} field="quantity" />
                         </Form.Group>
@@ -487,6 +501,7 @@ const AdminProduct = () => {
                                     setIsSubmitting(false);// mo nut
                                 }}
                                 defaultValue={productById.discount}
+                                readOnly={openInputUpdate}
                             />
                             <ValidationMessage errorResponse={errorResponse} field="discount" />
                         </Form.Group>
@@ -504,6 +519,7 @@ const AdminProduct = () => {
                                     setIsSubmitting(false);// mo nut
                                 }}
                                 defaultValue={productById.unitPrice}
+                                readOnly={openInputUpdate}
                             />
                             <ValidationMessage errorResponse={errorResponse} field="unitPrice" />
                         </Form.Group>
@@ -527,9 +543,15 @@ const AdminProduct = () => {
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
                             <Form.Label>Chọn loại hàng</Form.Label>
                             <Form.Control
+                                type="input"
+                                placeholder="loại hàng"
+                                defaultValue={productById.category.categoryName}
+                                readOnly={openInputUpdate}
+                            />
+                            <Form.Control
                                 as="select"
                                 name="categoryId"
-                                value={productById.categoryId}
+                                value={productById.category.categoryId}
                                 onChange={(e) => {
                                     setValue({ ...value, categoryId: e.target.value });
                                     setErrorResponse({
@@ -549,6 +571,12 @@ const AdminProduct = () => {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput7" style={{ marginLeft: "10px" }}>
                             <Form.Label>Tên hãng</Form.Label>
+                            <Form.Control
+                                type="input"
+                                placeholder="loại hàng"
+                                defaultValue={productById.supplier.supplierName}
+                                readOnly={openInputUpdate}
+                            />
                             <Form.Control
                                 as="select"
                                 name="categoryId"
