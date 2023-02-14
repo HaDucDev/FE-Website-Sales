@@ -49,13 +49,13 @@ const AdminProduct = () => {
 
 
     const [productById, setProductById] = useState({
-        productId:"",
+        productId: "",
         productName: "",
         quantity: "",
         discount: "",
         unitPrice: "",
         descriptionProduct: "",
-        productImage:"",
+        productImage: "",
         category: "",
         supplier: ""
     })// state getbyId
@@ -142,7 +142,7 @@ const AdminProduct = () => {
                 discount: productDetail.discount,
                 unitPrice: productDetail.unitPrice,
                 descriptionProduct: productDetail.descriptionProduct,
-                productImage:productDetail.productImage,
+                productImage: productDetail.productImage,
                 category: productDetail.category,
                 supplier: productDetail.supplier
             });
@@ -198,7 +198,7 @@ const AdminProduct = () => {
                                     discount: "",
                                     unitPrice: "",
                                     descriptionProduct: "",
-                                    productImage:"",
+                                    productImage: "",
                                     categoryId: "",
                                     supplierId: ""
                                 });
@@ -440,7 +440,7 @@ const AdminProduct = () => {
                     <Modal.Title>Sửa product </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Mã sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
@@ -449,7 +449,7 @@ const AdminProduct = () => {
                         />
                         <ValidationMessage errorResponse={errorResponse} field="productName" />
                     </Form.Group>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Tên sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
@@ -542,83 +542,96 @@ const AdminProduct = () => {
                     <div style={{ display: "flex" }}>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
                             <Form.Label>Chọn loại hàng</Form.Label>
-                            <Form.Control
-                                type="input"
-                                placeholder="loại hàng"
-                                defaultValue={productById.category.categoryName}
-                                readOnly={openInputUpdate}
-                            />
-                            <Form.Control
-                                as="select"
-                                name="categoryId"
-                                value={productById.category.categoryId}
-                                onChange={(e) => {
-                                    setValue({ ...value, categoryId: e.target.value });
-                                    setErrorResponse({
-                                        ...errorResponse,
-                                        categoryId: ""
-                                    })
-                                    setIsSubmitting(false);// mo nut
-                                }}>
-                                <option value={0}>Chọn category...</option>
-                                {
-                                    selectCategoryList.map((category) => (
-                                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
-                                    ))
-                                }
-                            </Form.Control>
-                            <ValidationMessage errorResponse={errorResponse} field="categoryId" />
+                            {
+                                openInputUpdate ? (
+                                    <Form.Control
+                                        type="input"
+                                        placeholder="loại hàng"
+                                        defaultValue={productById.category.categoryName}
+                                        readOnly={openInputUpdate}
+                                    />
+                                ) : (<>
+                                    <Form.Control
+                                        as="select"
+                                        name="categoryId"
+                                        value={productById.category.categoryId}
+                                        onChange={(e) => {
+                                            setValue({ ...value, categoryId: e.target.value });
+                                            setErrorResponse({
+                                                ...errorResponse,
+                                                categoryId: ""
+                                            })
+                                            setIsSubmitting(false);// mo nut
+                                        }}>
+                                        <option value={0}>Chọn category...</option>
+                                        {
+                                            selectCategoryList.map((category) => (
+                                                <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
+                                            ))
+                                        }
+                                    </Form.Control>
+                                    <ValidationMessage errorResponse={errorResponse} field="categoryId" />
+                                </>)
+                            }
+
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput7" style={{ marginLeft: "10px" }}>
                             <Form.Label>Tên hãng</Form.Label>
-                            <Form.Control
-                                type="input"
-                                placeholder="loại hàng"
-                                defaultValue={productById.supplier.supplierName}
-                                readOnly={openInputUpdate}
-                            />
-                            <Form.Control
-                                as="select"
-                                name="categoryId"
-                                value={productById.supplierId}
-                                onChange={(e) => {
-                                    setValue({ ...value, supplierId: e.target.value });
-                                    setErrorResponse({
-                                        ...errorResponse,
-                                        supplierId: ""
-                                    })
-                                    setIsSubmitting(false);// mo nut
-                                }}>
-                                <option value={0}>Chọn supplier...</option>
-                                {
-                                    selectSupplierList.map((supplier) => (
-                                        <option key={supplier.supplierId} value={supplier.supplierId}>{supplier.supplierName}</option>
-                                    ))
-                                }
-                            </Form.Control>
-                            <ValidationMessage errorResponse={errorResponse} field="supplierId" />
-                        </Form.Group>                
+                            {
+                                openInputUpdate ? (<Form.Control
+                                    type="input"
+                                    placeholder="loại hàng"
+                                    defaultValue={productById.supplier.supplierName}
+                                    readOnly={openInputUpdate}
+                                />) : (
+                                    <>
+                                        <Form.Control
+                                            as="select"
+                                            name="categoryId"
+                                            value={productById.supplier.supplierId}
+                                            onChange={(e) => {
+                                                setValue({ ...value, supplierId: e.target.value });
+                                                setErrorResponse({
+                                                    ...errorResponse,
+                                                    supplierId: ""
+                                                })
+                                                setIsSubmitting(false);// mo nut
+                                            }}>
+                                            <option value={0}>Chọn supplier...</option>
+                                            {
+                                                selectSupplierList.map((supplier) => (
+                                                    <option key={supplier.supplierId} value={supplier.supplierId}>{supplier.supplierName}</option>
+                                                ))
+                                            }
+                                        </Form.Control>
+                                        <ValidationMessage errorResponse={errorResponse} field="supplierId" />
+                                    </>
+                                )
+                            }
+
+                        </Form.Group>
                     </div>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput8" style={{ marginLeft: "10px" }}>
-                            <Form.Label>Ảnh cho sản phẩm</Form.Label>
-                            <div style={{ display: "flex" }}>
-                            <div>
-                                <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
-                            </div>
-                            <div style={{ margin: "auto" }}>
-                                <Form.Label >Đổi ảnh</Form.Label>
-                                <Form.Control
-                                type="file"
-                                onChange={(e) => {
-                                    (setSelectedFile(e.target.files[0]));
-                                }}
-                            />
-                            </div>
+                        <Form.Label>Ảnh cho sản phẩm</Form.Label>
+                        <div style={{ display: "flex" }}>
+                            {
+                                openInputUpdate ? (<div>
+                                    <img style={{ border: "1px solid black" }} src={productById.productImage} width={100} height={100} alt="lỗi ảnh" />
+                                </div>) : (<div style={{ margin: "auto" }}>
+                                    <Form.Label >Đổi ảnh</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        onChange={(e) => {
+                                            (setSelectedFile(e.target.files[0]));
+                                        }}
+                                    />
+                                </div>)
+                            }
                         </div>
-                        </Form.Group>
+                    </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                    <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
                         Đóng
                     </Button>
 
