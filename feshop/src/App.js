@@ -1,9 +1,9 @@
 import './App.css';
-import AdminProduct from './components/admin/product/AdminProduct';
+import Home from './pages/Home';
 
 function App() {
   return (
-      <AdminProduct/>
+      <Home/>
   );
 }
 
