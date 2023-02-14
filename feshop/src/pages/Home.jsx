@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Button, Image } from 'react-bootstrap';
-import './home.css';
+import './css/home.css';
 
 const data = [
     {
@@ -65,11 +65,11 @@ const Home = () => {
     return (
         <>
             <div className="card-list-container" >
-                {data.map((item, index) => (
-                    <Card key={index} className="card-container">
+                {data.map((item) => (
+                    <Card className="card-container">
                         <Image src={item.image} fluid className="card-image" />
                         <Card.Body>
-                            <Card.Title className="card-title">{item.title}-{index}</Card.Title>
+                            <Card.Title className="card-title">{item.title}</Card.Title>
                             <Card.Text className="card-text">{item.text}</Card.Text>
                             <Button variant="primary" className="card-button">{item.button}</Button>
                         </Card.Body>
