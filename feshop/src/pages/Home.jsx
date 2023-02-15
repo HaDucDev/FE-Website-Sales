@@ -7,17 +7,17 @@ import 'react-pagination-library/build/css/index.css';
 const Home = () => {
 
 
-    const [listProductHome, setListProductHome] = useState([])
+    const [listProductHome, setListProductHome] = useState([])//state san pham trang home
+    const [page, setPage] = useState(1);// number be +1
+    const [totalPages, setTotalPages] = useState(1)
+
 
     useEffect(() => {
-        productServiceUser.getAllHomeProductService().then((responseData) => {
-            setListProductHome(responseData.data.content)
+        productServiceUser.getAllHomeProductService(page-1).then((responseData) => {
+            setListProductHome(responseData.data.content)    
+            setTotalPages(responseData.data.totalPages)    
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [])
-
-    const handlePageChange = (pageNumber) => {
-        console.log(`active page is ${pageNumber}`);
-      };
+    }, [page])
 
 
     return (
@@ -35,11 +35,11 @@ const Home = () => {
                 ))}
             </div>
             <Pagination
-                currentPage={3}
-                totalPages={10}
+                currentPage={page}
+                totalPages={totalPages}
                 showFirstLastPages
                 size="md"
-                changeCurrentPage={handlePageChange}         
+                changeCurrentPage={(pageNumber)=>{setPage(pageNumber);}}         
             />
         </>
     );// ngoac tong
