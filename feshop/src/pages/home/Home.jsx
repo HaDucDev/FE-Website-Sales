@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Image } from 'react-bootstrap';
 import './css/home.css';
-import productServiceUser from "../services/user/user.product.service";
+import productServiceUser from "../../services/user/user.product.service";
 import Pagination from 'react-pagination-library';
 import 'react-pagination-library/build/css/index.css';
 const Home = () => {
