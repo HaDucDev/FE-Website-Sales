@@ -1,77 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Image } from 'react-bootstrap';
 import './css/home.css';
-
-const data = [
-    {
-        title: 'Card 1',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 1',
-        button: 'Go to card 1',
-    },
-    {
-        title: 'Card 2',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 2',
-        button: 'Go to card 2',
-    },
-    {
-        title: 'Card 3',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 3',
-        button: 'Go to card 3',
-    },
-    {
-        title: 'Card 1',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 1',
-        button: 'Go to card 1',
-    },
-    {
-        title: 'Card 2',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 2',
-        button: 'Go to card 2',
-    },
-    {
-        title: 'Card 3',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 3',
-        button: 'Go to card 3',
-    },
-    {
-        title: 'Card 1',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 1',
-        button: 'Go to card 1',
-    },
-    {
-        title: 'Card 2',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 2',
-        button: 'Go to card 2',
-    },
-    {
-        title: 'Card 3',
-        image: 'https://via.placeholder.com/300x200',
-        text: 'This is card 3',
-        button: 'Go to card 3',
-    }
-    
-];
-
+import productServiceUser from "../services/user/user.product.service";
 
 const Home = () => {
+
+
+    const [listProductHome, setListProductHome] = useState([]) 
+
+    useEffect(()=>{
+       productServiceUser.getAllHomeProductService().then((responseData)=>{
+        setListProductHome(responseData.data.content)
+       }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+    },[])
+   
+
     return (
         <>
             <div className="card-list-container" >
-                {data.map((item) => (
+                {listProductHome.map((item) => (
                     <Card className="card-container">
-                        <Image src={item.image} fluid className="card-image" />
+                        <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }}/>
                         <Card.Body>
-                            <Card.Title className="card-title">{item.title}</Card.Title>
-                            <Card.Text className="card-text">{item.text}</Card.Text>
-                            <Button variant="primary" className="card-button">{item.button}</Button>
+                            <Card.Title className="card-title">{item.productName}</Card.Title>
+                            <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
+                            <Button variant="primary" className="card-button">Thêm sản phẩm vào giỏ hàng</Button>
                         </Card.Body>
                     </Card>
                 ))}
