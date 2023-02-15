@@ -9,15 +9,17 @@ const Home = () => {
 
     const [listProductHome, setListProductHome] = useState([])//state san pham trang home
     const [page, setPage] = useState(1);// number be +1
-    const [totalPages, setTotalPages] = useState(1)
+    const [totalPages, setTotalPages] = useState(1);//tong so trang san pham
+    const sizes = [4, 8, 16];// so luong san pham 1 trang
+    const [size, setSize] = useState(8);
 
 
     useEffect(() => {
-        productServiceUser.getAllHomeProductService(page-1).then((responseData) => {
-            setListProductHome(responseData.data.content)    
-            setTotalPages(responseData.data.totalPages)    
+        productServiceUser.getAllHomeProductService(page - 1, size).then((responseData) => {
+            setListProductHome(responseData.data.content);//data    
+            setTotalPages(responseData.data.totalPages);//so trang   
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [page])
+    }, [page, size])
 
 
     return (
@@ -34,13 +36,21 @@ const Home = () => {
                     </Card>
                 ))}
             </div>
-            <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                showFirstLastPages
-                size="md"
-                changeCurrentPage={(pageNumber)=>{setPage(pageNumber);}}         
-            />
+            <div style={{display:"flex", justifyContent:"center",alignItems:"center", height:"50px"}}>
+            <select onChange={(e) => { setSize(e.target.value); }} value={size} style={{display:"flex", justifyContent:"center",alignItems:"center", width:"10%"}}>
+                    {sizes.map((size) => (
+                        <option key={size} value={size}>
+                            {size} sản phẩm trang này
+                        </option>
+                    ))}
+                </select>
+                <Pagination style={{display:"flex", justifyContent:"center",alignItems:"center",marginLeft:"10px"}}
+                    currentPage={page}
+                    totalPages={totalPages}
+                    showFirstLastPages
+                    size="md"
+                    changeCurrentPage={(pageNumber) => { setPage(pageNumber); }} />
+            </div>
         </>
     );// ngoac tong
 }
