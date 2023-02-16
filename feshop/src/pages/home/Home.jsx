@@ -31,13 +31,13 @@ const Home = () => {
                         <Card.Body>
                             <Card.Title className="card-title">{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
-                            <Button variant="primary" className="card-button">Thêm sản phẩm vào giỏ hàng</Button>
+                            <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>
                         </Card.Body>
                     </Card>
                 ))}
             </div>
             <div style={{display:"flex", justifyContent:"center",alignItems:"center", height:"50px"}}>
-            <select onChange={(e) => { setSize(e.target.value); }} value={size} style={{display:"flex", justifyContent:"center",alignItems:"center", width:"10%"}}>
+            <select onChange={(e) => { setSize(e.target.value); }} value={size} style={{display:"flex", justifyContent:"center",alignItems:"center", width:"12%"}}>
                     {sizes.map((size) => (
                         <option key={size} value={size}>
                             {size} sản phẩm trang này

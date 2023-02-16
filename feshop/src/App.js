@@ -4,6 +4,7 @@ import AdminCategory from './components/admin/category/AdminCategory';
 import AdminProduct from './components/admin/product/AdminProduct';
 import AdminSupplier from './components/admin/supplier/AdminSupplier';
 import Admin from './pages/admin/Admin';
+import Login from './pages/common/Login';
 import Home from './pages/home/Home';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                 <Route path="supplier" element={<AdminSupplier/>}></Route>
                 <Route path="product" element={<AdminProduct/>}></Route>
             </Route>
+            <Route path="/login" element={<Login/>}></Route>
           </Routes>
       </BrowserRouter>
       
