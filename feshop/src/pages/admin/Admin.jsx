@@ -6,45 +6,48 @@ import "./css/sidebar.css";
 const sidebarNav = [
   {
     id: 0,
-    link: "/admin/reviews",
-    section: "reviews",
-    text: "Đánh giá",
-  },
-  {
-    id: 1,
     link: "/admin/users",
     section: "users",
     text: "Tài khoản",
+    
   },
   {
-    id: 2,
-    link: "/admin/products",
-    section: "products",
-    text: "Sản phẩm",
-  },
-  {
-    id: 3,
-    link: "/admin/orders",
-    section: "orders",
-    text: "Đơn hàng",
-  },
-  {
-    id: 4,
+    id: 1,
     link: "/admin/category",
     section: "category",
     text: "Danh mục",
   },
   {
-    id: 5,
+    id: 2,
     link: "/admin/supplier",
     section: "supplier",
     text: "Nhà cung cấp",
+    
   },
   {
-    id: 6,
+    id: 3,
+    link: "/admin/products",
+    section: "products",
+    text: "Sản phẩm",  
+  },
+  {
+    id: 4,
+    link: "/admin/orders",
+    section: "orders",
+    text: "Đơn hàng",
+  },
+  {
+    id: 5,
     link: "/admin/revenue",
     section: "supplier",
     text: "Thống kê",
+    
+  },
+  {
+    id: 6,
+    link: "/admin/reviews",
+    section: "reviews",
+    text: "Đánh giá",
   },
 ];
 
