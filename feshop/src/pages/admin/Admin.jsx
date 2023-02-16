@@ -26,7 +26,7 @@ const sidebarNav = [
   },
   {
     id: 3,
-    link: "/admin/products",
+    link: "/admin/product",
     section: "products",
     text: "Sản phẩm",  
   },

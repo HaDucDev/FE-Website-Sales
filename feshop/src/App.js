@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import AdminCategory from './components/admin/category/AdminCategory';
+import AdminProduct from './components/admin/product/AdminProduct';
+import AdminSupplier from './components/admin/supplier/AdminSupplier';
 import Admin from './pages/admin/Admin';
 import Home from './pages/home/Home';
 
@@ -12,6 +14,8 @@ function App() {
             <Route path="/" element={<Home/>}></Route>
             <Route path="/admin" element={<Admin/>}>
                 <Route path="category" element={<AdminCategory/>}></Route>
+                <Route path="supplier" element={<AdminSupplier/>}></Route>
+                <Route path="product" element={<AdminProduct/>}></Route>
             </Route>
           </Routes>
       </BrowserRouter>
