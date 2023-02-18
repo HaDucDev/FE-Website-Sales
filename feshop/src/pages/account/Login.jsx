@@ -10,7 +10,8 @@ const Login = () => {
     password: ""
   })
 
-  const handleLogin =() =>{
+  const handleLogin =(e) =>{
+    e.preventDefault()
       accountService.loginService(loginAccount).then((dataResponse)=>{
         let data= dataResponse.data;
         console.log(data);
