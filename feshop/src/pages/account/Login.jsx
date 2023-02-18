@@ -1,6 +1,6 @@
 import {useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import accountService from '../../services/account/account.service';
 const Login = () => {
 
@@ -10,13 +10,21 @@ const Login = () => {
     password: ""
   })
 
+  const nav= useNavigate();
+
   const handleLogin =(e) =>{
     e.preventDefault();
       accountService.loginService(loginAccount).then((dataResponse)=>{
         let dataUser= dataResponse.data;
         localStorage.setItem("currentUser",JSON.stringify(dataUser));
         const getcurrentUser=JSON.parse(localStorage.getItem("currentUser"));
-        console.log(getcurrentUser.username);
+        console.log("Người dùng "+ getcurrentUser.username +" đang dăng nhập");
+        if(getcurrentUser){
+            if(getcurrentUser.roleName==="ROLE_ADMIN"){
+              nav("/admin")
+            }
+        }
+        
       }).catch((err) => {
         let errorShow = err.response.data;
         alert(errorShow);
