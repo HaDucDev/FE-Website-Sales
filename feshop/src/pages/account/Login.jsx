@@ -14,8 +14,9 @@ const Login = () => {
     e.preventDefault();
       accountService.loginService(loginAccount).then((dataResponse)=>{
         let dataUser= dataResponse.data;
-        localStorage.setItem('currentUser',JSON.stringify(dataUser));
-        console.log(localStorage.getItem('currentUser'));
+        localStorage.setItem("currentUser",JSON.stringify(dataUser));
+        const getcurrentUser=JSON.parse(localStorage.getItem("currentUser"));
+        console.log(getcurrentUser.username);
       }).catch((err) => {
         let errorShow = err.response.data;
         alert(errorShow);
