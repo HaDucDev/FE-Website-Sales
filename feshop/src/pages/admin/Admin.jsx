@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "./css/admin.css";
 
 
@@ -53,6 +53,15 @@ const sideBar = [
 
 const Admin = () => {
 
+  const nav = useNavigate();
+
+  useEffect(()=>{
+    let user = JSON.parse(localStorage.getItem("currentUser"));
+    if(user==null || user ==="" || user.roleName !== "ROLE_ADMIN"){
+        alert("Bạn không có quyền vào trang này");
+        nav("/")
+    } 
+  })
   const [activeIndex, setActiveIndex] = useState(null);
   return (
     <>
