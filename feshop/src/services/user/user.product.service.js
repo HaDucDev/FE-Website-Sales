@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_ADMIN} from "../../utils/utils";
+import { API_COMMON} from "../../utils/utils";
 
 
 const getAllHomeProductService = async (number,size) => {
-    const response = await axios.get(API_ADMIN +`product?number=${number}&size=${size}`);
+    const response = await axios.get(API_COMMON +`product?number=${number}&size=${size}`);
     return response;
 }
 
