@@ -11,10 +11,11 @@ const Login = () => {
   })
 
   const handleLogin =(e) =>{
-    e.preventDefault()
+    e.preventDefault();
       accountService.loginService(loginAccount).then((dataResponse)=>{
-        let data= dataResponse.data;
-        console.log(data);
+        let dataUser= dataResponse.data;
+        localStorage.setItem('currentUser',JSON.stringify(dataUser));
+        console.log(localStorage.getItem('currentUser'));
       }).catch((err) => {
         let errorShow = err.response.data;
         alert(errorShow);
@@ -52,7 +53,7 @@ const Login = () => {
                 }}
               />
             </Form.Group>
-            <div className="checkbox-container">
+            <div>
               <input
                 id="checkbox"
                 type="checkbox"
