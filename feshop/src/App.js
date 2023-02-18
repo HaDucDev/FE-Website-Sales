@@ -4,7 +4,7 @@ import AdminCategory from './components/admin/category/AdminCategory';
 import AdminProduct from './components/admin/product/AdminProduct';
 import AdminSupplier from './components/admin/supplier/AdminSupplier';
 import Admin from './pages/admin/Admin';
-import Login from './pages/common/Login';
+import Login from './pages/account/Login';
 import Home from './pages/home/Home';
 
 function App() {

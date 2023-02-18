@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import "./css/sidebar.css";
+import "./css/admin.css";
 
 
-const sidebarNav = [
+const sideBar = [
   {
     id: 0,
     link: "/admin/users",
@@ -65,8 +65,8 @@ const Admin = () => {
               width="200"
               height="200"
             />
-            {sidebarNav.length > 0 &&
-              sidebarNav.map((nav, index) => (
+            {sideBar.length > 0 &&
+              sideBar.map((nav, index) => (
                 <Link
                   to={nav.link}
                   key={index}

@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 const Login = () => {
+
+  const [isShow, setIsShow] = useState(false);
 
     return (
         <>
@@ -25,13 +28,23 @@ const Login = () => {
           <Form.Group>
             <Form.Label>Mật khẩu</Form.Label>
             <Form.Control
-              type="password"
+              type={isShow ? "text" : "password"}
               placeholder="Mật khẩu"
               onChange={e => {
                 //setPassword(e.target.value);
               }}
             />
           </Form.Group>
+          <div className="checkbox-container">
+          <input
+            id="checkbox"
+            type="checkbox"
+            checked={isShow}
+            onChange={ (e)=> setIsShow(e.target.checked)}
+            style ={{marginRight: '5px'}}
+          />
+          <label htmlFor="checkbox">  Hiển thị mật khẩu</label>
+        </div>
           <Button variant="primary" type="submit" className="w-100 mt-3"> Đăng nhập</Button>
           <div>
             <Link to="/" style={{float:"left"}}>Đăng kí tài khoản</Link>
