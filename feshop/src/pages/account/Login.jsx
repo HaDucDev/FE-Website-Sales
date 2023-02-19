@@ -23,6 +23,9 @@ const Login = () => {
             if(getcurrentUser.roleName==="ROLE_ADMIN"){
               nav("/admin")
             }
+            if(getcurrentUser.roleName==="ROLE_CUSTOMER"){
+              nav("/")
+            }
         }
         
       }).catch((err) => {
