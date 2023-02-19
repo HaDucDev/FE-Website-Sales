@@ -6,23 +6,24 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { LoginContext } from '../../App';
-
 // ui React bootstrap https://react-bootstrap.github.io/components/navbar/#responsive-behaviors
 const HeaderApp = () => {
 
-    const textLogin = useContext(LoginContext);
+  const textLogin = useContext(LoginContext);
     useEffect(() => {
       console.log("ok123456")
       console.log(textLogin.loadPage)
     }, [textLogin.loadPage]);
-    return (
-        <>
-            {['sm'].map((expand) => (
+
+  const doneLogin = localStorage.getItem("currentUser");
+  return (
+    <>
+      {['sm'].map((expand) => (
         <Navbar key={expand} bg="light" expand={expand} className="mb-3">
           <Container fluid>
             <Navbar.Brand href="#">Navbar Offcanvas</Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-            <Navbar.Offcanvas  id={`offcanvasNavbar-expand-${expand}`} aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`} placement="end">
+            <Navbar.Offcanvas id={`offcanvasNavbar-expand-${expand}`} aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`} placement="end">
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
                   Offcanvas
@@ -42,10 +43,10 @@ const HeaderApp = () => {
                     </NavDropdown.Item>
                   </NavDropdown>
                   {
-                    textLogin.loadPage===1 ? (
-                        <Nav.Link href="#action2">Đăng xuất</Nav.Link>
-                    ):
-                    (<Nav.Link href="#action2">Đăng nhập</Nav.Link>)
+                    (doneLogin) ? (
+                      <Nav.Link href="#action2">Đăng xuất</Nav.Link>
+                    ) :
+                      (<Nav.Link href="#action2">Đăng nhập</Nav.Link>)
                   }
                 </Nav>
               </Offcanvas.Body>
@@ -54,8 +55,8 @@ const HeaderApp = () => {
         </Navbar>
       ))}
 
-        </>
-    )
+    </>
+  )
 }
 
 export default HeaderApp;

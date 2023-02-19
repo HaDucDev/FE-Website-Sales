@@ -13,19 +13,20 @@ import { useState } from 'react';
 
 
 export const LoginContext = createContext();
+
 function App() {
 
   const [loadPage, setLoadPage] = useState(0);
 
-  const state= {
+  const state = {
     loadPage,
     setLoadPage
   }
   return (
     <>
-    {
-      console.log("test12345")
-    }
+      {
+        console.log("test12345")
+      }
       <LoginContext.Provider value={state}>
         <HeaderApp />
         <BrowserRouter>
@@ -36,7 +37,7 @@ function App() {
               <Route path="supplier" element={<AdminSupplier />}></Route>
               <Route path="product" element={<AdminProduct />}></Route>
             </Route>
-            <Route path="/login" element={<Login/>}></Route>
+            <Route path="/login" element={<Login />}></Route>
           </Routes>
         </BrowserRouter>
       </LoginContext.Provider>
