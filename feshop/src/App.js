@@ -7,23 +7,35 @@ import Admin from './pages/admin/Admin';
 import Login from './pages/account/Login';
 import Home from './pages/home/Home';
 import HeaderApp from './pages/account/HeaderApp';
+import { createContext } from 'react';
+import { useState } from 'react';
 
+
+
+export const LoginContext = createContext();
 function App() {
+
+  const [loadPage, setLoadPage] = useState(0);
   return (
     <>
-      <HeaderApp/>
-      <BrowserRouter>
+    {
+      console.log("test12345")
+    }
+      <LoginContext.Provider value={loadPage}>
+        <HeaderApp />
+        <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home/>}></Route>
-            <Route path="/admin" element={<Admin/>}>
-                <Route path="category" element={<AdminCategory/>}></Route>
-                <Route path="supplier" element={<AdminSupplier/>}></Route>
-                <Route path="product" element={<AdminProduct/>}></Route>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/admin" element={<Admin />} exact>
+              <Route path="category" element={<AdminCategory />}></Route>
+              <Route path="supplier" element={<AdminSupplier />}></Route>
+              <Route path="product" element={<AdminProduct />}></Route>
             </Route>
-            <Route path="/login" element={<Login/>}></Route>
+            <Route path="/login" element={<Login setLoadPage={setLoadPage}/>}></Route>
           </Routes>
-      </BrowserRouter>
-      
+        </BrowserRouter>
+      </LoginContext.Provider>
+
     </>
 
   );

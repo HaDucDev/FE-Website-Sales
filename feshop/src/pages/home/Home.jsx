@@ -25,8 +25,8 @@ const Home = () => {
     return (
         <>
             <div className="card-list-container" >
-                {listProductHome.map((item) => (
-                    <Card className="card-container">
+                {listProductHome.map((item,index) => (
+                    <Card key={index} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
                             <Card.Title className="card-title">{item.productName}</Card.Title>

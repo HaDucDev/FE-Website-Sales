@@ -2,7 +2,7 @@ import {useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import accountService from '../../services/account/account.service';
-const Login = () => {
+const Login = ({setLoadPage}) => {
 
   const [isShow, setIsShow] = useState(false);
   const [loginAccount, setLoginaccount] = useState({
@@ -21,6 +21,7 @@ const Login = () => {
         console.log("Người dùng "+ getcurrentUser.username +" đang dăng nhập");
         if(getcurrentUser){
             if(getcurrentUser.roleName==="ROLE_ADMIN"){
+              setLoadPage(1);
               nav("/admin")
             }
             if(getcurrentUser.roleName==="ROLE_CUSTOMER"){

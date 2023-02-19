@@ -56,11 +56,15 @@ const Admin = () => {
   const nav = useNavigate();
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
+  //const textLogin = useContext(LoginContext);
+
   useEffect(() => {
-    console.log("ok")
     if (user == null || user === "" || user.roleName !== "ROLE_ADMIN") {
       alert("Bạn không có quyền vào trang này");
-      nav("/")
+      nav("/");
+    }
+    else{
+      //textLogin.setLoadPage(1);
     }
   })
   const [activeIndex, setActiveIndex] = useState(null);

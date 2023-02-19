@@ -1,11 +1,20 @@
+import { useEffect } from 'react';
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { LoginContext } from '../../App';
 
 // ui React bootstrap https://react-bootstrap.github.io/components/navbar/#responsive-behaviors
 const HeaderApp = () => {
+
+    const textLogin = useContext(LoginContext);
+    useEffect(() => {
+      console.log("ok123456")
+      console.log(textLogin)
+    }, [textLogin]);
     return (
         <>
             {['sm'].map((expand) => (
@@ -33,7 +42,7 @@ const HeaderApp = () => {
                     </NavDropdown.Item>
                   </NavDropdown>
                   {
-                    localStorage.getItem("currentUser") ? (
+                    textLogin===1 ? (
                         <Nav.Link href="#action2">Đăng xuất</Nav.Link>
                     ):
                     (<Nav.Link href="#action2">Đăng nhập</Nav.Link>)
