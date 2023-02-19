@@ -6,10 +6,12 @@ import AdminSupplier from './components/admin/supplier/AdminSupplier';
 import Admin from './pages/admin/Admin';
 import Login from './pages/account/Login';
 import Home from './pages/home/Home';
+import HeaderApp from './pages/account/HeaderApp';
 
 function App() {
   return (
     <>
+      <HeaderApp/>
       <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>}></Route>
