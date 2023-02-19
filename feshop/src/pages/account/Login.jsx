@@ -1,8 +1,9 @@
-import {useState } from 'react';
+import {useContext, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../App';
 import accountService from '../../services/account/account.service';
-const Login = ({setLoadPage}) => {
+const Login = () => {
 
   const [isShow, setIsShow] = useState(false);
   const [loginAccount, setLoginaccount] = useState({
@@ -12,6 +13,8 @@ const Login = ({setLoadPage}) => {
 
   const nav= useNavigate();
 
+  const textLogin = useContext(LoginContext);
+
   const handleLogin =(e) =>{
     e.preventDefault();
       accountService.loginService(loginAccount).then((dataResponse)=>{
@@ -19,9 +22,9 @@ const Login = ({setLoadPage}) => {
         localStorage.setItem("currentUser",JSON.stringify(dataUser));
         const getcurrentUser=JSON.parse(localStorage.getItem("currentUser"));
         console.log("Người dùng "+ getcurrentUser.username +" đang dăng nhập");
+        textLogin.setLoadPage(1);
         if(getcurrentUser){
             if(getcurrentUser.roleName==="ROLE_ADMIN"){
-              setLoadPage(1);
               nav("/admin")
             }
             if(getcurrentUser.roleName==="ROLE_CUSTOMER"){

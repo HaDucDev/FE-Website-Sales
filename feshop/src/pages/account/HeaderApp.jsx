@@ -13,8 +13,8 @@ const HeaderApp = () => {
     const textLogin = useContext(LoginContext);
     useEffect(() => {
       console.log("ok123456")
-      console.log(textLogin)
-    }, [textLogin]);
+      console.log(textLogin.loadPage)
+    }, [textLogin.loadPage]);
     return (
         <>
             {['sm'].map((expand) => (
@@ -42,7 +42,7 @@ const HeaderApp = () => {
                     </NavDropdown.Item>
                   </NavDropdown>
                   {
-                    textLogin===1 ? (
+                    textLogin.loadPage===1 ? (
                         <Nav.Link href="#action2">Đăng xuất</Nav.Link>
                     ):
                     (<Nav.Link href="#action2">Đăng nhập</Nav.Link>)
