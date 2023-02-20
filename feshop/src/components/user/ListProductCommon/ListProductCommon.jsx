@@ -6,7 +6,7 @@ import productServiceUser from '../../../services/user/user.product.service';
 import Pagination from 'react-pagination-library';
 import 'react-pagination-library/build/css/index.css';
 import { Link } from 'react-router-dom';
-const ListProductHome = ()=>{
+const ListProductCommon = ()=>{
 
     const [listProductHome, setListProductHome] = useState([])//state san pham trang home
     const [page, setPage] = useState(1);// number be +1
@@ -59,4 +59,4 @@ const ListProductHome = ()=>{
 
 }
 
-export default ListProductHome;
+export default ListProductCommon;

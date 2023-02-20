@@ -10,6 +10,7 @@ import HeaderApp from './pages/common/HeaderApp';
 import { createContext } from 'react';
 import { useState } from 'react';
 import ProductDetail from './components/user/product-detail/ProductDetail';
+import ListProductCommon from './components/user/ListProductCommon/ListProductCommon';
 
 
 
@@ -36,11 +37,11 @@ function App() {
             {/* common */}
 
             <Route path="/" element={<Home />}>
-              {/* <Route path="/product-detail/:id" element={<ProductDetail />} /> */}
+              <Route path="" element={<ListProductCommon/>} />
+              <Route path="/product-detail/:id" element={<ProductDetail />} />
             </Route>
             <Route path="/login" element={<Login />}></Route>
-            <Route path="/product-detail/:id" element={<ProductDetail />} />
-
+       
             {/* admin */}
             <Route path="/admin" element={<Admin />} exact>
               <Route path="category" element={<AdminCategory />}></Route>

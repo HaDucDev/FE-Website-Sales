@@ -1,11 +1,8 @@
-import ListProducCommon from "../../components/user/ListProductCommon/ListProductCommon";
+import { Outlet} from "react-router";
 const Home = () => {
-
-   
-
     return (
         <>
-        <ListProducCommon/>
+            <Outlet/>
         </>
     );// ngoac tong
 }
