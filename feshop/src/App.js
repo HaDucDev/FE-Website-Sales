@@ -26,13 +26,9 @@ function App() {
   }
   return (
     <>
-      {
-        console.log("test12345")
-      }
       <LoginContext.Provider value={state}>
-        <HeaderApp />
-
         <BrowserRouter>
+          <HeaderApp />
           <Routes>
             {/* common */}
 
