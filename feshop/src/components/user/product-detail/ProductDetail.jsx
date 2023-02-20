@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
-import productServiceUser from '../../services/user/user.product.service';
+import productServiceUser from '../../../services/user/user.product.service';
 
 const ProductDetail = () => {
 

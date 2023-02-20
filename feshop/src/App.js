@@ -9,7 +9,7 @@ import Home from './pages/home/Home';
 import HeaderApp from './pages/common/HeaderApp';
 import { createContext } from 'react';
 import { useState } from 'react';
-import ProductDetail from './pages/common/ProductDetail';
+import ProductDetail from './components/user/product-detail/ProductDetail';
 
 
 
