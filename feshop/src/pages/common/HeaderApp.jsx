@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { Button } from 'react-bootstrap';
+import { Cart } from 'react-bootstrap-icons';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -25,7 +26,9 @@ const HeaderApp = () => {
       {['sm'].map((expand) => (
         <Navbar key={expand} bg="light" expand={expand} className="mb-3">
           <Container fluid>
-            <Navbar.Brand href="#">Navbar Offcanvas</Navbar.Brand>
+            <Navbar.Brand href="#" onClick={(e) => { e.preventDefault(); nav("/") }}><img src="https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676874555/hdshop_a8eqd5.png" alt='lỗi'
+              style={{ height: "40px", width: "100%", objectFit: "cover", borderRadius: "50%" }} />
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
             <Navbar.Offcanvas id={`offcanvasNavbar-expand-${expand}`} aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`} placement="end">
               <Offcanvas.Header closeButton>
@@ -35,13 +38,13 @@ const HeaderApp = () => {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="#action1">Giỏ hàng</Nav.Link>
+                  <Nav.Link href="#action1" style={{ marginRight: "10px" }}>Giỏ hàng<Cart size={24} className="cursor-pointer"></Cart><span style={{ fontSize: "20px" }}>0</span> </Nav.Link>
                   {
                     (doneLogin) ? (
                       <>
-                        <img src={JSON.parse(doneLogin).avatar ? JSON.parse(doneLogin).avatar : "https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png"} alt='lỗi' 
-                        style={{height:"40px", width:"40px", objectFit:"cover",borderRadius:"50%"}}/>
-                    
+                        <img src={JSON.parse(doneLogin).avatar ? JSON.parse(doneLogin).avatar : "https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png"} alt='lỗi'
+                          style={{ height: "40px", width: "40px", objectFit: "cover", borderRadius: "50%" }} />
+
                         <NavDropdown title={JSON.parse(doneLogin).username} id={`offcanvasNavbarDropdown-expand-${expand}`}>
                           <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
                           <NavDropdown.Item href="#action4">
