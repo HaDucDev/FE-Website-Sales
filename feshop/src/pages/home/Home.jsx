@@ -4,6 +4,7 @@ import './css/home.css';
 import productServiceUser from "../../services/user/user.product.service";
 import Pagination from 'react-pagination-library';
 import 'react-pagination-library/build/css/index.css';
+import { Link } from 'react-router-dom';
 const Home = () => {
 
 
@@ -29,9 +30,12 @@ const Home = () => {
                     <Card key={index} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
-                            <Card.Title className="card-title">{item.productName}</Card.Title>
+                            <Card.Title className="card-title" style={{height:"28%"}}>{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
-                            <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>
+                            <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>                           
+                            <Link to={`/product-detail/${item.productId}`} className="btn-click">
+                                    <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>
+                            </Link>
                         </Card.Body>
                     </Card>
                 ))}

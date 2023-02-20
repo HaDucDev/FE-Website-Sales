@@ -4,11 +4,12 @@ import AdminCategory from './components/admin/category/AdminCategory';
 import AdminProduct from './components/admin/product/AdminProduct';
 import AdminSupplier from './components/admin/supplier/AdminSupplier';
 import Admin from './pages/admin/Admin';
-import Login from './pages/account/Login';
+import Login from './pages/common/Login';
 import Home from './pages/home/Home';
-import HeaderApp from './pages/account/HeaderApp';
+import HeaderApp from './pages/common/HeaderApp';
 import { createContext } from 'react';
 import { useState } from 'react';
+import ProductDetail from './pages/common/ProductDetail';
 
 
 
@@ -29,15 +30,20 @@ function App() {
       }
       <LoginContext.Provider value={state}>
         <HeaderApp />
+
         <BrowserRouter>
           <Routes>
+            {/* common */}
             <Route path="/" element={<Home />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/product-detail/:id" element={<ProductDetail />} />
+
+            {/* admin */}
             <Route path="/admin" element={<Admin />} exact>
               <Route path="category" element={<AdminCategory />}></Route>
               <Route path="supplier" element={<AdminSupplier />}></Route>
               <Route path="product" element={<AdminProduct />}></Route>
             </Route>
-            <Route path="/login" element={<Login />}></Route>
           </Routes>
         </BrowserRouter>
       </LoginContext.Provider>
