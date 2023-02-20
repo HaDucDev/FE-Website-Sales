@@ -34,7 +34,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* common */}
-            <Route path="/" element={<Home />}></Route>
+
+            <Route path="/" element={<Home />}>
+              {/* <Route path="/product-detail/:id" element={<ProductDetail />} /> */}
+            </Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/product-detail/:id" element={<ProductDetail />} />
 

@@ -7,9 +7,15 @@ const getAllHomeProductService = async (number,size) => {
     return response;
 }
 
+const getDetailProductService = async (id) => {
+    const response = await axios.get(API_COMMON +`product/detail/${id}`);
+    return response;
+}
+
 
  const productServiceUser = {
     getAllHomeProductService,
+    getDetailProductService
 }
 
 export default productServiceUser;
