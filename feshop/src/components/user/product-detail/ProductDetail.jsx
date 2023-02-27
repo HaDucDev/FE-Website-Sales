@@ -15,6 +15,8 @@ const ProductDetail = () => {
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [id]);
 
+    const [quantityBuy, setQuantityBuy] = useState(1);
+
     return (
         <>
             <Container>
@@ -26,15 +28,21 @@ const ProductDetail = () => {
                     <Col md={6}>
                         <h2>{productDetail.productName}</h2>
                         <p className="lead">Giá: {productDetail.unitPrice} VND
-                                - Giảm: {productDetail.discount}%
+                            - Giảm: {productDetail.discount}%
                         </p>
                         <p className="lead">Loại sản phẩm: {productDetail.isCategory}</p>
                         <p className="lead">Nhà sản xuất: {productDetail.isSupplier}</p>
                         <p className="lead">Số lượng: Còn {productDetail.quantity} sản phẩm</p>
-                        <p >Mô tả:
-                            <div dangerouslySetInnerHTML={{__html: productDetail.descriptionProduct}}/>
-                        </p>
-                        <Button variant="primary">Add to Cart</Button>
+                        <div style={{marginBottom:"2px"}}>
+                            <p style={{marginBottom:"0px"}}>Mô tả:</p>
+                            <div dangerouslySetInnerHTML={{ __html: productDetail.descriptionProduct }} />
+                        </div>
+                        <div style={{ display: "flex" , justifyContent: "left"}}> 
+                            <input type="number" min={1} max={productDetail.quantity} value={quantityBuy} 
+                             onChange={(e)=>{setQuantityBuy(e.target.value)}} style={{marginRight:"5px", width:"10%"}} />
+                            <Button variant="primary">Add to Cart</Button>
+                        </div>
+                        
                     </Col>
                 </Row>
             </Container>

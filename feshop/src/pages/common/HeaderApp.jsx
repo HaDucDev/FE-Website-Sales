@@ -49,8 +49,7 @@ const HeaderApp = () => {
                   <Nav.Link href="#action1" onClick={
                     (e) => {
                       e.preventDefault();
-                      (doneLogin) ? (nav("/cart")): (alert("ok"))
-                      //localStorage.removeItem("currentUser"); nav("/") 
+                      (doneLogin) ? (nav("/cart")): (alert("Bạn phải đăng nhập mới có thể xem giỏ hàng"))
                     }
                   } style={{ marginRight: "10px" }}>
                     Giỏ hàng<Cart size={24} className="cursor-pointer" />
