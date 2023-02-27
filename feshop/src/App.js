@@ -11,6 +11,7 @@ import { createContext } from 'react';
 import { useState } from 'react';
 import ProductDetail from './components/user/product-detail/ProductDetail';
 import ListProductCommon from './components/user/ListProductCommon/ListProductCommon';
+import Cart from './pages/home/cart/Cart';
 
 
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/product-detail/:id" element={<ProductDetail />} />
             </Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="/cart" element={<Cart/>}></Route>
        
             {/* admin */}
             <Route path="/admin" element={<Admin />} exact>
