@@ -6,8 +6,14 @@ const getCountProductCategoryService = async (userId) => {
     return response;
 }
 
+const getAllProductInCartService = async (userId) => {
+    const response = await axios.get(API_COMMON +`cart/all-product/${userId}`);
+    return response;
+}
+
 const cartServiceUser = {
     getCountProductCategoryService,
+    getAllProductInCartService
 }
 
 export default cartServiceUser;

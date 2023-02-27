@@ -8,9 +8,10 @@ const Cart = () => {
     const [carts, setCarts] = useState([]);
 
     useEffect(() => {
-        cartServiceUser.getCountProductCategoryService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
+        cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
             console.log("test 12345678 - " + JSON.parse(localStorage.getItem("currentUser")).userId)
             setCarts(dataResponse.data);
+            console.log(dataResponse.data)
           })
     }, [])
     return (

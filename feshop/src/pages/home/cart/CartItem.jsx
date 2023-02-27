@@ -1,21 +1,20 @@
 
 
-const CartItem = (data) => {
+const CartItem = (props) => {
 
-    console.log(data.length)
     return (
         <>
             {
-                data.length > 0 ? (
-                    data.map((item) => (
-                        <tr key={item.id}>
-                            <td>{item.name}</td>
-                            <td>${item.price}</td>
+                props.data.length > 0 ? (
+                    props.data.map((item) => (
+                        <tr key={item.id.producId}>
+                            <td>{item.product.productName}</td>
+                            <td>{item.product.productName}</td>
                             <td>{item.quantity}</td>
-                            <td>${item.price * item.quantity}</td>
+                            <td>${item.quantity}</td>
                         </tr>
                     ))
-                ) : ("Không có sản phẩm nào")
+                ) : "Không có sản phẩm nào"
             }
         </>
     )
