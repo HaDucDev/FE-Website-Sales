@@ -1,21 +1,22 @@
 
 
-const CartItem = () => {
+const CartItem = (data) => {
+
+    console.log(data.length)
     return (
         <>
-
-            <tr key={1}>
-                <td>21312312</td>
-                <td>asdasdas</td>
-                <td>asdasdasd</td>
-                <td>dasdasdasd</td>
-            </tr>
-            <tr key={2}>
-                <td>21312312</td>
-                <td>asdasdas</td>
-                <td>asdasdasd</td>
-                <td>dasdasdasd</td>
-            </tr>
+            {
+                data.length > 0 ? (
+                    data.map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.name}</td>
+                            <td>${item.price}</td>
+                            <td>{item.quantity}</td>
+                            <td>${item.price * item.quantity}</td>
+                        </tr>
+                    ))
+                ) : ("Không có sản phẩm nào")
+            }
         </>
     )
 }
