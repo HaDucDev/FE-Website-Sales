@@ -49,6 +49,7 @@ const HeaderApp = () => {
                   <Nav.Link href="#action1" onClick={
                     (e) => {
                       e.preventDefault();
+                      (doneLogin) ? (nav("/cart")): (alert("ok"))
                       //localStorage.removeItem("currentUser"); nav("/") 
                     }
                   } style={{ marginRight: "10px" }}>
