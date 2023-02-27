@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
+import { LoginContext } from '../../../App';
 import cartServiceUser from '../../../services/user/user.cart.service';
 import productServiceUser from '../../../services/user/user.product.service';
 import ValidationMessage from '../../acommon-component/ValidationMessage';
@@ -23,6 +25,8 @@ const ProductDetail = () => {
        message:""
     });//state error
 
+    const textLogin = useContext(LoginContext);// dung de load lai cart o header
+
     const addToCart = ()=>{
         let data= {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
@@ -35,6 +39,7 @@ const ProductDetail = () => {
                 quantity:"",
                 message:""
             })
+            textLogin.setLoadPage(2);
             alert(dataShow["message"]);
         }).catch((err)=>{
             console.log(err)
