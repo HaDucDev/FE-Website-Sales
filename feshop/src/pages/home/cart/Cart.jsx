@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Table } from 'react-bootstrap';
+import CartItem from './CartItem';
 import "./css/cart.css"
 const Cart = () => {
 
@@ -18,14 +19,7 @@ const Cart = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {items.map((item) => (
-                            <tr key={item.id}>
-                                <td>{item.name}</td>
-                                <td>${item.price}</td>
-                                <td>{item.quantity}</td>
-                                <td>${item.price * item.quantity}</td>
-                            </tr>
-                        ))}
+                        <CartItem/>
                     </tbody>
                 </Table>
             </div>
