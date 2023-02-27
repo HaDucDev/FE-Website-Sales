@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
+import cartServiceUser from '../../../services/user/user.cart.service';
 import productServiceUser from '../../../services/user/user.product.service';
+import ValidationMessage from '../../acommon-component/ValidationMessage';
 
 const ProductDetail = () => {
 
@@ -16,6 +18,30 @@ const ProductDetail = () => {
     }, [id]);
 
     const [quantityBuy, setQuantityBuy] = useState(1);
+    const [errorResponse, setErrorResponse] = useState({
+       quantity:"",
+       message:""
+    });//state error
+
+    const addToCart = ()=>{
+        let data= {
+            "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+            "productId":Number(id),
+            "quantity": (quantityBuy==="") ? -1 : quantityBuy
+        }
+        cartServiceUser.addProductToCartService(data).then((dataResponse)=>{
+            let dataShow = dataResponse.data;
+            setErrorResponse({
+                quantity:"",
+                message:""
+            })
+            alert(dataShow["message"]);
+        }).catch((err)=>{
+            console.log(err)
+            let errorShow = err.response.data;
+            setErrorResponse(errorShow);
+        })
+    }
 
     return (
         <>
@@ -39,10 +65,17 @@ const ProductDetail = () => {
                         </div>
                         <div style={{ display: "flex" , justifyContent: "left"}}> 
                             <input type="number" min={1} max={productDetail.quantity} value={quantityBuy} 
-                             onChange={(e)=>{setQuantityBuy(e.target.value)}} style={{marginRight:"5px", width:"10%"}} />
-                            <Button variant="primary">Add to Cart</Button>
+                             onChange={(e)=>{
+                                setErrorResponse({
+                                    quantity:"",
+                                    message:""
+                                })
+                                setQuantityBuy(e.target.value);
+                                }} style={{marginRight:"5px", width:"10%"}} />
+                            <Button onClick={()=> addToCart()} variant="primary">Add to Cart</Button>
                         </div>
-                        
+                        <ValidationMessage errorResponse={errorResponse} field="quantity" />
+                        <ValidationMessage errorResponse={errorResponse} field="message" />
                     </Col>
                 </Row>
             </Container>

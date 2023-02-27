@@ -11,9 +11,15 @@ const getAllProductInCartService = async (userId) => {
     return response;
 }
 
+const addProductToCartService = async (data) => {
+    const response = await axios.post( API_COMMON +"cart",data)
+    return response;
+}
+
 const cartServiceUser = {
     getCountProductCategoryService,
-    getAllProductInCartService
+    getAllProductInCartService,
+    addProductToCartService
 }
 
 export default cartServiceUser;
