@@ -12,7 +12,7 @@ const Cart = () => {
             console.log("test 12345678 - " + JSON.parse(localStorage.getItem("currentUser")).userId)
             setCarts(dataResponse.data);
             console.log(dataResponse.data)
-          })
+        })
     }, [])
     return (
         <>
@@ -27,7 +27,15 @@ const Cart = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <CartItem data={carts}/>
+                        {
+                            carts.length > 0 ? (
+                                carts.map((item, index) => {
+                                    return (<CartItem key={index} data={item} />)
+                                })
+                            ) : (<tr>
+                                <td colSpan={4}>Không có sản phẩm nào</td>
+                            </tr>)
+                        }
                     </tbody>
                 </Table>
             </div>
