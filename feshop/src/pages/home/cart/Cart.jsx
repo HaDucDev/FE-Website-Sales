@@ -17,14 +17,14 @@ const Cart = () => {
     return (
         <>
             <h2 style={{ textAlign:'center'}}>Giỏ hàng</h2>
-            <div style={{ margin: "1% 3%" }}>
+            <div style={{ margin: "auto", width:"85%"}}>
                 <Table responsive>
                     <thead>
                         <tr>
-                            <th>Mã sản phẩm</th>
-                            <th>Sản phẩm</th>
-                            <th>Số lượng</th>
-                            <th>Giá</th>
+                            <th style={{width:"5%"}}>Mã sản phẩm</th>
+                            <th style={{width:"30%"}}>Sản phẩm</th>
+                            <th style={{width:"8%"}}>Số lượng</th>
+                            <th style={{width:"5%"}}>Giá</th>
                         </tr>
                     </thead>
                     <tbody>
