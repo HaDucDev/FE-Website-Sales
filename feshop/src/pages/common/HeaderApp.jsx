@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { Cart } from 'react-bootstrap-icons';
@@ -9,8 +9,11 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useNavigate } from 'react-router';
 import { LoginContext } from '../../App';
+import cartServiceUser from '../../services/user/user.cart.service';
 // ui React bootstrap https://react-bootstrap.github.io/components/navbar/#responsive-behaviors
 const HeaderApp = () => {
+
+  const [countCart, setCountCart] = useState(0);
 
   const textLogin = useContext(LoginContext);
   useEffect(() => {
@@ -19,6 +22,11 @@ const HeaderApp = () => {
   }, [textLogin.loadPage]);
 
   const doneLogin = localStorage.getItem("currentUser");
+  if (doneLogin) {
+    cartServiceUser.getCountProductCategoryService(JSON.parse(doneLogin).userId).then((dataResponse) => {
+      setCountCart(dataResponse.data);
+    })
+  }
 
   const nav = useNavigate();
   return (
@@ -38,7 +46,15 @@ const HeaderApp = () => {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="#action1" style={{ marginRight: "10px" }}>Giỏ hàng<Cart size={24} className="cursor-pointer"></Cart><span style={{ fontSize: "20px" }}>0</span> </Nav.Link>
+                  <Nav.Link href="#action1" onClick={
+                    (e) => {
+                      e.preventDefault();
+                      (doneLogin) ? (nav("/cart")): (alert("Bạn phải đăng nhập mới có thể xem giỏ hàng"))
+                    }
+                  } style={{ marginRight: "10px" }}>
+                    Giỏ hàng<Cart size={24} className="cursor-pointer" />
+                    <span style={{ fontSize: "20px", backgroundColor: "yellow", borderRadius: "50%", color: "red" }}>{countCart}</span>
+                  </Nav.Link>
                   {
                     (doneLogin) ? (
                       <>
@@ -60,7 +76,11 @@ const HeaderApp = () => {
                   }
                   {
                     (doneLogin) ? (
-                      <Button variant="outline-success" onClick={(e) => { e.preventDefault(); localStorage.removeItem("currentUser"); nav("/") }}>Đăng xuất</Button>
+                      <Button variant="outline-success" onClick={(e) => 
+                        { e.preventDefault(); 
+                          localStorage.removeItem("currentUser"); 
+                          nav("/") 
+                          setCountCart(0);}}>Đăng xuất</Button>
                     ) :
                       (<Button variant="outline-success" onClick={(e) => { e.preventDefault(); nav("/login") }}>Đăng nhập</Button>)
                   }
