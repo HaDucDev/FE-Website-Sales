@@ -25,6 +25,7 @@ const Cart = () => {
                             <th style={{width:"30%"}}>Sản phẩm</th>
                             <th style={{width:"8%"}}>Số lượng</th>
                             <th style={{width:"5%"}}>Giá</th>
+                            <th style={{width:"5%"}}></th>
                         </tr>
                     </thead>
                     <tbody>
