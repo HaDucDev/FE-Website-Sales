@@ -7,13 +7,15 @@ const Cart = () => {
 
     const [carts, setCarts] = useState([]);
 
+    const [loadCart, setLoadCart] = useState(0);
+
     useEffect(() => {
         cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
             console.log("test 12345678 - " + JSON.parse(localStorage.getItem("currentUser")).userId)
             setCarts(dataResponse.data);
             console.log(dataResponse.data)
         })
-    }, [])
+    }, [loadCart])
     return (
         <>
             <h2 style={{ textAlign:'center'}}>Giỏ hàng</h2>
@@ -32,7 +34,7 @@ const Cart = () => {
                         {
                             carts.length > 0 ? (
                                 carts.map((item, index) => {
-                                    return (<CartItem key={index} data={item} />)
+                                    return (<CartItem key={index} data={item} loadCart={setLoadCart}/>)
                                 })
                             ) : (<tr>
                                 <td colSpan={4}>Không có sản phẩm nào</td>

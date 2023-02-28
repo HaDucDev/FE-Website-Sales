@@ -39,6 +39,7 @@ const CartItem = (props) => {
         console.log(dataRequest);
         cartServiceUser.deleteCartService(dataRequest).then((dataResponse) => {
             console.log(dataResponse.data);
+            props.loadCart(Math.random());
             alert(dataResponse.data.message);
         }).catch((err) => {
             console.log(err.response.data);
