@@ -31,7 +31,8 @@ const ProductDetail = () => {
         let data= {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
             "productId":Number(id),
-            "quantity": (quantityBuy==="") ? -1 : quantityBuy
+            "quantity": (quantityBuy==="") ? -1 : quantityBuy,
+            "operator":"add"
         }
         cartServiceUser.addProductToCartService(data).then((dataResponse)=>{
             let dataShow = dataResponse.data;

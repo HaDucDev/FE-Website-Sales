@@ -9,15 +9,21 @@ const CartItem = (props) => {
 
     const [quantityBuy, setQuantityBuy] = useState(props.data.quantity);
 
-    const handleIncrease = ()=>{
+    const handleQuantity = (operator)=>{
         let data= {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
             "productId":props.data.id.productId,
-            "quantity": 1
+            "quantity": 1,
+            "operator":operator
         }
         cartServiceUser.addProductToCartService(data).then((dataResponse)=>{
             console.log(dataResponse.data);
-            setQuantityBuy(quantityBuy+1);
+            if(operator==="add"){
+                setQuantityBuy(quantityBuy+1);
+            }
+            if(operator==="sub"){
+                setQuantityBuy(quantityBuy-1);
+            }
         }).catch((err)=>{
             console.log(err.response.data);
         })
@@ -40,13 +46,13 @@ const CartItem = (props) => {
                     </td>
                     <td style={{ padding:"2%"}}>
                         <div style={{ display: "flex",justifyContent: "center",  alignItems: "center"}}>
-                            <button >-</button>
+                            <button onClick={(e)=>{ e.preventDefault();handleQuantity("sub");}}>-</button>
                             <input type="number" value={quantityBuy} min={1} max={props.data.product.quantity}
                                 onChange={(e) => {
                                     setQuantityBuy(e.target.value);
                                 }}
                                 style={{ width: "50%", textAlign:'center'}} />
-                            <button onClick={handleIncrease}>+</button>
+                            <button onClick={(e)=>{ e.preventDefault();handleQuantity("add");}}>+</button>
                         </div>
                     </td>
                     <td>{Number(props.data.product.unitPrice) - Number(props.data.product.unitPrice) * Number(props.data.product.discount) / 100}đ
