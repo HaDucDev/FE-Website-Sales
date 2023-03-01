@@ -3,7 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import cartServiceUser from "../../../services/user/user.cart.service";
-import { addProductId } from "../../../utils/reducer/selectProductBuyReducer";
+import { addProductId, deleteProductId } from "../../../utils/reducer/selectProductBuyReducer";
 
 
 const CartItem = (props) => {
@@ -75,7 +75,7 @@ const CartItem = (props) => {
         if (isChecked === false) {
             cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
                 if (dataResponse.data === true) {
-                    dispatch(addProductId(props.data.id.productId))
+                    dispatch(addProductId(props.data.id.productId));
                     setIsChecked(true);
                 }
             }).catch((err) => {
@@ -86,6 +86,7 @@ const CartItem = (props) => {
             })
         }
         if (isChecked === true) {
+            dispatch(deleteProductId(props.data.id.productId));
             setIsChecked(false);
             setFocus(false);
         }
