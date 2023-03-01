@@ -1,5 +1,3 @@
-// import { useEffect } from "react";
-// import { useCallback } from "react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,6 +50,7 @@ const CartItem = (props) => {
         console.log(dataRequest);
         cartServiceUser.deleteCartService(dataRequest).then((dataResponse) => {
             console.log(dataResponse.data);
+            dispatch(deleteProductId(props.data.id.productId));
             props.loadCart(Math.random());
             alert(dataResponse.data.message);
         }).catch((err) => {
@@ -69,14 +68,6 @@ const CartItem = (props) => {
     const [isSubSubmitting, setIsSubSubmitting] = useState(false);// khoa nut tru khi state quantityBuy qua sl ton kho
 
     const list = data.productSelectList;
-    // if (list.includes(props.data.id.productId) === true) {
-    //     setIsChecked(true)
-    // }
-    // useEffect(()=>{
-    //     if(list.includes(props.data.id.productId)===true){
-    //         setIsChecked(true)
-    //     }
-    // },[])
     const handleCheckChange = () => {
         console.log("testnao the kia:"+isChecked)
         setFocus(true);
