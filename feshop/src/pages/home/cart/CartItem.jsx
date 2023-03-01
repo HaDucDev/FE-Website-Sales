@@ -103,7 +103,7 @@ const CartItem = (props) => {
                         <button disabled={isSubSubmitting} onClick={(e) => {
                             e.preventDefault();
                             setIsAddSubmitting(false)
-                            if (quantityBuy < 2) { setIsSubSubmitting(true); }
+                            if (quantityBuy < 2) { setIsSubSubmitting(true); setIsAddSubmitting(true);}
                             else handleQuantity("sub");
                         }}
                         >-</button>
@@ -117,7 +117,7 @@ const CartItem = (props) => {
                             e.preventDefault();
                             setIsSubSubmitting(false);
                             if (quantityBuy > props.data.product.quantity) {
-                                setIsAddSubmitting(true); 
+                                setIsAddSubmitting(true); setIsSubSubmitting(true);
                             }
                             else handleQuantity("add");
                         }}>+</button>
