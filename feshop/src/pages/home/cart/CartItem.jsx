@@ -1,3 +1,5 @@
+// import { useEffect } from "react";
+// import { useCallback } from "react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +14,14 @@ const CartItem = (props) => {
 
     const data = useSelector(state => state.listProductBuy);
     console.log("list redux");
-    console.log(data);
+    console.log(data.productSelectList);
 
     // lay ham de thuc hien action
     const dispatch = useDispatch();
 
     const [quantityBuy, setQuantityBuy] = useState(props.data.quantity);
+
+
 
     const handleQuantity = (operator) => {
         let data = {
@@ -64,7 +68,7 @@ const CartItem = (props) => {
     const [isAddSubmitting, setIsAddSubmitting] = useState(false);// khoa nut cong khi state quantityBuy qua sl ton kho
     const [isSubSubmitting, setIsSubSubmitting] = useState(false);// khoa nut tru khi state quantityBuy qua sl ton kho
 
-
+    const list = data.productSelectList;
     const handleCheckChange = () => {
         setFocus(true);
         let dataRequest = {
@@ -76,7 +80,9 @@ const CartItem = (props) => {
             cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
                 if (dataResponse.data === true) {
                     dispatch(addProductId(props.data.id.productId));
+                    //props.loadCart(Math.random());
                     setIsChecked(true);
+                    props.loadCart(Math.random());
                 }
             }).catch((err) => {
                 setFocus(false);
@@ -91,11 +97,12 @@ const CartItem = (props) => {
             setFocus(false);
         }
     }
+
     return (
         <>
             <tr>
                 <td style={{ padding: "2%" }}>
-                    <input type="checkbox" checked={isChecked} onChange={handleCheckChange} style={{ transform: "scale(2)" }} />
+                    <input type="checkbox" checked={list.includes(props.data.id.productId)? true :false} onChange={handleCheckChange} style={{ transform: "scale(2)" }} />
                 </td>
                 <td style={{ padding: "2%" }}>{props.data.id.productId}</td>
                 <td style={{ display: "flex", justifyContent: "center", height: "100%", padding: "3%" }}>
@@ -113,7 +120,7 @@ const CartItem = (props) => {
                         <button disabled={isSubSubmitting} onClick={(e) => {
                             e.preventDefault();
                             setIsAddSubmitting(false)
-                            if (quantityBuy < 2) { setIsSubSubmitting(true); setIsAddSubmitting(true);}
+                            if (quantityBuy < 2) { setIsSubSubmitting(true); setIsAddSubmitting(true); }
                             else handleQuantity("sub");
                         }}
                         >-</button>

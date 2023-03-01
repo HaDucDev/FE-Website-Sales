@@ -12,7 +12,7 @@ const Cart = () => {
     const [loadCart, setLoadCart] = useState(0);
 
     const [currentPage, setCurrentPage] = useState(1); // lưu trữ trang hiện tại
-    const itemsPerPage = 4; // số lượng items trên mỗi trang
+    const itemsPerPage = 2; // số lượng items trên mỗi trang
 
     // hàm để tính toán index bắt đầu và index kết thúc của items trên mỗi trang
     const getIndexes = () => {
@@ -33,7 +33,7 @@ const Cart = () => {
             setCarts(dataResponse.data);
             console.log(dataResponse.data)
         })
-    }, [loadCart])
+    }, [loadCart,currentPage])
 
     // hàm callback được gọi khi người dùng chọn trang mới
     const onPageChange = (pageNumber) => {
@@ -56,9 +56,9 @@ const Cart = () => {
                     </thead>
                     <tbody>
                         {
-                            carts.length > 0 ? (
-                                getCurrentItems().map((item, index) => {
-                                    return (<CartItem key={index} data={item} loadCart={setLoadCart} />)
+                            getCurrentItems().length > 0 ? (
+                                getCurrentItems().map((item) => {
+                                    return (<CartItem key={item.id.productId} data={item} loadCart={setLoadCart} />)
                                 })
                             ) : (<tr>
                                 <td colSpan={4}>Không có sản phẩm nào</td>
