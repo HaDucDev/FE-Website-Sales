@@ -18,23 +18,24 @@ const Cart = () => {
     }, [loadCart])
     return (
         <>
-            <h2 style={{ textAlign:'center'}}>Giỏ hàng</h2>
-            <div style={{ margin: "auto", width:"85%"}}>
+            <h2 style={{ textAlign: 'center' }}>Giỏ hàng</h2>
+            <div style={{ margin: "auto", width: "85%" }}>
                 <Table responsive>
                     <thead>
                         <tr>
-                            <th style={{width:"5%"}}>Mã sản phẩm</th>
-                            <th style={{width:"30%"}}>Sản phẩm</th>
-                            <th style={{width:"8%"}}>Số lượng</th>
-                            <th style={{width:"5%"}}>Giá</th>
-                            <th style={{width:"5%"}}></th>
+                            <th style={{ width: "1%" }}>Chọn</th>
+                            <th style={{ width: "6%" }}>Mã sản phẩm</th>
+                            <th style={{ width: "30%" }}>Sản phẩm</th>
+                            <th style={{ width: "8%" }}>Số lượng</th>
+                            <th style={{ width: "5%" }}>Giá</th>
+                            <th style={{ width: "5%" }}></th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             carts.length > 0 ? (
                                 carts.map((item, index) => {
-                                    return (<CartItem key={index} data={item} loadCart={setLoadCart}/>)
+                                    return (<CartItem key={index} data={item} loadCart={setLoadCart} />)
                                 })
                             ) : (<tr>
                                 <td colSpan={4}>Không có sản phẩm nào</td>

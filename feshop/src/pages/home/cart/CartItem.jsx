@@ -46,11 +46,20 @@ const CartItem = (props) => {
             alert(err.response.data)
         })
     }
+
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckChange = (event) => {
+        setIsChecked(event.target.checked);
+    }
     return (
         <>
             {
                 <tr>
-                    <td>{props.data.id.productId}</td>
+                    <td style={{padding: "2%" }}>
+                        <input type="checkbox" checked={isChecked} onChange={handleCheckChange} style={{transform:"scale(2)"}}/>
+                    </td>
+                    <td style={{padding: "2%" }}>{props.data.id.productId}</td>
                     <td style={{ display: "flex", justifyContent: "center", height: "100%", padding: "3%" }}>
                         <div style={{ width: "20%", height: "20%" }}>
                             <img src={props.data.product.productImage} alt="" style={{ width: "30%" }} />
