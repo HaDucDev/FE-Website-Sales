@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import cartServiceUser from "../../../services/user/user.cart.service";
 
@@ -47,57 +47,82 @@ const CartItem = (props) => {
         })
     }
 
-    const [isChecked, setIsChecked] = useState(false);
-    const [focus, setFocus] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);//checkbox
+    const [focus, setFocus] = useState(false);//dau cach
+    const [modalError, setModalError] = useState(false);//mo modal
+    const [error, setError] = useState("");
+
 
     const handleCheckChange = (event) => {
         setFocus(true);
         let dataRequest = {
-            "userId":JSON.parse(localStorage.getItem("currentUser")).userId,
-            "productId":props.data.id.productId,
-            "quantity":quantityBuy
+            "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+            "productId": props.data.id.productId,
+            "quantity": quantityBuy
         }
-        //cartServiceUser.checkProductQuantityCartService
-        setIsChecked(event.target.checked);
+        cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
+            if (dataResponse.data===true) {
+                setIsChecked(event.target.checked);
+            }
+        }).catch((err) => {
+            setFocus(false);
+            setModalError(!modalError);
+            let error = err.response.data
+            setError(error);
+        })
     }
     return (
         <>
-            {
-                <tr>
-                    <td style={{padding: "2%" }}>
-                        <input type="checkbox" checked={isChecked} onChange={handleCheckChange} style={{transform:"scale(2)"}}/>
-                    </td>
-                    <td style={{padding: "2%" }}>{props.data.id.productId}</td>
-                    <td style={{ display: "flex", justifyContent: "center", height: "100%", padding: "3%" }}>
-                        <div style={{ width: "20%", height: "20%" }}>
-                            <img src={props.data.product.productImage} alt="" style={{ width: "30%" }} />
-                        </div>
-                        <div style={{ width: "40%" }}>
-                            <Link to={`/product-detail/${props.data.id.productId}`}>
-                                <div>{props.data.product.productName}</div>
-                            </Link>
-                        </div>
-                    </td>
-                    <td style={{ padding: "2%" }}>
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <button onClick={(e) => { e.preventDefault(); handleQuantity("sub"); }}>-</button>
-                            <input type="number" value={quantityBuy} min={1} max={props.data.product.quantity}
-                                onChange={(e) => {
-                                    setQuantityBuy(e.target.value);
-                                }}
-                                readOnly={focus}
-                                style={{ width: "50%", textAlign: 'center' }} />
-                            <button onClick={(e) => { e.preventDefault(); handleQuantity("add"); }}>+</button>
-                        </div>
-                    </td>
-                    <td>{Number(props.data.product.unitPrice) - Number(props.data.product.unitPrice) * Number(props.data.product.discount) / 100}đ
-                        <pre /><s>{props.data.product.unitPrice}đ</s>
-                    </td>
-                    <td style={{ justifyContent: "center", alignItems: "center" }}>
-                        <Button onClick={handleDelete} style={{ marginTop: "10%" }}> Xóa </Button>
-                    </td>
-                </tr>
-            }
+            <tr>
+                <td style={{ padding: "2%" }}>
+                    <input type="checkbox" checked={isChecked} onChange={(e)=> handleCheckChange(e)} style={{ transform: "scale(2)" }} />
+                </td>
+                <td style={{ padding: "2%" }}>{props.data.id.productId}</td>
+                <td style={{ display: "flex", justifyContent: "center", height: "100%", padding: "3%" }}>
+                    <div style={{ width: "20%", height: "20%" }}>
+                        <img src={props.data.product.productImage} alt="" style={{ width: "30%" }} />
+                    </div>
+                    <div style={{ width: "40%" }}>
+                        <Link to={`/product-detail/${props.data.id.productId}`}>
+                            <div>{props.data.product.productName}</div>
+                        </Link>
+                    </div>
+                </td>
+                <td style={{ padding: "2%" }}>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <button onClick={(e) => { e.preventDefault(); handleQuantity("sub"); }}>-</button>
+                        <input type="number" value={quantityBuy} min={1} max={props.data.product.quantity}
+                            onChange={(e) => {
+                                setQuantityBuy(e.target.value);
+                            }}
+                            readOnly={focus}
+                            style={{ width: "50%", textAlign: 'center' }} />
+                        <button onClick={(e) => { e.preventDefault(); handleQuantity("add"); }}>+</button>
+                    </div>
+                </td>
+                <td>{Number(props.data.product.unitPrice) - Number(props.data.product.unitPrice) * Number(props.data.product.discount) / 100}đ
+                    <pre /><s>{props.data.product.unitPrice}đ</s>
+                </td>
+                <td style={{ justifyContent: "center", alignItems: "center" }}>
+                    <Button onClick={handleDelete} style={{ marginTop: "10%" }}> Xóa </Button>
+                </td>
+            </tr>
+
+            <Modal show={modalError} onHide={() => setModalError(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Lỗi</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p> {error["message"]}</p>
+                    <p> {error["quantity"]}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() =>setModalError(false)}>
+                        Đóng
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </>
     )
 }
