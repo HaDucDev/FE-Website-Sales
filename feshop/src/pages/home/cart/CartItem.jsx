@@ -69,7 +69,16 @@ const CartItem = (props) => {
     const [isSubSubmitting, setIsSubSubmitting] = useState(false);// khoa nut tru khi state quantityBuy qua sl ton kho
 
     const list = data.productSelectList;
+    // if (list.includes(props.data.id.productId) === true) {
+    //     setIsChecked(true)
+    // }
+    // useEffect(()=>{
+    //     if(list.includes(props.data.id.productId)===true){
+    //         setIsChecked(true)
+    //     }
+    // },[])
     const handleCheckChange = () => {
+        console.log("testnao the kia:"+isChecked)
         setFocus(true);
         let dataRequest = {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
@@ -77,19 +86,26 @@ const CartItem = (props) => {
             "quantity": quantityBuy
         }
         if (isChecked === false) {
-            cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
-                if (dataResponse.data === true) {
-                    dispatch(addProductId(props.data.id.productId));
-                    //props.loadCart(Math.random());
-                    setIsChecked(true);
-                    props.loadCart(Math.random());
-                }
-            }).catch((err) => {
+            if (list.includes(props.data.id.productId) === true) {
+                dispatch(deleteProductId(props.data.id.productId));
+                setIsChecked(false);
                 setFocus(false);
-                setModalError(!modalError);
-                let error = err.response.data
-                setError(error);
-            })
+            }
+            else {
+                cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
+                    if (dataResponse.data === true) {
+                        dispatch(addProductId(props.data.id.productId));
+                        //props.loadCart(Math.random());
+                        setIsChecked(true);
+                        props.loadCart(Math.random());
+                    }
+                }).catch((err) => {
+                    setFocus(false);
+                    setModalError(!modalError);
+                    let error = err.response.data
+                    setError(error);
+                })
+            }
         }
         if (isChecked === true) {
             dispatch(deleteProductId(props.data.id.productId));
@@ -102,7 +118,7 @@ const CartItem = (props) => {
         <>
             <tr>
                 <td style={{ padding: "2%" }}>
-                    <input type="checkbox" checked={list.includes(props.data.id.productId)? true :false} onChange={handleCheckChange} style={{ transform: "scale(2)" }} />
+                    <input type="checkbox" checked={list.includes(props.data.id.productId) ? true : false} onChange={handleCheckChange} style={{ transform: "scale(2)" }} />
                 </td>
                 <td style={{ padding: "2%" }}>{props.data.id.productId}</td>
                 <td style={{ display: "flex", justifyContent: "center", height: "100%", padding: "3%" }}>
