@@ -52,6 +52,9 @@ const CartItem = (props) => {
     const [modalError, setModalError] = useState(false);//mo modal
     const [error, setError] = useState("");
 
+    const [isAddSubmitting, setIsAddSubmitting] = useState(false);// khoa nut cong khi state quantityBuy qua sl ton kho
+    const [isSubSubmitting, setIsSubSubmitting] = useState(false);// khoa nut tru khi state quantityBuy qua sl ton kho
+
 
     const handleCheckChange = () => {
         setFocus(true);
@@ -73,8 +76,9 @@ const CartItem = (props) => {
                 setError(error);
             })
         }
-        if(isChecked===true){
+        if (isChecked === true) {
             setIsChecked(false);
+            setFocus(false);
         }
     }
     return (
@@ -96,14 +100,27 @@ const CartItem = (props) => {
                 </td>
                 <td style={{ padding: "2%" }}>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <button onClick={(e) => { e.preventDefault(); handleQuantity("sub"); }}>-</button>
+                        <button disabled={isSubSubmitting} onClick={(e) => {
+                            e.preventDefault();
+                            setIsAddSubmitting(false)
+                            if (quantityBuy < 2) { setIsSubSubmitting(true); }
+                            else handleQuantity("sub");
+                        }}
+                        >-</button>
                         <input type="number" value={quantityBuy} min={1} max={props.data.product.quantity}
                             onChange={(e) => {
                                 setQuantityBuy(e.target.value);
                             }}
                             readOnly={focus}
                             style={{ width: "50%", textAlign: 'center' }} />
-                        <button onClick={(e) => { e.preventDefault(); handleQuantity("add"); }}>+</button>
+                        <button disabled={isAddSubmitting} onClick={(e) => {
+                            e.preventDefault();
+                            setIsSubSubmitting(false);
+                            if (quantityBuy > props.data.product.quantity) {
+                                setIsAddSubmitting(true); 
+                            }
+                            else handleQuantity("add");
+                        }}>+</button>
                     </div>
                 </td>
                 <td>{Number(props.data.product.unitPrice) - Number(props.data.product.unitPrice) * Number(props.data.product.discount) / 100}đ
@@ -123,7 +140,7 @@ const CartItem = (props) => {
                     <p> {error["quantity"]}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() =>setModalError(false)}>
+                    <Button variant="primary" onClick={() => setModalError(false)}>
                         Đóng
                     </Button>
                 </Modal.Footer>
