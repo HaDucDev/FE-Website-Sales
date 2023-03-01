@@ -3,11 +3,29 @@ import { Table } from 'react-bootstrap';
 import cartServiceUser from '../../../services/user/user.cart.service';
 import CartItem from './CartItem';
 import "./css/cart.css"
+import Pagination from 'react-pagination-library';
+import 'react-pagination-library/build/css/index.css';
 const Cart = () => {
 
-    const [carts, setCarts] = useState([]);
+    const [carts, setCarts] = useState([]);// lưu trữ dữ liệu list
 
     const [loadCart, setLoadCart] = useState(0);
+
+    const [currentPage, setCurrentPage] = useState(1); // lưu trữ trang hiện tại
+    const itemsPerPage = 4; // số lượng items trên mỗi trang
+
+    // hàm để tính toán index bắt đầu và index kết thúc của items trên mỗi trang
+    const getIndexes = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return { startIndex, endIndex };
+    };
+
+    // hàm để lấy danh sách items theo trang hiện tại
+    const getCurrentItems = () => {
+        const { startIndex, endIndex } = getIndexes();
+        return carts.slice(startIndex, endIndex);
+    };
 
     useEffect(() => {
         cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
@@ -16,6 +34,11 @@ const Cart = () => {
             console.log(dataResponse.data)
         })
     }, [loadCart])
+
+    // hàm callback được gọi khi người dùng chọn trang mới
+    const onPageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
     return (
         <>
             <h2 style={{ textAlign: 'center' }}>Giỏ hàng</h2>
@@ -34,7 +57,7 @@ const Cart = () => {
                     <tbody>
                         {
                             carts.length > 0 ? (
-                                carts.map((item, index) => {
+                                getCurrentItems().map((item, index) => {
                                     return (<CartItem key={index} data={item} loadCart={setLoadCart} />)
                                 })
                             ) : (<tr>
@@ -44,6 +67,12 @@ const Cart = () => {
                     </tbody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(carts.length / itemsPerPage)}
+                changeCurrentPage={onPageChange}
+                theme="bottom-border"
+            />
         </>
     )
 }
