@@ -53,29 +53,35 @@ const CartItem = (props) => {
     const [error, setError] = useState("");
 
 
-    const handleCheckChange = (event) => {
+    const handleCheckChange = () => {
         setFocus(true);
         let dataRequest = {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
             "productId": props.data.id.productId,
             "quantity": quantityBuy
         }
-        cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
-            if (dataResponse.data===true) {
-                setIsChecked(event.target.checked);
-            }
-        }).catch((err) => {
-            setFocus(false);
-            setModalError(!modalError);
-            let error = err.response.data
-            setError(error);
-        })
+        if (isChecked === false) {
+            cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
+                if (dataResponse.data === true) {
+
+                    setIsChecked(true);
+                }
+            }).catch((err) => {
+                setFocus(false);
+                setModalError(!modalError);
+                let error = err.response.data
+                setError(error);
+            })
+        }
+        if(isChecked===true){
+            setIsChecked(false);
+        }
     }
     return (
         <>
             <tr>
                 <td style={{ padding: "2%" }}>
-                    <input type="checkbox" checked={isChecked} onChange={(e)=> handleCheckChange(e)} style={{ transform: "scale(2)" }} />
+                    <input type="checkbox" checked={isChecked} onChange={handleCheckChange} style={{ transform: "scale(2)" }} />
                 </td>
                 <td style={{ padding: "2%" }}>{props.data.id.productId}</td>
                 <td style={{ display: "flex", justifyContent: "center", height: "100%", padding: "3%" }}>
