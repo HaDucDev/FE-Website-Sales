@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import cartServiceUser from "../../../services/user/user.cart.service";
+import { addProductId } from "../../../utils/reducer/selectProductBuyReducer";
 
 
 const CartItem = (props) => {
@@ -12,6 +13,9 @@ const CartItem = (props) => {
     const data = useSelector(state => state.listProductBuy);
     console.log("list redux");
     console.log(data);
+
+    // lay ham de thuc hien action
+    const dispatch = useDispatch();
 
     const [quantityBuy, setQuantityBuy] = useState(props.data.quantity);
 
@@ -71,7 +75,7 @@ const CartItem = (props) => {
         if (isChecked === false) {
             cartServiceUser.checkProductQuantityCartService(dataRequest).then((dataResponse) => {
                 if (dataResponse.data === true) {
-
+                    dispatch(addProductId(props.data.id.productId))
                     setIsChecked(true);
                 }
             }).catch((err) => {
