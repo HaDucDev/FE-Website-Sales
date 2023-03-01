@@ -48,8 +48,16 @@ const CartItem = (props) => {
     }
 
     const [isChecked, setIsChecked] = useState(false);
+    const [focus, setFocus] = useState(false);
 
     const handleCheckChange = (event) => {
+        setFocus(true);
+        let dataRequest = {
+            "userId":JSON.parse(localStorage.getItem("currentUser")).userId,
+            "productId":props.data.id.productId,
+            "quantity":quantityBuy
+        }
+        //cartServiceUser.checkProductQuantityCartService
         setIsChecked(event.target.checked);
     }
     return (
@@ -77,6 +85,7 @@ const CartItem = (props) => {
                                 onChange={(e) => {
                                     setQuantityBuy(e.target.value);
                                 }}
+                                readOnly={focus}
                                 style={{ width: "50%", textAlign: 'center' }} />
                             <button onClick={(e) => { e.preventDefault(); handleQuantity("add"); }}>+</button>
                         </div>
