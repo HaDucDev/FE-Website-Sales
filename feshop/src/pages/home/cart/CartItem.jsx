@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import cartServiceUser from "../../../services/user/user.cart.service";
 
 
 const CartItem = (props) => {
     console.log("ok roi chu")
-    console.log(props.data)
+    console.log(props.data);
+
+    const data = useSelector(state => state.listProductBuy);
+    console.log("list redux");
+    console.log(data);
 
     const [quantityBuy, setQuantityBuy] = useState(props.data.quantity);
 
