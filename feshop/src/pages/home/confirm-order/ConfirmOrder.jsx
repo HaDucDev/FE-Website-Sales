@@ -61,9 +61,9 @@ const ConfirmOrder = () => {
                 <td>{user.id.productId}</td>
                 <td style={{ padding: "0px", width: "10%" }}><img src={user.product.productImage} alt="" style={{ width: "10%", margin: "0px" }} /></td>
                 <td>{user.product.productName}</td>
-                <td>{user.product.unitPrice} đ</td>
+                <td>{user.product.unitPrice.toLocaleString('en-US')} đ</td>
                 <td>{user.quantity}</td>
-                <td>{user.quantity * user.product.unitPrice} đ</td>
+                <td>{(user.quantity * user.product.unitPrice).toLocaleString('en-US')} đ</td>
             </tr>
         );
     });
@@ -118,7 +118,7 @@ const ConfirmOrder = () => {
                             </div>
                             <div style={{ float: "right" }}>
                                 <p>Shipping: Miễn phí</p>
-                                <p>Tổng tiền: {totalMoney} đ</p>
+                                <p>Tổng tiền: {totalMoney.toLocaleString('en-US')} đ</p>
                             </div>
                         </div>
                     </div>
