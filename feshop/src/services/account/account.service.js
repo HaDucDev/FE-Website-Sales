@@ -7,8 +7,14 @@ const loginService = async(user) =>{
     return response;
 }
 
+const inforUserByIdService = async(userId) =>{
+    const response = await axios.get( API_COMMON +`user/${userId}`);
+    return response;
+}
+
 const accountService = {
     loginService,
+    inforUserByIdService
 }
 
 export default accountService;
