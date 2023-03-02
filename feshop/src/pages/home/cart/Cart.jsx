@@ -4,6 +4,8 @@ import cartServiceUser from '../../../services/user/user.cart.service';
 import CartItem from './CartItem';
 import "./css/cart.css"
 import ReactPaginate from 'react-paginate';
+import { useSelector } from 'react-redux';
+import orderServiceUser from '../../../services/user/user.order.service';
 
 
 const Cart = () => {
@@ -31,6 +33,23 @@ const Cart = () => {
         console.log(selected)
         setCurrentPage(selected);
     };
+
+    const data = useSelector(state => state.listProductBuy);
+    const listRequest=data.productSelectList;
+    console.log(listRequest);
+    const confirmList =()=>{
+        let dataRequest = {
+            "productIdBuyList": listRequest
+        }
+        orderServiceUser.checkProductOrderConfirmationService(dataRequest).then((dataResponse)=>{
+            if(dataResponse.data===true){
+
+            }
+        }).catch((e)=>{
+            let data = e.response.data;
+            (data["productIdBuyList"]) ? alert(data["productIdBuyList"]) : alert(data["message"]) ;
+        })
+    }
     return (
         <>
             <h2 style={{ textAlign: 'center' }}>Giỏ hàng</h2>
@@ -73,11 +92,7 @@ const Cart = () => {
                         />
                     </div>
                     <div style={{ float: "right", padding: "1px" }}>
-                        <Button variant="outline-dark" style={{ width: "100%" }} onClick={
-                            () => {
-
-                            }
-                        }> Xác nhận đơn hàng </Button>
+                        <Button variant="outline-dark" style={{ width: "100%" }} onClick={confirmList}> Xác nhận đơn hàng </Button>
                     </div>
                 </div>
             </div>
