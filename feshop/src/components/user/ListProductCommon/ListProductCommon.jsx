@@ -7,6 +7,7 @@ import Pagination from 'react-pagination-library';
 import 'react-pagination-library/build/css/index.css';
 import { Link } from 'react-router-dom';
 const ListProductCommon = ()=>{
+    //npm i --save-dev @types/react-pagination-library
 
     const [listProductHome, setListProductHome] = useState([])//state san pham trang home
     const [page, setPage] = useState(1);// number be +1
