@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import cartServiceUser from '../../../services/user/user.cart.service';
 import CartItem from './CartItem';
 import "./css/cart.css"
@@ -12,7 +12,7 @@ const Cart = () => {
     const [loadCart, setLoadCart] = useState(0);
 
     const [currentPage, setCurrentPage] = useState(1); // lưu trữ trang hiện tại
-    const itemsPerPage = 2; // số lượng items trên mỗi trang
+    const itemsPerPage = 4; // số lượng items trên mỗi trang
 
     // hàm để tính toán index bắt đầu và index kết thúc của items trên mỗi trang
     const getIndexes = () => {
@@ -33,7 +33,7 @@ const Cart = () => {
             setCarts(dataResponse.data);
             console.log(dataResponse.data)
         })
-    }, [loadCart,currentPage])
+    }, [loadCart, currentPage])
 
     // hàm callback được gọi khi người dùng chọn trang mới
     const onPageChange = (pageNumber) => {
@@ -66,13 +66,21 @@ const Cart = () => {
                         }
                     </tbody>
                 </Table>
+                <div style={{justifyContent:"center"}}>
+                    <div style={{ float: "left", padding: "1px" }}>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={Math.ceil(carts.length / itemsPerPage)}
+                            changeCurrentPage={onPageChange}
+                            theme="bottom-border"
+                        />
+                    </div>
+                    <div style={{ float: "right", padding: "1px" }}>
+                        <Button variant="outline-dark"  style={{ width: "100%"}}> Xác nhận đơn hàng </Button>
+                    </div>
+                </div>
             </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(carts.length / itemsPerPage)}
-                changeCurrentPage={onPageChange}
-                theme="bottom-border"
-            />
+
         </>
     )
 }
