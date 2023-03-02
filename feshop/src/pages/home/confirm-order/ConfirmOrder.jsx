@@ -26,6 +26,7 @@ const ConfirmOrder = () => {
     const nav = useNavigate();
     const data = useSelector(state => state.listProductBuy);
     const listRequest = data.productSelectList;
+    const [totalMoney, setTotalMoney] = useState(0);
 
 
     useEffect(() => {
@@ -46,12 +47,15 @@ const ConfirmOrder = () => {
 
             const dataCartBuy = dataTable.filter(item => listRequest.includes(item.id.productId))
             setProductList(dataCartBuy);
+            let total = productList.reduce(
+                (a, b) => (a.product.unitPrice - (a.product.unitPrice * a.product.discount / 100)) * a.quantity + (b.product.unitPrice - (b.product.unitPrice * b.product.discount / 100)) * b.quantity);
+            setTotalMoney(total);
         }).catch((e) => {
             alert(e.response.data)
         });
-    }, [pageNumber, listRequest]);
+    }, [pageNumber, listRequest, productList]);
 
-    const displayUsers = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(user => {
+    const displayProducts = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(user => {
         return (
             <tr key={user.id.productId}>
                 <td>{user.id.productId}</td>
@@ -95,7 +99,7 @@ const ConfirmOrder = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {displayUsers}
+                                {displayProducts}
                             </tbody>
                         </table>
                         <div>
@@ -114,7 +118,7 @@ const ConfirmOrder = () => {
                             </div>
                             <div style={{ float: "right" }}>
                                 <p>Shipping: Miễn phí</p>
-                                <p>Tổng tiền: 000000</p>
+                                <p>Tổng tiền: {totalMoney} đ</p>
                             </div>
                         </div>
                     </div>
