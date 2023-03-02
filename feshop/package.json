@@ -15,6 +15,7 @@
     "react-bootstrap-icons": "^1.10.2",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
+    "react-paginate": "^8.1.4",
     "react-pagination-library": "^0.1.14",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",

@@ -3,29 +3,20 @@ import { Button, Table } from 'react-bootstrap';
 import cartServiceUser from '../../../services/user/user.cart.service';
 import CartItem from './CartItem';
 import "./css/cart.css"
-import Pagination from 'react-pagination-library';
-import 'react-pagination-library/build/css/index.css';
+import ReactPaginate from 'react-paginate';
+
+
 const Cart = () => {
 
     const [carts, setCarts] = useState([]);// lưu trữ dữ liệu list
 
     const [loadCart, setLoadCart] = useState(0);
 
-    const [currentPage, setCurrentPage] = useState(1); // lưu trữ trang hiện tại
+    const [currentPage, setCurrentPage] = useState(0); // lưu trữ trang hiện tại
     const itemsPerPage = 4; // số lượng items trên mỗi trang
+    const pagesVisited = currentPage * itemsPerPage;
 
-    // hàm để tính toán index bắt đầu và index kết thúc của items trên mỗi trang
-    const getIndexes = () => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        return { startIndex, endIndex };
-    };
-
-    // hàm để lấy danh sách items theo trang hiện tại
-    const getCurrentItems = () => {
-        const { startIndex, endIndex } = getIndexes();
-        return carts.slice(startIndex, endIndex);
-    };
+    const currentItems=  carts.slice(pagesVisited, pagesVisited+itemsPerPage);
 
     useEffect(() => {
         cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
@@ -36,8 +27,9 @@ const Cart = () => {
     }, [loadCart, currentPage])
 
     // hàm callback được gọi khi người dùng chọn trang mới
-    const onPageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const onPageChange = ({selected}) => {
+        console.log(selected)
+        setCurrentPage(selected);
     };
     return (
         <>
@@ -56,8 +48,8 @@ const Cart = () => {
                     </thead>
                     <tbody>
                         {
-                            getCurrentItems().length > 0 ? (
-                                getCurrentItems().map((item) => {
+                            currentItems.length > 0 ? (
+                                currentItems.map((item) => {
                                     return (<CartItem key={item.id.productId} data={item} loadCart={setLoadCart} />)
                                 })
                             ) : (<tr>
@@ -66,17 +58,26 @@ const Cart = () => {
                         }
                     </tbody>
                 </Table>
-                <div style={{justifyContent:"center"}}>
-                    <div style={{ float: "left", padding: "1px" }}>
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={Math.ceil(carts.length / itemsPerPage)}
-                            changeCurrentPage={onPageChange}
-                            theme="bottom-border"
+                <div style={{ justifyContent: "center" }}>
+                    <div style={{ float: "left", padding: "1px" }}>               
+                        <ReactPaginate
+                            previousLabel={'Previous'}
+                            nextLabel={'Next'}
+                            pageCount={Math.ceil(carts.length / itemsPerPage)}
+                            onPageChange={onPageChange}
+                            containerClassName={'pagination'}
+                            previousLinkClassName={'pagination__link'}
+                            nextLinkClassName={'pagination__link'}
+                            disabledClassName={'pagination__link--disabled'}
+                            activeClassName={'pagination__link--active'}
                         />
                     </div>
                     <div style={{ float: "right", padding: "1px" }}>
-                        <Button variant="outline-dark"  style={{ width: "100%"}}> Xác nhận đơn hàng </Button>
+                        <Button variant="outline-dark" style={{ width: "100%" }} onClick={
+                            () => {
+
+                            }
+                        }> Xác nhận đơn hàng </Button>
                     </div>
                 </div>
             </div>
