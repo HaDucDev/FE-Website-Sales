@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import accountService from "../../../services/account/account.service";
 import cartServiceUser from "../../../services/user/user.cart.service";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 const ConfirmOrder = () => {
@@ -22,14 +23,16 @@ const ConfirmOrder = () => {
         address: ""
     });
 
+    const nav = useNavigate();
     const data = useSelector(state => state.listProductBuy);
-    const listRequest=data.productSelectList;
+    const listRequest = data.productSelectList;
+
 
     useEffect(() => {
         accountService.inforUserByIdService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
             let user = dataResponse.data;
             setInforUser({
-                username: user.username,
+                fullName: user.fullName,
                 phone: user.phone,
                 address: user.address
             });
@@ -39,14 +42,14 @@ const ConfirmOrder = () => {
 
         // lay tat ca san pham trong gio cua nguoi dung theo id
         cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
-            let dataTable =dataResponse.data;
+            let dataTable = dataResponse.data;
 
             const dataCartBuy = dataTable.filter(item => listRequest.includes(item.id.productId))
             setProductList(dataCartBuy);
         }).catch((e) => {
             alert(e.response.data)
         });
-    }, [pageNumber,listRequest]);
+    }, [pageNumber, listRequest]);
 
     const displayUsers = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(user => {
         return (
@@ -64,6 +67,14 @@ const ConfirmOrder = () => {
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
+
+    const handleCreateOrder = (e) => {
+        e.preventDefault();
+        if (listRequest.length === 0) {
+            alert("Sản phẩm trống, yêu cầu người dùng chọn lại sản phẩm")
+            nav("/cart")
+        }
+    }
 
     return (
         <>
@@ -88,7 +99,7 @@ const ConfirmOrder = () => {
                             </tbody>
                         </table>
                         <div>
-                            <div style={{ float: "left", padding:"1%" }}>
+                            <div style={{ float: "left", padding: "1%" }}>
                                 <ReactPaginate
                                     previousLabel={'Previous'}
                                     nextLabel={'Next'}
@@ -117,7 +128,7 @@ const ConfirmOrder = () => {
                                 <Col>
                                     <Form.Group controlId="formName">
                                         <Form.Label>Tên người nhận</Form.Label>
-                                        <Form.Control type="text" placeholder="Người nhận" defaultValue={inforUser.username} />
+                                        <Form.Control type="text" placeholder="Người nhận" defaultValue={inforUser.fullName} />
                                     </Form.Group>
                                     <Form.Group controlId="formSdt">
                                         <Form.Label>Số điện thoại</Form.Label>
@@ -142,7 +153,7 @@ const ConfirmOrder = () => {
             </div>
 
             <div style={{ margin: "1% 40%", width: "60%" }}>
-                <Button variant="outline-success" style={{ width: "30%" }}>Đặt hàng</Button>
+                <Button variant="outline-success" style={{ width: "30%" }} onClick={handleCreateOrder}>Đặt hàng</Button>
             </div>
         </>
     )
