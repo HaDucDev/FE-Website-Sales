@@ -6,6 +6,7 @@ import "./css/cart.css"
 import ReactPaginate from 'react-paginate';
 import { useSelector } from 'react-redux';
 import orderServiceUser from '../../../services/user/user.order.service';
+import { useNavigate } from 'react-router';
 
 
 const Cart = () => {
@@ -37,13 +38,15 @@ const Cart = () => {
     const data = useSelector(state => state.listProductBuy);
     const listRequest=data.productSelectList;
     console.log(listRequest);
+
+    const nav = useNavigate();
     const confirmList =()=>{
         let dataRequest = {
             "productIdBuyList": listRequest
         }
         orderServiceUser.checkProductOrderConfirmationService(dataRequest).then((dataResponse)=>{
             if(dataResponse.data===true){
-
+                nav("/confirm-order")
             }
         }).catch((e)=>{
             let data = e.response.data;

@@ -12,6 +12,7 @@ import { useState } from 'react';
 import ProductDetail from './components/user/product-detail/ProductDetail';
 import ListProductCommon from './components/user/ListProductCommon/ListProductCommon';
 import Cart from './pages/home/cart/Cart';
+import ConfirmOrder from './pages/home/confirm-order/ConfirmOrder';
 
 
 
@@ -39,6 +40,7 @@ function App() {
             </Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/cart" element={<Cart/>}></Route>
+            <Route path="/confirm-order" element={<ConfirmOrder/>}></Route>
        
             {/* admin */}
             <Route path="/admin" element={<Admin />} exact>
