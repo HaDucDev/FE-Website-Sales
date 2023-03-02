@@ -5,6 +5,7 @@ import "./css/confirm_order.css"
 import 'bootstrap/dist/css/bootstrap.css';
 import accountService from "../../../services/account/account.service";
 import cartServiceUser from "../../../services/user/user.cart.service";
+import { useSelector } from "react-redux";
 
 
 const ConfirmOrder = () => {
@@ -21,6 +22,9 @@ const ConfirmOrder = () => {
         address: ""
     });
 
+    const data = useSelector(state => state.listProductBuy);
+    const listRequest=data.productSelectList;
+
     useEffect(() => {
         accountService.inforUserByIdService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
             let user = dataResponse.data;
@@ -35,11 +39,14 @@ const ConfirmOrder = () => {
 
         // lay tat ca san pham trong gio cua nguoi dung theo id
         cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
-            setProductList(dataResponse.data);
+            let dataTable =dataResponse.data;
+
+            const dataCartBuy = dataTable.filter(item => listRequest.includes(item.id.productId))
+            setProductList(dataCartBuy);
         }).catch((e) => {
             alert(e.response.data)
         });
-    }, [pageNumber]);
+    }, [pageNumber,listRequest]);
 
     const displayUsers = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(user => {
         return (
