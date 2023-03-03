@@ -3,10 +3,9 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import ReactPaginate from 'react-paginate';
 import "./css/confirm_order.css"
 import 'bootstrap/dist/css/bootstrap.css';
-import accountService from "../../../services/account/account.service";
-import cartServiceUser from "../../../services/user/user.cart.service";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import orderServiceUser from "../../../services/user/user.order.service";
 
 
 const ConfirmOrder = () => {
@@ -18,7 +17,7 @@ const ConfirmOrder = () => {
     const pagesVisited = pageNumber * usersPerPage; // Số user đã xem
 
     const [inforUser, setInforUser] = useState({
-        username: "",
+        fullName: "",
         phone: "",
         address: ""
     });
@@ -26,44 +25,44 @@ const ConfirmOrder = () => {
     const nav = useNavigate();
     const data = useSelector(state => state.listProductBuy);
     const listRequest = data.productSelectList;
-    const [totalMoney, setTotalMoney] = useState(0);
+    //const [totalMoney, setTotalMoney] = useState(0);
 
+
+    const fitlerProductBuy = (list, id) => {// loc san pham mua
+        if (listRequest.length > 0) {
+            return list.filter(item => listRequest.includes(id))
+        }
+        return list;
+    }
 
     useEffect(() => {
-        accountService.inforUserByIdService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
-            let user = dataResponse.data;
+        orderServiceUser.loadOrderComfirmService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
+            let resp = dataResponse.data;
+            console.log(resp.getProductBuyResponseList)
             setInforUser({
-                fullName: user.fullName,
-                phone: user.phone,
-                address: user.address
-            });
-        }).catch((e) => {
-            alert(e.response.data)
-        });
+                fullName: resp.fullName,
+                phone: resp.phone,
+                address: resp.address
+            })
+            setProductList(resp.getProductBuyResponseList);
+        })
+    }, [pageNumber]);
 
-        // lay tat ca san pham trong gio cua nguoi dung theo id
-        cartServiceUser.getAllProductInCartService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
-            let dataTable = dataResponse.data;
-
-            const dataCartBuy = dataTable.filter(item => listRequest.includes(item.id.productId))
-            setProductList(dataCartBuy);
-            let total = productList.reduce(
-                (a, b) => (a.product.unitPrice - (a.product.unitPrice * a.product.discount / 100)) * a.quantity + (b.product.unitPrice - (b.product.unitPrice * b.product.discount / 100)) * b.quantity);
-            setTotalMoney(total);
-        }).catch((e) => {
-            alert(e.response.data)
-        });
-    }, [pageNumber, listRequest, productList]);
-
-    const displayProducts = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(user => {
+    const displayProducts = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(producOrderInfor => {
         return (
-            <tr key={user.id.productId}>
-                <td>{user.id.productId}</td>
-                <td style={{ padding: "0px", width: "10%" }}><img src={user.product.productImage} alt="" style={{ width: "10%", margin: "0px" }} /></td>
-                <td>{user.product.productName}</td>
-                <td>{user.product.unitPrice.toLocaleString('en-US')} đ</td>
-                <td>{user.quantity}</td>
-                <td>{(user.quantity * user.product.unitPrice).toLocaleString('en-US')} đ</td>
+            <tr key={producOrderInfor.productId}>
+                <td>{producOrderInfor.productId}</td>
+                <td style={{ padding: "0px", width: "10%" }}><img src={producOrderInfor.productImage} alt="" style={{ width: "10%", margin: "0px" }} /></td>
+                <td>{producOrderInfor.productName}</td>
+                <td><p>
+                    <div> {(producOrderInfor.sellingPrice).toLocaleString('en-US')} đ </div>
+                    <div>
+                        <s>{(producOrderInfor.unitPrice).toLocaleString('en-US')} đ</s>
+                    </div>
+                </p></td>
+                <td>{producOrderInfor.quantityBuy}</td>
+                <td>{(producOrderInfor.totalMoney).toLocaleString('en-US')} đ</td>
+                {/* {(producOrderInfor.sallingPrice).toLocaleString('en-US')} đ<s>{(producOrderInfor.unitPrice).toLocaleString('en-US')} đ</s> */}
             </tr>
         );
     });
@@ -99,7 +98,9 @@ const ConfirmOrder = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {displayProducts}
+                                {
+                                    (listRequest.length > 0 && displayProducts > 0) ? (<p>Không có sản phẩm nào</p>) : displayProducts
+                                }
                             </tbody>
                         </table>
                         <div>
@@ -118,7 +119,8 @@ const ConfirmOrder = () => {
                             </div>
                             <div style={{ float: "right" }}>
                                 <p>Shipping: Miễn phí</p>
-                                <p>Tổng tiền: {totalMoney.toLocaleString('en-US')} đ</p>
+                                <p>Shipping: Miễn phí</p>
+                                {/* <p>Tổng tiền: {totalMoney.toLocaleString('en-US')} đ</p> */}
                             </div>
                         </div>
                     </div>

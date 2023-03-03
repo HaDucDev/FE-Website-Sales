@@ -6,8 +6,15 @@ const checkProductOrderConfirmationService = async (data) => {// dung chung them
     return response;
 }
 
+//xem dang dinh mua
+const loadOrderComfirmService = async (userId) => {// dung chung them va sua
+  const response = await axios.get( API_COMMON +`order/order-confirmation/${userId}`)
+  return response;
+}
+
 const orderServiceUser = {
-  checkProductOrderConfirmationService
+  checkProductOrderConfirmationService,
+  loadOrderComfirmService
 }
 
 export default orderServiceUser;
