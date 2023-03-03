@@ -10,10 +10,13 @@ import orderServiceUser from "../../../services/user/user.order.service";
 
 const ConfirmOrder = () => {
 
+    const data = useSelector(state => state.listProductBuy);
+    const listRequest = data.productSelectList;
+
     const [productList, setProductList] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const usersPerPage = 3; // Số lượng user hiển thị trên mỗi trang
-    const pageCount = Math.ceil(productList.length / usersPerPage); // Tính tổng số trang
+    const pageCount = Math.ceil(listRequest.length / usersPerPage); // Tính tổng số trang
     const pagesVisited = pageNumber * usersPerPage; // Số user đã xem
 
     const [inforUser, setInforUser] = useState({
@@ -23,8 +26,7 @@ const ConfirmOrder = () => {
     });
 
     const nav = useNavigate();
-    const data = useSelector(state => state.listProductBuy);
-    const listRequest = data.productSelectList;
+    
     //const [totalMoney, setTotalMoney] = useState(0);
 
 
