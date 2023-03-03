@@ -11,7 +11,7 @@ import orderServiceUser from "../../../services/user/user.order.service";
 const ConfirmOrder = () => {
 
     const data = useSelector(state => state.listProductBuy);
-    const listRequest = ((data.productSelectList).length===0) ?(JSON.parse(sessionStorage.getItem("listBuySave")).productIdBuyList) : (data.productSelectList)  ;
+    const listRequest = ((data.productSelectList).length === 0) ? (JSON.parse(sessionStorage.getItem("listBuySave")).productIdBuyList) : (data.productSelectList);
 
     const [productList, setProductList] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
@@ -27,11 +27,8 @@ const ConfirmOrder = () => {
 
     const nav = useNavigate();
 
-    // if (listRequest.length === 0) {
-    //     alert("Sản phẩm trống, yêu cầu người dùng chọn lại sản phẩm")
-    //     nav("/cart")
-    // }
-    
+    const [selectedOption, setSelectedOption] = useState("tien_mat");// radio thanh toan
+
 
     useEffect(() => {
         orderServiceUser.loadOrderComfirmService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
@@ -72,10 +69,10 @@ const ConfirmOrder = () => {
     });
 
     //tinh tong tien san pham mua
-    const totalMoneyBuy = fitlerProductBuy(productList).reduce((initTotal,item)=>{
-        return initTotal+item.totalMoney;
-    },0)
-    
+    const totalMoneyBuy = fitlerProductBuy(productList).reduce((initTotal, item) => {
+        return initTotal + item.totalMoney;
+    }, 0)
+
 
     const changePage = ({ selected }) => {
         setPageNumber(selected);
@@ -111,11 +108,11 @@ const ConfirmOrder = () => {
                                 (listRequest.length > 0 && displayProducts.length > 0) && (
                                     <tbody>
                                         {displayProducts}
-                                    </tbody>) 
+                                    </tbody>)
                             }
                         </table>
                         {
-                                (listRequest.length===0) && (<div style={{ textAlign: "center" }}><i>Không có sản phẩm nào</i></div>)
+                            (listRequest.length === 0) && (<div style={{ textAlign: "center" }}><i>Không có sản phẩm nào</i></div>)
                         }
                         <div>
                             <div style={{ float: "left", padding: "1%" }}>
@@ -131,7 +128,7 @@ const ConfirmOrder = () => {
                                     activeClassName={'pagination__link--active'}
                                 />
                             </div>
-                            <div style={{ float: "right",}}>
+                            <div style={{ float: "right", }}>
                                 <div>Shipping: Miễn phí</div>
                                 <div>Tổng tiền: {(totalMoneyBuy).toLocaleString('en-US')} đ</div>
                             </div>
@@ -139,7 +136,7 @@ const ConfirmOrder = () => {
                     </div>
                 </div>
 
-                <div style={{ width: "30%", margin: "0px 5px", borderLeft: "1px solid #2522ca" }}>
+                <div style={{ width: "30%", margin: "0px 5px", borderLeft: "2px solid #2522ca" }}>
                     <h5 style={{ textAlign: "center" }}>Thông tin</h5>
                     <div style={{ margin: "1% 0x 0px 1%", padding: "1%", borderRadius: "0%" }}>
                         <Form>
@@ -160,8 +157,12 @@ const ConfirmOrder = () => {
                                     <div >
                                         <Form.Group controlId="formRadio" >
                                             <Form.Label>Chọn phương thức thanh toán</Form.Label>
-                                            <Form.Check type="radio" label="Tiền mặt" name="formRadio" id="option1" />
-                                            <Form.Check type="radio" label="Thanh toán với momo" name="formRadio" id="option2" />
+                                            <Form.Check type="radio" label="Tiền mặt" name="formRadio" id="option1"
+                                                value="tien_mat"
+                                                checked={selectedOption === "tien_mat"} onChange={(e)=> setSelectedOption(e.target.value)}/>
+                                            <Form.Check type="radio" label="Thanh toán với momo" name="formRadio" id="option2"
+                                                value="tn_momo"
+                                                checked={selectedOption === "tn_momo"} onChange={(e)=> setSelectedOption(e.target.value)}/>
                                         </Form.Group>
                                     </div>
                                 </Col>
