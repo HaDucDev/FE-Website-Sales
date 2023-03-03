@@ -37,11 +37,11 @@ function App() {
             <Route path="/" element={<Home />}>
               <Route path="" element={<ListProductCommon />} />
               <Route path="/product-detail/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />}></Route>
-              <Route path="/confirm-order" element={<ConfirmOrder />}></Route>
+
             </Route>
             <Route path="/login" element={<Login />}></Route>
-
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/confirm-order" element={<ConfirmOrder />}></Route>
 
             {/* admin */}
             <Route path="/admin" element={<Admin />} exact>

@@ -11,7 +11,7 @@ import orderServiceUser from "../../../services/user/user.order.service";
 const ConfirmOrder = () => {
 
     const data = useSelector(state => state.listProductBuy);
-    const listRequest = data.productSelectList;
+    const listRequest = ((data.productSelectList).length===0) ?(JSON.parse(sessionStorage.getItem("listBuySave")).productIdBuyList) : (data.productSelectList)  ;
 
     const [productList, setProductList] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
@@ -27,6 +27,10 @@ const ConfirmOrder = () => {
 
     const nav = useNavigate();
 
+    // if (listRequest.length === 0) {
+    //     alert("Sản phẩm trống, yêu cầu người dùng chọn lại sản phẩm")
+    //     nav("/cart")
+    // }
     
 
     useEffect(() => {
@@ -129,8 +133,7 @@ const ConfirmOrder = () => {
                             </div>
                             <div style={{ float: "right",}}>
                                 <div>Shipping: Miễn phí</div>
-                                <div>Shipping: {(totalMoneyBuy).toLocaleString('en-US')} đ</div>
-                                {/* <p>Tổng tiền: {totalMoney.toLocaleString('en-US')} đ</p> */}
+                                <div>Tổng tiền: {(totalMoneyBuy).toLocaleString('en-US')} đ</div>
                             </div>
                         </div>
                     </div>

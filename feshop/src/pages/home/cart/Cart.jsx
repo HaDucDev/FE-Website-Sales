@@ -46,6 +46,7 @@ const Cart = () => {
         }
         orderServiceUser.checkProductOrderConfirmationService(dataRequest).then((dataResponse)=>{
             if(dataResponse.data===true){
+                sessionStorage.setItem("listBuySave",JSON.stringify(dataRequest));
                 nav("/confirm-order")
             }
         }).catch((e)=>{

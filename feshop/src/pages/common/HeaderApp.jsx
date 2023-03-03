@@ -79,6 +79,7 @@ const HeaderApp = () => {
                       <Button variant="outline-success" onClick={(e) => 
                         { e.preventDefault(); 
                           localStorage.removeItem("currentUser"); 
+                          sessionStorage.clear();
                           nav("/") 
                           setCountCart(0);}}>Đăng xuất</Button>
                     ) :
