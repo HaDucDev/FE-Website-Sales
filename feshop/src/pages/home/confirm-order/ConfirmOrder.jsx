@@ -26,9 +26,6 @@ const ConfirmOrder = () => {
     });
 
     const nav = useNavigate();
-    
-    //const [totalMoney, setTotalMoney] = useState(0);
-
 
     
 
@@ -70,6 +67,12 @@ const ConfirmOrder = () => {
         );
     });
 
+    //tinh tong tien san pham mua
+    const totalMoneyBuy = fitlerProductBuy(productList).reduce((initTotal,item)=>{
+        return initTotal+item.totalMoney;
+    },0)
+    
+
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
@@ -108,7 +111,7 @@ const ConfirmOrder = () => {
                             }
                         </table>
                         {
-                                (displayProducts.length<1) && (<i style={{ textAlign: "center" }}>Không có sản phẩm nào</i>)
+                                (listRequest.length===0) && (<div style={{ textAlign: "center" }}><i>Không có sản phẩm nào</i></div>)
                         }
                         <div>
                             <div style={{ float: "left", padding: "1%" }}>
@@ -126,7 +129,7 @@ const ConfirmOrder = () => {
                             </div>
                             <div style={{ float: "right",}}>
                                 <div>Shipping: Miễn phí</div>
-                                <div>Shipping: Miễn phí</div>
+                                <div>Shipping: {(totalMoneyBuy).toLocaleString('en-US')} đ</div>
                                 {/* <p>Tổng tiền: {totalMoney.toLocaleString('en-US')} đ</p> */}
                             </div>
                         </div>
