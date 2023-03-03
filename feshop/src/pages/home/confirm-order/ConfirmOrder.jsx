@@ -56,12 +56,12 @@ const ConfirmOrder = () => {
                 <td>{producOrderInfor.productId}</td>
                 <td style={{ padding: "0px", width: "10%" }}><img src={producOrderInfor.productImage} alt="" style={{ width: "10%", margin: "0px" }} /></td>
                 <td>{producOrderInfor.productName}</td>
-                <td><p>
+                <td>
                     <div> {(producOrderInfor.sellingPrice).toLocaleString('en-US')} đ </div>
                     <div>
                         <s>{(producOrderInfor.unitPrice).toLocaleString('en-US')} đ</s>
                     </div>
-                </p></td>
+                </td>
                 <td>{producOrderInfor.quantityBuy}</td>
                 <td>{(producOrderInfor.totalMoney).toLocaleString('en-US')} đ</td>
             </tr>
@@ -106,7 +106,7 @@ const ConfirmOrder = () => {
                             }
                         </table>
                         {
-                                (displayProducts.length<1) && (<p style={{ textAlign: "center" }}>Không có sản phẩm nào</p>)
+                                (displayProducts.length<1) && (<i style={{ textAlign: "center" }}>Không có sản phẩm nào</i>)
                         }
                         <div>
                             <div style={{ float: "left", padding: "1%" }}>
@@ -122,9 +122,9 @@ const ConfirmOrder = () => {
                                     activeClassName={'pagination__link--active'}
                                 />
                             </div>
-                            <div style={{ float: "right" }}>
-                                <p>Shipping: Miễn phí</p>
-                                <p>Shipping: Miễn phí</p>
+                            <div style={{ float: "right",}}>
+                                <div>Shipping: Miễn phí</div>
+                                <div>Shipping: Miễn phí</div>
                                 {/* <p>Tổng tiền: {totalMoney.toLocaleString('en-US')} đ</p> */}
                             </div>
                         </div>
