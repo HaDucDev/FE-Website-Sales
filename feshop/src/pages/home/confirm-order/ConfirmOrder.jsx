@@ -28,12 +28,7 @@ const ConfirmOrder = () => {
     //const [totalMoney, setTotalMoney] = useState(0);
 
 
-    const fitlerProductBuy = (list, id) => {// loc san pham mua
-        if (listRequest.length > 0) {
-            return list.filter(item => listRequest.includes(id))
-        }
-        return list;
-    }
+    
 
     useEffect(() => {
         orderServiceUser.loadOrderComfirmService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
@@ -48,7 +43,14 @@ const ConfirmOrder = () => {
         })
     }, [pageNumber]);
 
-    const displayProducts = productList.slice(pagesVisited, pagesVisited + usersPerPage).map(producOrderInfor => {
+
+    const fitlerProductBuy = (list) => {// loc san pham mua
+        if (listRequest.length > 0) {
+            return list.filter(item => listRequest.includes(item.productId))
+        }
+        return list;
+    }
+    const displayProducts = fitlerProductBuy(productList).slice(pagesVisited, pagesVisited + usersPerPage).map(producOrderInfor => {
         return (
             <tr key={producOrderInfor.productId}>
                 <td>{producOrderInfor.productId}</td>
@@ -62,7 +64,6 @@ const ConfirmOrder = () => {
                 </p></td>
                 <td>{producOrderInfor.quantityBuy}</td>
                 <td>{(producOrderInfor.totalMoney).toLocaleString('en-US')} đ</td>
-                {/* {(producOrderInfor.sallingPrice).toLocaleString('en-US')} đ<s>{(producOrderInfor.unitPrice).toLocaleString('en-US')} đ</s> */}
             </tr>
         );
     });
@@ -97,12 +98,16 @@ const ConfirmOrder = () => {
                                     <th>Tổng cộng</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {
-                                    (listRequest.length > 0 && displayProducts > 0) ? (<p>Không có sản phẩm nào</p>) : displayProducts
-                                }
-                            </tbody>
+                            {
+                                (listRequest.length > 0 && displayProducts.length > 0) && (
+                                    <tbody>
+                                        {displayProducts}
+                                    </tbody>) 
+                            }
                         </table>
+                        {
+                                (displayProducts.length<1) && (<p style={{ textAlign: "center" }}>Không có sản phẩm nào</p>)
+                        }
                         <div>
                             <div style={{ float: "left", padding: "1%" }}>
                                 <ReactPaginate
