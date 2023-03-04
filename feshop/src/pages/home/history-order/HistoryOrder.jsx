@@ -10,6 +10,7 @@ const HistoryOrder = () => {
     const [orderList, setOrderList] = useState([]);// state datatable
     const [intiText, setText] = useState("");// state search
     const [initFilter, setFilter] = useState("");// state search
+    const [isClickedColor, setIsClickedColor] = useState(false);// state hiển thị màu khi click filter
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -121,8 +122,9 @@ const HistoryOrder = () => {
                                 value={intiText}
                                 onChange={(e) => setText(e.target.value)}
                             />
-                            <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor ? "dark" : "outline-dark"}
                                 onClick={() => {
+                                    setIsClickedColor(!isClickedColor)
                                     setFilter("")
                                 }}>Tất cả</Button>
                             <Button style={{ marginLeft: "10px" }} variant="outline-dark"
