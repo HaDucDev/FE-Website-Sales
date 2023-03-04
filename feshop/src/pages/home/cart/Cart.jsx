@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import cartServiceUser from '../../../services/user/user.cart.service';
-import CartItem from './CartItem';
+import CartItem from '../../../components/user/cart/CartItem';
 import "./css/cart.css"
 import ReactPaginate from 'react-paginate';
 import { useSelector } from 'react-redux';
