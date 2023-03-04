@@ -9,20 +9,33 @@ const HistoryOrder = () => {
 
     const [orderList, setOrderList] = useState([]);// state datatable
     const [intiText, setText] = useState("");// state search
+    const [initFilter, setFilter] = useState("");// state search
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
             setOrderList(response.data)
         }).catch(error => alert("Lỗi " + error.response.data + ". Bạn hãy quay lại sau."));
-    }, [intiText]);
+    }, [intiText, initFilter]);
 
 
     const searchAndFilter = (data) => {
-        return data.filter(row => convert_vi_to_en(row.receiptUser.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
+
+        let dataSearch = data.filter(row => convert_vi_to_en(row.receiptUser.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.ordersId.toString().includes(intiText)
             || row.totalAmount.toString().includes(intiText)
             || convert_vi_to_en(row.note.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
-            || convert_vi_to_en(row.statusOrder.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1);
+            || convert_vi_to_en(row.statusOrder.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1);;
+
+        if (initFilter === "tat_ca") {
+            return dataSearch;
+        }
+        if (initFilter === "") {
+            return dataSearch;
+        }
+        if (initFilter !== "") {
+            return dataSearch.filter(item => (item.statusOrder).includes(initFilter));
+        }
+        return dataSearch;
     }
 
     const colunmns = [
@@ -87,9 +100,9 @@ const HistoryOrder = () => {
     return (
         <>
 
-            <div style={{width:"90%", margin:"auto"}}>
+            <div style={{ width: "90%", margin: "auto" }}>
                 <h4>Lịch sử đơn hàng</h4>
-                <DataTable 
+                <DataTable
                     //title="Lịch sử đơn hàng"
                     columns={colunmns}
                     data={searchAndFilter(orderList)}
@@ -105,25 +118,29 @@ const HistoryOrder = () => {
                     subHeaderComponent={
                         <>
                             <input type="text" placeholder="Tìm kiếm" className="w-25 form-control"
-                            value={intiText} 
-                            onChange={(e) => setText(e.target.value)} 
+                                value={intiText}
+                                onChange={(e) => setText(e.target.value)}
                             />
                             <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                                 onClick={() => {
-
+                                    setFilter("")
                                 }}>Tất cả</Button>
                             <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                                 onClick={() => {
-
+                                    setFilter("Đang chờ")
                                 }}>Đang chờ duyệt</Button>
                             <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                                 onClick={() => {
-
+                                    setFilter("Đang giao")
                                 }}>Đang giao</Button>
                             <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                                 onClick={() => {
-
+                                    setFilter("Đã giao")
                                 }}>Đã nhận</Button>
+                            <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                                onClick={() => {
+                                    setFilter("Đã hủy")
+                                }}>Đã hủy</Button>
                         </>
                     }
                     subHeaderAlign="right"
