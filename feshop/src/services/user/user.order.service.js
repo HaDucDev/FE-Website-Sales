@@ -28,12 +28,19 @@ const createOrderOfflineOrPaymentLinkOnline = async (data) =>{
   return response;
 }
 
+//lay tat ca don hang cua nguoi dung
+const getAllOrderByUserId = async (userId) =>{
+  const response = await axios.get( API_COMMON +`order/all-order/${userId}`)
+  return response;
+}
+
 
 
 const orderServiceUser = {
   checkProductOrderConfirmationService,
   loadOrderComfirmService,
-  createOrderOfflineOrPaymentLinkOnline
+  createOrderOfflineOrPaymentLinkOnline,
+  getAllOrderByUserId
 }
 
 export default orderServiceUser;
