@@ -9,8 +9,8 @@ const HistoryOrder = () => {
 
     const [orderList, setOrderList] = useState([]);// state datatable
     const [intiText, setText] = useState("");// state search
-    const [initFilter, setFilter] = useState("");// state search
-    const [isClickedColor, setIsClickedColor] = useState(false);// state hiển thị màu khi click filter
+    const [initFilter, setFilter] = useState("");// state button loc
+    const [isClickedColor, setIsClickedColor] = useState(null);// state hiển thị màu khi click filter dùng many button
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -118,29 +118,31 @@ const HistoryOrder = () => {
                     subHeader
                     subHeaderComponent={
                         <>
-                            <input type="text" placeholder="Tìm kiếm" className="w-25 form-control"
-                                value={intiText}
-                                onChange={(e) => setText(e.target.value)}
+                            <input type="text" placeholder="Tìm kiếm" className="w-25 form-control" value={intiText} onChange={(e) => setText(e.target.value)}
                             />
-                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor ? "dark" : "outline-dark"}
+                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button1" ? "dark" : "outline-dark"}
                                 onClick={() => {
-                                    setIsClickedColor(!isClickedColor)
+                                    setIsClickedColor("button1")
                                     setFilter("")
                                 }}>Tất cả</Button>
-                            <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button2" ? "dark" : "outline-dark"}
                                 onClick={() => {
+                                    setIsClickedColor("button2")
                                     setFilter("Đang chờ")
                                 }}>Đang chờ duyệt</Button>
-                            <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button3" ? "dark" : "outline-dark"}
                                 onClick={() => {
+                                    setIsClickedColor("button3")
                                     setFilter("Đang giao")
                                 }}>Đang giao</Button>
-                            <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button4" ? "dark" : "outline-dark"}
                                 onClick={() => {
+                                    setIsClickedColor("button4")
                                     setFilter("Đã giao")
                                 }}>Đã nhận</Button>
-                            <Button style={{ marginLeft: "10px" }} variant="outline-dark"
+                            <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button5" ? "dark" : "outline-dark"}
                                 onClick={() => {
+                                    setIsClickedColor("button5")
                                     setFilter("Đã hủy")
                                 }}>Đã hủy</Button>
                         </>
