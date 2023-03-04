@@ -6,15 +6,24 @@ const checkProductOrderConfirmationService = async (data) => {// dung chung them
     return response;
 }
 
-//xem dang dinh mua
-const loadOrderComfirmService = async (userId) => {// dung chung them va sua
+//xem cac san pham dang dinh mua
+const loadOrderComfirmService = async (userId) => {
   const response = await axios.get( API_COMMON +`order/order-confirmation/${userId}`)
   return response;
 }
 
+// tao don hang bang thanh toan tien mat hoac xuat link thanh toan
+const createOrderOfflineOrPaymentLinkOnline = async (data) =>{
+  const response = await axios.post( API_COMMON +"order/create-offline-or-link-payment-online",data)
+  return response;
+}
+
+
+
 const orderServiceUser = {
   checkProductOrderConfirmationService,
-  loadOrderComfirmService
+  loadOrderComfirmService,
+  createOrderOfflineOrPaymentLinkOnline
 }
 
 export default orderServiceUser;

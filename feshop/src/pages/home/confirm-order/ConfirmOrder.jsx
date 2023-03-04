@@ -84,6 +84,29 @@ const ConfirmOrder = () => {
             alert("Sản phẩm trống, yêu cầu người dùng chọn lại sản phẩm")
             nav("/cart")
         }
+        if (listRequest.length !== 0) {
+
+            let dataRequest = {
+                "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+                "receiptUser": inforUser.fullName,
+                "phone": inforUser.phone,
+                "address": inforUser.address,
+                "methodPayment": selectedOption,
+                "buyProducts": listRequest
+            }
+            orderServiceUser.createOrderOfflineOrPaymentLinkOnline(dataRequest).then((dataResponse)=>{
+                let dataok =dataResponse.data;
+                alert(dataok["message"]);
+                if(selectedOption==="tien_mat"){
+                    alert("Bạn đã đặt hàng thành công")
+                    sessionStorage.clear();
+                    nav("/history-order")
+                }
+                if(selectedOption==="tn_momo"){
+                    window.location.href = dataok["message"];
+                }
+            })
+        }
     }
 
     return (
@@ -159,10 +182,10 @@ const ConfirmOrder = () => {
                                             <Form.Label>Chọn phương thức thanh toán</Form.Label>
                                             <Form.Check type="radio" label="Tiền mặt" name="formRadio" id="option1"
                                                 value="tien_mat"
-                                                checked={selectedOption === "tien_mat"} onChange={(e)=> setSelectedOption(e.target.value)}/>
+                                                checked={selectedOption === "tien_mat"} onChange={(e) => setSelectedOption(e.target.value)} />
                                             <Form.Check type="radio" label="Thanh toán với momo" name="formRadio" id="option2"
                                                 value="tn_momo"
-                                                checked={selectedOption === "tn_momo"} onChange={(e)=> setSelectedOption(e.target.value)}/>
+                                                checked={selectedOption === "tn_momo"} onChange={(e) => setSelectedOption(e.target.value)} />
                                         </Form.Group>
                                     </div>
                                 </Col>
