@@ -1,6 +1,16 @@
 import axios from "axios";
 import { API_COMMON} from "../../utils/utils";
 
+function authHeader() {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (user && user.jwtToken) {
+    return { Authorization: "Bearer " + user.jwtToken };
+  } else {
+    return {};
+  }
+}
+
 const checkProductOrderConfirmationService = async (data) => {// dung chung them va sua
     const response = await axios.post( API_COMMON +"order/order-confirmation",data)
     return response;
@@ -14,7 +24,7 @@ const loadOrderComfirmService = async (userId) => {
 
 // tao don hang bang thanh toan tien mat hoac xuat link thanh toan
 const createOrderOfflineOrPaymentLinkOnline = async (data) =>{
-  const response = await axios.post( API_COMMON +"order/create-offline-or-link-payment-online",data)
+  const response = await axios.post( API_COMMON +"order/create-offline-or-link-payment-online",data, { headers: authHeader() })
   return response;
 }
 

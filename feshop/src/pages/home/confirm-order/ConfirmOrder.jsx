@@ -96,13 +96,13 @@ const ConfirmOrder = () => {
             }
             orderServiceUser.createOrderOfflineOrPaymentLinkOnline(dataRequest).then((dataResponse)=>{
                 let dataok =dataResponse.data;
-                alert(dataok["message"]);
                 if(selectedOption==="tien_mat"){
-                    alert("Bạn đã đặt hàng thành công")
+                    alert(dataok["message"]);
                     sessionStorage.clear();
                     nav("/history-order")
                 }
                 if(selectedOption==="tn_momo"){
+                    alert(dataok["message"]);
                     window.location.href = dataok["message"];
                 }
             })
