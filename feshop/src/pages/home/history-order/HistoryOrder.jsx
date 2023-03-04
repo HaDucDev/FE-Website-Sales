@@ -2,18 +2,29 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import orderServiceUser from "../../../services/user/user.order.service";
+import convert_vi_to_en from "../../../utils/utils";
 
 
 const HistoryOrder = () => {
 
     const [orderList, setOrderList] = useState([]);// state datatable
-
+    const [intiText, setText] = useState("");// state search
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
             setOrderList(response.data)
         }).catch(error => alert("Lỗi " + error.response.data + ". Bạn hãy quay lại sau."));
-    }, [])
+    }, [intiText]);
+
+
+    const searchAndFilter = (data) => {
+        return data.filter(row => convert_vi_to_en(row.receiptUser.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
+            || row.ordersId.toString().includes(intiText)
+            || row.totalAmount.toString().includes(intiText)
+            || convert_vi_to_en(row.note.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
+            || convert_vi_to_en(row.statusOrder.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1);
+    }
+
     const colunmns = [
         {
             name: "Mã đơn hàng",
@@ -22,7 +33,12 @@ const HistoryOrder = () => {
             center: true
         },
         {
-            name: "Tổng tiền",
+            name: "Người nhận",
+            selector: (row) => row.receiptUser,
+            center: true
+        },
+        {
+            name: "Tổng tiền đơn hàng",
             selector: (row) => <div>{row.totalAmount} đ</div>,
             center: true
         },
@@ -76,7 +92,7 @@ const HistoryOrder = () => {
                 <DataTable 
                     //title="Lịch sử đơn hàng"
                     columns={colunmns}
-                    data={orderList}
+                    data={searchAndFilter(orderList)}
                     pagination
                     fixedHeader // thanh keo cua bang
                     fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
@@ -89,8 +105,8 @@ const HistoryOrder = () => {
                     subHeaderComponent={
                         <>
                             <input type="text" placeholder="Tìm kiếm" className="w-25 form-control"
-                            //value={intiText} 
-                            //onChange={(e) => setText(e.target.value)} 
+                            value={intiText} 
+                            onChange={(e) => setText(e.target.value)} 
                             />
                             <Button style={{ marginLeft: "10px" }} variant="outline-dark"
                                 onClick={() => {
