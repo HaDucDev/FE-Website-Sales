@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import orderServiceUser from "../../../services/user/user.order.service";
 import convert_vi_to_en from "../../../utils/utils";
@@ -11,6 +11,7 @@ const HistoryOrder = () => {
     const [intiText, setText] = useState("");// state search
     const [initFilter, setFilter] = useState("");// state button loc
     const [isClickedColor, setIsClickedColor] = useState(null);// state hiển thị màu khi click filter dùng many button
+    const [showOrderDetailModal, setShowOrderDetailMOdal] = useState(false);//state bat/tat modal chi tiet don hang
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -72,8 +73,10 @@ const HistoryOrder = () => {
                 return <>
                     <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
                         <Button variant="outline-dark" onClick={
-                            () => {
-                            }
+                            () => { 
+                                setShowOrderDetailMOdal(true);
+
+                             }
                         }>Chi tiết</Button>
                         <button style={{ marginLeft: "5px" }} className="btn btn-primary" >Hủy</button>
                     </div>
@@ -151,6 +154,28 @@ const HistoryOrder = () => {
                     customStyles={customStyles}
                 />
             </div>
+
+
+            {/* Modal Xác nhận product*/}
+            <Modal show={showOrderDetailModal} onHide={() => setShowOrderDetailMOdal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Chi tiết đơn hàng </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p> {`Chi tiết đơn hàng "${{}}"`}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowOrderDetailMOdal(!showOrderDetailModal)}>
+                        Không
+                    </Button>
+                    <Button variant="primary"
+                    //onClick={() => handleDeleteProduct()}
+                    >
+                        Có
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </>
     )
 }
