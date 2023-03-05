@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Modal} from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import orderDeailServiceUser from "../../../services/user/user.order.detail.service";
 import orderServiceUser from "../../../services/user/user.order.service";
@@ -15,6 +15,8 @@ const HistoryOrder = () => {
     const [showOrderDetailModal, setShowOrderDetailMOdal] = useState(false);//state bat/tat modal chi tiet don hang
 
     const [orderDetailList, setOrderDetailList] = useState([]);// state order detail -list
+
+    //const [inforOrderInOrder]
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -155,7 +157,6 @@ const HistoryOrder = () => {
 
     return (
         <>
-
             <div style={{ width: "90%", margin: "auto" }}>
                 <h4>Lịch sử đơn hàng</h4>
                 <DataTable
@@ -208,41 +209,123 @@ const HistoryOrder = () => {
             </div>
 
 
-            {/* Modal Xác nhận product*/}
+            {/* Modal chi tiet don hang*/}
             <Modal show={showOrderDetailModal} onHide={() => setShowOrderDetailMOdal(false)} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Chi tiết đơn hàng </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <div>
-                        <DataTable
-                            //title="Lịch sử đơn hàng"
-                            columns={colunmnsOrderDetail}
-                            data={orderDetailList}
-                            pagination
-                            fixedHeader // thanh keo cua bang
-                            fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
-                            highlightOnHover // dua chuot vo dong doi mau
-                            paginationIconFirstPage
-                            responsive
-                            paginationPerPage={5}
-                            paginationRowsPerPageOptions={[5, 15, 23, 50]}
-                            subHeader
-                            subHeaderAlign="right"
-                            customStyles={customStylesOrderDetail}
-                        />
+                    <Row>
+                        <div>
+                            <div style={{ float: "left" }}>
+                                <div><h5>Thông tin</h5></div>
+                            </div>
+                            <div style={{ float: "right" }}>
+                                <div>Tổng tiền : 123456</div>
+                            </div>
+                        </div>
+                    </Row>
+                    <div>
+                        <div style={{ width: "100%", margin: "0px 5px" }}>
+                            <div style={{ margin: "1% 0x 0px 1%", padding: "1%", borderRadius: "0%" }}>
+                                <Form>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group controlId="formName">
+                                                <Form.Label>Tên người nhận</Form.Label>
+                                                <Form.Control type="text" placeholder="Người nhận"
+                                                //defaultValue={inforUser.fullName} 
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col> <Form.Group controlId="formAddress">
+                                            <Form.Label>Địa chỉ nhận</Form.Label>
+                                            <Form.Control type="text" placeholder="Địa chỉ"
+                                            //defaultValue={inforUser.address} 
+                                            />
+                                        </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group controlId="formSdt">
+                                                <Form.Label>Số điện thoại</Form.Label>
+                                                <Form.Control type="text" placeholder="số điện thoại"
+                                                //defaultValue={inforUser.phone} 
+                                                />
+                                            </Form.Group>
+
+                                        </Col>
+
+                                        <Col>
+                                            <Form.Group controlId="formAddress">
+                                                <Form.Label>Ngày tạo</Form.Label>
+                                                <Form.Control type="text" placeholder="Ngày tạo"
+                                                //defaultValue={inforUser.address} 
+                                                />
+                                            </Form.Group></Col>
+                                        <Col>
+                                            <Form.Group controlId="formAddress">
+                                                <Form.Label>Ngày nhận</Form.Label>
+                                                <Form.Control type="text" placeholder="Ngày nhận"
+                                                //defaultValue={inforUser.address} 
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+
+                                            <Form.Group controlId="formSdt">
+                                                <Form.Label>Trạng thái đơn hàng</Form.Label>
+                                                <Form.Control type="text" placeholder="Trạng thái đơn hàng"
+                                                //defaultValue={inforUser.phone} 
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group controlId="formName">
+                                                <Form.Label>Tình trạng thanh toán</Form.Label>
+                                                <Form.Control type="text" placeholder="Tình trạng thanh toán"
+                                                //defaultValue={inforUser.fullName} 
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group controlId="formAddress">
+                                                <Form.Label>Shipper giao hàng</Form.Label>
+                                                <Form.Control type="text" placeholder="Người giao"
+                                                //defaultValue={inforUser.address} 
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </div>
+                        </div>
+                        <div>
+                            <DataTable
+                                //title="Lịch sử đơn hàng"
+                                columns={colunmnsOrderDetail}
+                                data={orderDetailList}
+                                pagination
+                                fixedHeader // thanh keo cua bang
+                                fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
+                                highlightOnHover // dua chuot vo dong doi mau
+                                paginationIconFirstPage
+                                responsive
+                                paginationPerPage={5}
+                                paginationRowsPerPageOptions={[5, 15, 23, 50]}
+                                subHeader
+                                subHeaderAlign="right"
+                                customStyles={customStylesOrderDetail}
+                            />
+                        </div>
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-
-                    <Button variant="secondary" onClick={() => setShowOrderDetailMOdal(!showOrderDetailModal)}>
-                        Không
-                    </Button>
-                    <Button variant="primary"
-                    //onClick={() => handleDeleteProduct()}
-                    >
-                        Có
-                    </Button>
+                    <Button variant="primary" onClick={() => setShowOrderDetailMOdal(!showOrderDetailModal)}>Đóng</Button>
                 </Modal.Footer>
             </Modal>
 
