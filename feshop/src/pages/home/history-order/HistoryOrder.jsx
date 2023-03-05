@@ -16,7 +16,16 @@ const HistoryOrder = () => {
 
     const [orderDetailList, setOrderDetailList] = useState([]);// state order detail -list
 
-    //const [inforOrderInOrder]
+    const [inforOrderInOrderDetail, setInforOrderInOrderDetail] = useState({
+            address: "",
+            receiptUser: "",
+            phone: "",
+            createdDate: "",
+            receivedDate: "",
+            note: "",
+            statusOrder: "",
+            shipperId: "",
+    })
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -49,6 +58,20 @@ const HistoryOrder = () => {
         orderDeailServiceUser.getAllOrderDetailByOrdersId(ordersId).then((dataResponse) => {
             let listDetail = dataResponse.data;
             setOrderDetailList(listDetail);
+            const [firstElement] = listDetail;
+            setInforOrderInOrderDetail({
+                address: firstElement.order.address,
+                receiptUser: firstElement.order.receiptUser,
+                phone: firstElement.order.phoneNumber,
+                createdDate: firstElement.order.createdDate,
+                receivedDate: firstElement.order.receivedDate ? "" : firstElement.order.receivedDate,
+                note: firstElement.order.note,
+                statusOrder: firstElement.order.statusOrder,
+                shipperId: (!firstElement.order.shipperId) ? "" : firstElement.order.shipperId,
+        })
+            console.log(firstElement);
+
+
         })
         setShowOrderDetailMOdal(true);
     }
@@ -233,70 +256,62 @@ const HistoryOrder = () => {
                                         <Col>
                                             <Form.Group controlId="formName">
                                                 <Form.Label>Tên người nhận</Form.Label>
-                                                <Form.Control type="text" placeholder="Người nhận"
-                                                //defaultValue={inforUser.fullName} 
+                                                <Form.Control type="text" placeholder="Người nhận" 
+                                                    defaultValue={inforOrderInOrderDetail.receiptUser} 
                                                 />
                                             </Form.Group>
                                         </Col>
                                         <Col> <Form.Group controlId="formAddress">
                                             <Form.Label>Địa chỉ nhận</Form.Label>
-                                            <Form.Control type="text" placeholder="Địa chỉ"
-                                            //defaultValue={inforUser.address} 
+                                            <Form.Control type="text" placeholder="Địa chỉ" readOnly
+                                            defaultValue={inforOrderInOrderDetail.address} 
                                             />
                                         </Form.Group>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col>
+                                        <Col md={3}>
                                             <Form.Group controlId="formSdt">
                                                 <Form.Label>Số điện thoại</Form.Label>
-                                                <Form.Control type="text" placeholder="số điện thoại"
-                                                //defaultValue={inforUser.phone} 
+                                                <Form.Control type="text" placeholder="số điện thoại" readOnly
+                                                defaultValue={inforOrderInOrderDetail.phone} 
                                                 />
                                             </Form.Group>
-
                                         </Col>
-
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Ngày tạo</Form.Label>
-                                                <Form.Control type="text" placeholder="Ngày tạo"
-                                                //defaultValue={inforUser.address} 
-                                                />
+                                                <Form.Control type="text" placeholder="Ngày tạo" readOnly
+                                                    defaultValue={inforOrderInOrderDetail.createdDate} />
                                             </Form.Group></Col>
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Ngày nhận</Form.Label>
-                                                <Form.Control type="text" placeholder="Ngày nhận"
-                                                //defaultValue={inforUser.address} 
-                                                />
+                                                <Form.Control type="text"  readOnly defaultValue={inforOrderInOrderDetail.receivedDate}  />
                                             </Form.Group>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col>
+                                        <Col md={3}>
 
                                             <Form.Group controlId="formSdt">
                                                 <Form.Label>Trạng thái đơn hàng</Form.Label>
-                                                <Form.Control type="text" placeholder="Trạng thái đơn hàng"
-                                                //defaultValue={inforUser.phone} 
-                                                />
+                                                <Form.Control type="text" placeholder="Trạng thái đơn hàng" readOnly
+                                                defaultValue={inforOrderInOrderDetail.statusOrder}  />
                                             </Form.Group>
                                         </Col>
                                         <Col>
                                             <Form.Group controlId="formName">
                                                 <Form.Label>Tình trạng thanh toán</Form.Label>
-                                                <Form.Control type="text" placeholder="Tình trạng thanh toán"
-                                                //defaultValue={inforUser.fullName} 
-                                                />
+                                                <Form.Control type="text" placeholder="Tình trạng thanh toán" readOnly
+                                                defaultValue={inforOrderInOrderDetail.note}  />
                                             </Form.Group>
                                         </Col>
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Shipper giao hàng</Form.Label>
-                                                <Form.Control type="text" placeholder="Người giao"
-                                                //defaultValue={inforUser.address} 
-                                                />
+                                                <Form.Control type="text"  readOnly
+                                                   defaultValue={inforOrderInOrderDetail.shipperId} />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -306,6 +321,7 @@ const HistoryOrder = () => {
                         <div>
                             <DataTable
                                 //title="Lịch sử đơn hàng"
+                                keyField="Mã sản phẩm"  //fix Encountered two children with the same key
                                 columns={colunmnsOrderDetail}
                                 data={orderDetailList}
                                 pagination
@@ -318,17 +334,14 @@ const HistoryOrder = () => {
                                 paginationRowsPerPageOptions={[5, 15, 23, 50]}
                                 subHeader
                                 subHeaderAlign="right"
-                                customStyles={customStylesOrderDetail}
-                            />
+                                customStyles={customStylesOrderDetail}/>
                         </div>
-
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowOrderDetailMOdal(!showOrderDetailModal)}>Đóng</Button>
                 </Modal.Footer>
             </Modal>
-
         </>
     )
 }
