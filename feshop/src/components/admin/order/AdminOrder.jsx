@@ -27,16 +27,13 @@ const AdminOrder = () => {
             shipperId: "",
     })
 
+    const [load, setLoadTable] = useState(false);// state load khi huy thanh cong
 
     useEffect(() => {
         orderService.getAllOrder().then((response) => {
             setOrderList(response.data)
         }).catch(error => alert("Lỗi " + error.response.data + ". Bạn hãy quay lại sau."));
-    }, [intiText, initFilter]);
-
-
-
-
+    }, [intiText, initFilter,load]);
 
     const searchAndFilter = (data) => {
 
@@ -80,6 +77,25 @@ const AdminOrder = () => {
         setShowOrderDetailMOdal(true);
     }
 
+    const cancelOrder = (id)=>{
+        orderService.cancelOrderService(id).then((dataResponse)=>{
+            let result = dataResponse.data;
+            setLoadTable(!load)
+            alert(result["message"])
+        })
+    }
+
+    const acceptOrder =(id) =>{
+        let dataRequest = {
+            "ordersId": id
+        }
+        orderService.acceptOrderService(dataRequest).then((dataResponse)=>{
+            let result = dataResponse.data;
+            setLoadTable(!load)
+            alert(result["message"])
+        })
+    }
+
     const colunmnsOrder = [
         {
             name: "Mã đơn hàng",
@@ -121,18 +137,18 @@ const AdminOrder = () => {
                             >Chi tiết</Button>
                             {
                                 (row.statusOrder === "Đang chờ") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
-                                //onClick={() => cancelOrder(row.ordersId)}
+                                    onClick={() => acceptOrder(row.ordersId)}
                                 >Duyệt đơn</Button>)
 
                             }
-                            {
+                            {/* {
                                 (row.statusOrder === "Đang giao") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
                                 //onClick={() => cancelOrder(row.ordersId)}
                                 >Xác nhận đã giao</Button>)
-                            }
+                            } */}
                             {
                                 (row.statusOrder === "Đang chờ") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
-                                //onClick={() => cancelOrder(row.ordersId)}
+                                onClick={() => cancelOrder(row.ordersId)}
                                 >Hủy đơn</Button>)
                             }
                         </div>
