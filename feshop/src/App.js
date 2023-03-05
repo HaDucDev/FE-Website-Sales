@@ -12,6 +12,8 @@ import { useState } from 'react';
 import ProductDetail from './components/user/product-detail/ProductDetail';
 import ListProductCommon from './components/user/ListProductCommon/ListProductCommon';
 import Cart from './pages/home/cart/Cart';
+import ConfirmOrder from './pages/home/confirm-order/ConfirmOrder';
+import HistoryOrder from './pages/home/history-order/HistoryOrder';
 
 
 
@@ -34,12 +36,15 @@ function App() {
             {/* common */}
 
             <Route path="/" element={<Home />}>
-              <Route path="" element={<ListProductCommon/>} />
+              <Route path="" element={<ListProductCommon />} />
               <Route path="/product-detail/:id" element={<ProductDetail />} />
+
             </Route>
             <Route path="/login" element={<Login />}></Route>
-            <Route path="/cart" element={<Cart/>}></Route>
-       
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/confirm-order" element={<ConfirmOrder />}></Route>
+            <Route path="/history-order" element={<HistoryOrder/>}></Route>
+
             {/* admin */}
             <Route path="/admin" element={<Admin />} exact>
               <Route path="category" element={<AdminCategory />}></Route>

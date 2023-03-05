@@ -49,7 +49,7 @@ const HeaderApp = () => {
                   <Nav.Link href="#action1" onClick={
                     (e) => {
                       e.preventDefault();
-                      (doneLogin) ? (nav("/cart")): (alert("Bạn phải đăng nhập mới có thể xem giỏ hàng"))
+                      (doneLogin) ? (nav("/cart")) : (alert("Bạn phải đăng nhập mới có thể xem giỏ hàng"))
                     }
                   } style={{ marginRight: "10px" }}>
                     Giỏ hàng<Cart size={24} className="cursor-pointer" />
@@ -62,13 +62,18 @@ const HeaderApp = () => {
                           style={{ height: "40px", width: "40px", objectFit: "cover", borderRadius: "50%" }} />
 
                         <NavDropdown title={JSON.parse(doneLogin).username} id={`offcanvasNavbarDropdown-expand-${expand}`}>
-                          <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+                          <NavDropdown.Item href="#action3" onClick={
+                            (e) => {
+                              e.preventDefault();   
+                              nav("/history-order")                          
+                            }
+                          }>Lịch sử đơn hàng</NavDropdown.Item>
                           <NavDropdown.Item href="#action4">
-                            Another action
+                            Thông tin cá nhân
                           </NavDropdown.Item>
                           <NavDropdown.Divider />
                           <NavDropdown.Item href="#action5">
-                            Something else here
+                            Đổi mật khẩu
                           </NavDropdown.Item>
                         </NavDropdown>
                       </>
@@ -76,11 +81,13 @@ const HeaderApp = () => {
                   }
                   {
                     (doneLogin) ? (
-                      <Button variant="outline-success" onClick={(e) => 
-                        { e.preventDefault(); 
-                          localStorage.removeItem("currentUser"); 
-                          nav("/") 
-                          setCountCart(0);}}>Đăng xuất</Button>
+                      <Button variant="outline-success" onClick={(e) => {
+                        e.preventDefault();
+                        localStorage.removeItem("currentUser");
+                        sessionStorage.clear();
+                        nav("/")
+                        setCountCart(0);
+                      }}>Đăng xuất</Button>
                     ) :
                       (<Button variant="outline-success" onClick={(e) => { e.preventDefault(); nav("/login") }}>Đăng nhập</Button>)
                   }
