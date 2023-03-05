@@ -266,7 +266,7 @@ const HistoryOrder = () => {
                                         <Col>
                                             <Form.Group controlId="formName">
                                                 <Form.Label>Tên người nhận</Form.Label>
-                                                <Form.Control type="text" placeholder="Người nhận" 
+                                                <Form.Control type="text" placeholder="Người nhận" readOnly
                                                     defaultValue={inforOrderInOrderDetail.receiptUser} 
                                                 />
                                             </Form.Group>
