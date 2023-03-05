@@ -34,7 +34,7 @@ const Login = () => {
         
       }).catch((err) => {
         let errorShow = err.response.data;
-        alert(errorShow);
+        alert(errorShow["message"]);
     })
 
   }
