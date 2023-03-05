@@ -34,13 +34,21 @@ const getAllOrderByUserId = async (userId) =>{
   return response;
 }
 
+//huy don hang neu chua duyet
+
+const cancelOrderService = async (ordersId) =>{
+  const response = await axios.delete(API_COMMON+ `order/${ordersId}`)
+  return response;
+}
+
 
 
 const orderServiceUser = {
   checkProductOrderConfirmationService,
   loadOrderComfirmService,
   createOrderOfflineOrPaymentLinkOnline,
-  getAllOrderByUserId
+  getAllOrderByUserId,
+  cancelOrderService
 }
 
 export default orderServiceUser;

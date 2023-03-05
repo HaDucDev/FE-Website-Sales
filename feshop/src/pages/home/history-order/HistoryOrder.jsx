@@ -15,7 +15,6 @@ const HistoryOrder = () => {
     const [showOrderDetailModal, setShowOrderDetailMOdal] = useState(false);//state bat/tat modal chi tiet don hang
 
     const [orderDetailList, setOrderDetailList] = useState([]);// state order detail -list
-
     const [inforOrderInOrderDetail, setInforOrderInOrderDetail] = useState({
             address: "",
             receiptUser: "",
@@ -27,11 +26,13 @@ const HistoryOrder = () => {
             shipperId: "",
     })
 
+    const [load, setLoadTable] = useState(false);// state load khi huy thanh cong
+
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
             setOrderList(response.data)
         }).catch(error => alert("Lỗi " + error.response.data + ". Bạn hãy quay lại sau."));
-    }, [intiText, initFilter]);
+    }, [intiText, initFilter,load]);
 
 
     const searchAndFilter = (data) => {
@@ -76,6 +77,14 @@ const HistoryOrder = () => {
         setShowOrderDetailMOdal(true);
     }
 
+    const cancelOrder = (id)=>{
+        orderServiceUser.cancelOrderService(id).then((dataResponse)=>{
+            let result = dataResponse.data;
+            setLoadTable(!load)
+            alert(result["message"])
+        })
+    }
+
     const colunmnsOrder = [
         {
             name: "Mã đơn hàng",
@@ -109,7 +118,8 @@ const HistoryOrder = () => {
                 return <>
                     <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
                         <Button variant="outline-dark" onClick={() => handleGetListOrderDetailByOrdersId(row.ordersId)}>Chi tiết</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" >Hủy</button>
+                        <button style={{ marginLeft: "5px" }} className="btn btn-success" onClick={()=> cancelOrder(row.ordersId)}
+                        disabled={(row.statusOrder !== "Đang chờ") ? true : false}>Hủy đơn</button>
                     </div>
                 </>
             },
@@ -208,22 +218,22 @@ const HistoryOrder = () => {
                                 onClick={() => {
                                     setIsClickedColor("button2")
                                     setFilter("Đang chờ")
-                                }}>Đang chờ duyệt</Button>
+                                }}>Đơn hàng đang chờ duyệt</Button>
                             <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button3" ? "dark" : "outline-dark"}
                                 onClick={() => {
                                     setIsClickedColor("button3")
                                     setFilter("Đang giao")
-                                }}>Đang giao</Button>
+                                }}>Đơn hàng đang giao</Button>
                             <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button4" ? "dark" : "outline-dark"}
                                 onClick={() => {
                                     setIsClickedColor("button4")
                                     setFilter("Đã giao")
-                                }}>Đã nhận</Button>
+                                }}>Đơn hàng đã nhận</Button>
                             <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button5" ? "dark" : "outline-dark"}
                                 onClick={() => {
                                     setIsClickedColor("button5")
                                     setFilter("Đã hủy")
-                                }}>Đã hủy</Button>
+                                }}>Đơn hàng đã hủy</Button>
                         </>
                     }
                     subHeaderAlign="right"
