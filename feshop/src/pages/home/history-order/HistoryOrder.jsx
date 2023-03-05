@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal} from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import orderDeailServiceUser from "../../../services/user/user.order.detail.service";
 import orderServiceUser from "../../../services/user/user.order.service";
 import convert_vi_to_en from "../../../utils/utils";
 
@@ -12,6 +13,8 @@ const HistoryOrder = () => {
     const [initFilter, setFilter] = useState("");// state button loc
     const [isClickedColor, setIsClickedColor] = useState(null);// state hiển thị màu khi click filter dùng many button
     const [showOrderDetailModal, setShowOrderDetailMOdal] = useState(false);//state bat/tat modal chi tiet don hang
+
+    const [orderDetailList, setOrderDetailList] = useState([]);// state order detail -list
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -40,7 +43,15 @@ const HistoryOrder = () => {
         return dataSearch;
     }
 
-    const colunmns = [
+    const handleGetListOrderDetailByOrdersId = (ordersId) => {
+        orderDeailServiceUser.getAllOrderDetailByOrdersId(ordersId).then((dataResponse) => {
+            let listDetail = dataResponse.data;
+            setOrderDetailList(listDetail);
+        })
+        setShowOrderDetailMOdal(true);
+    }
+
+    const colunmnsOrder = [
         {
             name: "Mã đơn hàng",
             selector: row => row.ordersId,
@@ -72,22 +83,16 @@ const HistoryOrder = () => {
             cell: (row) => {
                 return <>
                     <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
-                        <Button variant="outline-dark" onClick={
-                            () => { 
-                                setShowOrderDetailMOdal(true);
-
-                             }
-                        }>Chi tiết</Button>
+                        <Button variant="outline-dark" onClick={() => handleGetListOrderDetailByOrdersId(row.ordersId)}>Chi tiết</Button>
                         <button style={{ marginLeft: "5px" }} className="btn btn-primary" >Hủy</button>
                     </div>
-
                 </>
             },
             center: true
         }
     ];
 
-    const customStyles = {// css datatable
+    const customStylesOrder = {// css datatable
         headCells: {
             style: {
                 backgroundColor: "#C0D5FF"
@@ -101,6 +106,53 @@ const HistoryOrder = () => {
 
     };
 
+
+
+    const colunmnsOrderDetail = [
+        {
+            name: "Mã sản phẩm",
+            selector: row => row.id.productId,
+            sortable: true, // nha ten cot thi sort
+            center: true
+        },
+        {
+            name: "Tên sản phẩm",
+            selector: row => row.product.productName,
+            sortable: true, // nha ten cot thi sort
+            center: true
+        },
+        {
+            name: "produc Image",
+            selector: (row) => <img width={50} height={50} src={row.product.productImage} alt="lỗi ảnh" />,
+            center: true
+        },
+        {
+            name: "Số lượng",
+            selector: (row) => row.quantity,
+            center: true
+        },
+        {
+            name: "Tổng tiền",
+            selector: (row) => <div>{row.amount} đ</div>,
+            center: true
+        },
+    ];
+
+    const customStylesOrderDetail = {// css datatable
+        headCells: {
+            style: {
+                backgroundColor: "#C0D5FF"
+            },
+        },
+        headRow: {
+            style: {
+
+            },
+        },
+
+    };
+
+
     return (
         <>
 
@@ -108,7 +160,7 @@ const HistoryOrder = () => {
                 <h4>Lịch sử đơn hàng</h4>
                 <DataTable
                     //title="Lịch sử đơn hàng"
-                    columns={colunmns}
+                    columns={colunmnsOrder}
                     data={searchAndFilter(orderList)}
                     pagination
                     fixedHeader // thanh keo cua bang
@@ -151,20 +203,38 @@ const HistoryOrder = () => {
                         </>
                     }
                     subHeaderAlign="right"
-                    customStyles={customStyles}
+                    customStyles={customStylesOrder}
                 />
             </div>
 
 
             {/* Modal Xác nhận product*/}
-            <Modal show={showOrderDetailModal} onHide={() => setShowOrderDetailMOdal(false)}>
+            <Modal show={showOrderDetailModal} onHide={() => setShowOrderDetailMOdal(false)} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Chi tiết đơn hàng </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p> {`Chi tiết đơn hàng "${{}}"`}</p>
+                <div>
+                        <DataTable
+                            //title="Lịch sử đơn hàng"
+                            columns={colunmnsOrderDetail}
+                            data={orderDetailList}
+                            pagination
+                            fixedHeader // thanh keo cua bang
+                            fixedHeaderScrollHeight="400px" // cho cai thanh keo 400px va sat thanh keo cua page luon
+                            highlightOnHover // dua chuot vo dong doi mau
+                            paginationIconFirstPage
+                            responsive
+                            paginationPerPage={5}
+                            paginationRowsPerPageOptions={[5, 15, 23, 50]}
+                            subHeader
+                            subHeaderAlign="right"
+                            customStyles={customStylesOrderDetail}
+                        />
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
+
                     <Button variant="secondary" onClick={() => setShowOrderDetailMOdal(!showOrderDetailModal)}>
                         Không
                     </Button>
