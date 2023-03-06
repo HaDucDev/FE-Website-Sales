@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import orderDeailServiceUser from "../../../services/user/user.order.detail.service";
 import orderServiceUser from "../../../services/user/user.order.service";
 import convert_vi_to_en from "../../../utils/utils";
-
+import StarRatings from "react-star-ratings";
 
 const HistoryOrder = () => {
 
@@ -14,25 +14,30 @@ const HistoryOrder = () => {
     const [isClickedColor, setIsClickedColor] = useState(null);// state hiển thị màu khi click filter dùng many button
     const [showOrderDetailModal, setShowOrderDetailMOdal] = useState(false);//state bat/tat modal chi tiet don hang
 
+    const [reviewModal, setReviewModal] = useState(false);// modal danh gia san pham
+
     const [orderDetailList, setOrderDetailList] = useState([]);// state order detail -list
     const [inforOrderInOrderDetail, setInforOrderInOrderDetail] = useState({
-            address: "",
-            receiptUser: "",
-            phone: "",
-            createdDate: "",
-            receivedDate: "",
-            note: "",
-            statusOrder: "",
-            shipperId: "",
+        address: "",
+        receiptUser: "",
+        phone: "",
+        createdDate: "",
+        receivedDate: "",
+        note: "",
+        statusOrder: "",
+        shipperId: "",
     })
 
     const [load, setLoadTable] = useState(false);// state load khi huy thanh cong
+    const [rating, setRating] = useState(5);// danh gia sao
+
+    const [stateInfor, setStateInfor] = useState(Object);// giu gia tri khi chuyen tu 
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
             setOrderList(response.data)
         }).catch(error => alert("Lỗi " + error.response.data + ". Bạn hãy quay lại sau."));
-    }, [intiText, initFilter,load]);
+    }, [intiText, initFilter, load]);
 
 
     const searchAndFilter = (data) => {
@@ -69,7 +74,7 @@ const HistoryOrder = () => {
                 note: firstElement.order.note,
                 statusOrder: firstElement.order.statusOrder,
                 shipperId: (!firstElement.order.shipperId) ? "" : firstElement.order.shipperId,
-        })
+            })
             console.log(firstElement);
 
 
@@ -77,17 +82,27 @@ const HistoryOrder = () => {
         setShowOrderDetailMOdal(true);
     }
 
-    const cancelOrder = (id)=>{
-        orderServiceUser.cancelOrderService(id).then((dataResponse)=>{
+    const cancelOrder = (id) => {
+        orderServiceUser.cancelOrderService(id).then((dataResponse) => {
             let result = dataResponse.data;
             setLoadTable(!load)
             alert(result["message"])
         })
     }
 
-    const hanleReviewProduct = (productId, ordersId) =>{
-        
+    const hanleReviewProduct = (productId, ordersId) => {
+        setStateInfor({
+            productId: productId,
+            ordersId: ordersId
+        })
+        setReviewModal(true);
+        setShowOrderDetailMOdal(false);
     }
+
+    const changeRating = (newRating) => {
+        console.log(newRating);
+        setRating(newRating);
+    };
 
     const colunmnsOrder = [
         {
@@ -122,8 +137,8 @@ const HistoryOrder = () => {
                 return <>
                     <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
                         <Button variant="outline-dark" onClick={() => handleGetListOrderDetailByOrdersId(row.ordersId)}>Chi tiết</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-success" onClick={()=> cancelOrder(row.ordersId)}
-                        disabled={(row.statusOrder !== "Đang chờ") ? true : false}>Hủy đơn</button>
+                        <button style={{ marginLeft: "5px" }} className="btn btn-success" onClick={() => cancelOrder(row.ordersId)}
+                            disabled={(row.statusOrder !== "Đang chờ") ? true : false}>Hủy đơn</button>
                     </div>
                 </>
             },
@@ -179,15 +194,19 @@ const HistoryOrder = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                {
-                    ((row.order.statusOrder).includes("Đã giao")) ? (
-                        <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-success" 
-                        onClick={()=> hanleReviewProduct(row.id.productId,row.id.ordersId)}
-                        disabled={(row.isReview) ? true : false}>Đánh giá</button>
-                    </div>
-                    ): ""
-                }                   
+                    {
+                        (!row.isReview) ? (
+                            ((row.order.statusOrder).includes("Đã giao")) ? (
+                                <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
+                                    <button style={{ marginLeft: "5px" }} className="btn btn-success"
+                                        onClick={() => hanleReviewProduct(row.id.productId, row.id.ordersId)}
+                                        disabled={(row.isReview) ? true : false}>Đánh giá</button>
+                                </div>
+                            ) : ""
+
+                        ) : " Đã đánh giá"
+
+                    }
                 </>
             },
             center: true
@@ -288,14 +307,14 @@ const HistoryOrder = () => {
                                             <Form.Group controlId="formName">
                                                 <Form.Label>Tên người nhận</Form.Label>
                                                 <Form.Control type="text" placeholder="Người nhận" readOnly
-                                                    defaultValue={inforOrderInOrderDetail.receiptUser} 
+                                                    defaultValue={inforOrderInOrderDetail.receiptUser}
                                                 />
                                             </Form.Group>
                                         </Col>
                                         <Col> <Form.Group controlId="formAddress">
                                             <Form.Label>Địa chỉ nhận</Form.Label>
                                             <Form.Control type="text" placeholder="Địa chỉ" readOnly
-                                            defaultValue={inforOrderInOrderDetail.address} 
+                                                defaultValue={inforOrderInOrderDetail.address}
                                             />
                                         </Form.Group>
                                         </Col>
@@ -305,7 +324,7 @@ const HistoryOrder = () => {
                                             <Form.Group controlId="formSdt">
                                                 <Form.Label>Số điện thoại</Form.Label>
                                                 <Form.Control type="text" placeholder="số điện thoại" readOnly
-                                                defaultValue={inforOrderInOrderDetail.phone} 
+                                                    defaultValue={inforOrderInOrderDetail.phone}
                                                 />
                                             </Form.Group>
                                         </Col>
@@ -318,7 +337,7 @@ const HistoryOrder = () => {
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Ngày nhận</Form.Label>
-                                                <Form.Control type="text"  readOnly defaultValue={inforOrderInOrderDetail.receivedDate}  />
+                                                <Form.Control type="text" readOnly defaultValue={inforOrderInOrderDetail.receivedDate} />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -328,21 +347,21 @@ const HistoryOrder = () => {
                                             <Form.Group controlId="formSdt">
                                                 <Form.Label>Trạng thái đơn hàng</Form.Label>
                                                 <Form.Control type="text" placeholder="Trạng thái đơn hàng" readOnly
-                                                defaultValue={inforOrderInOrderDetail.statusOrder}  />
+                                                    defaultValue={inforOrderInOrderDetail.statusOrder} />
                                             </Form.Group>
                                         </Col>
                                         <Col>
                                             <Form.Group controlId="formName">
                                                 <Form.Label>Tình trạng thanh toán</Form.Label>
                                                 <Form.Control type="text" placeholder="Tình trạng thanh toán" readOnly
-                                                defaultValue={inforOrderInOrderDetail.note}  />
+                                                    defaultValue={inforOrderInOrderDetail.note} />
                                             </Form.Group>
                                         </Col>
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Shipper giao hàng</Form.Label>
-                                                <Form.Control type="text"  readOnly
-                                                   defaultValue={inforOrderInOrderDetail.shipperId} />
+                                                <Form.Control type="text" readOnly
+                                                    defaultValue={inforOrderInOrderDetail.shipperId} />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -365,12 +384,55 @@ const HistoryOrder = () => {
                                 paginationRowsPerPageOptions={[5, 15, 23, 50]}
                                 subHeader
                                 subHeaderAlign="right"
-                                customStyles={customStylesOrderDetail}/>
+                                customStyles={customStylesOrderDetail} />
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowOrderDetailMOdal(!showOrderDetailModal)}>Đóng</Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal danh gia san pham*/}
+            <Modal show={reviewModal} onHide={() => setReviewModal(false)} >
+                <Modal.Header closeButton>
+                    <Modal.Title>Đánh giá sản phẩm</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Hãy chọn đánh giá</p>
+                    <div style={{ display: "flex" }}>
+                        <div style={{ float: "left" }}>
+                            <StarRatings
+                                rating={rating}
+                                starRatedColor="yellow"
+                                changeRating={changeRating}
+                                numberOfStars={5}
+                                name='rating'
+                            />
+                        </div>
+                        <div style={{ float: "right", padding:"4%"}}>Sao đánh giá: {rating}</div>
+                    </div>
+                    <div>
+                        <Form>
+                            <Form.Group controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>Bình luận sản phẩm</Form.Label>
+                                <Form.Control as="textarea" rows={3}
+                                //value={text} 
+                                // onChange={handleTextChange} 
+                                />
+                            </Form.Group>
+                        </Form>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setReviewModal(!reviewModal)}>
+                        Đóng
+                    </Button>
+                    <Button variant="primary"
+                    //onClick={() => handleDeleteProduct()}
+                    >
+                        Đánh giá
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>
