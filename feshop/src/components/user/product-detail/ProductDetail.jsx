@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { LoginContext } from '../../../App';
 import cartServiceUser from '../../../services/user/user.cart.service';
@@ -87,7 +87,31 @@ const ProductDetail = () => {
 
                 </Row>
                 <Row>
-                    <div style={{height:"300px", width:"100%", backgroundColor:"blue"}}> </div>
+                    <div style={{marginBottom:"20px", border:"1px solid blue"}}>This is some text within a card body. </div>
+                </Row>
+                <Row>
+                    <Col sm={1}>
+                        <div style={{ width: "100px", height: "100px" }}>
+                            <img src={JSON.parse(localStorage.getItem("currentUser")).avatar} alt="123" style={{ width: "75%", borderRadius: "50%" }} />
+                        </div>
+                    </Col>
+                    <Col sm={11}>
+                        <Card body>This is some text within a card body. </Card>
+                    </Col>
+                    {/* style={{ height: "300px", width: "100%", backgroundColor: "blue" }} */}
+
+                </Row>
+                <Row>
+                    <Col sm={1}>
+                        <div style={{ width: "100px", height: "100px" }}>
+                            <img src={JSON.parse(localStorage.getItem("currentUser")).avatar} alt="123" style={{ width: "75%", borderRadius: "50%" }} />
+                        </div>
+                    </Col>
+                    <Col sm={11}>
+                        <Card body>This is some text within a card body. </Card>
+                    </Col>
+                    {/* style={{ height: "300px", width: "100%", backgroundColor: "blue" }} */}
+
                 </Row>
             </Container>
         </>
