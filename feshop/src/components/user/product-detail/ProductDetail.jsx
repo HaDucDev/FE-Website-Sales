@@ -21,28 +21,28 @@ const ProductDetail = () => {
 
     const [quantityBuy, setQuantityBuy] = useState(1);
     const [errorResponse, setErrorResponse] = useState({
-       quantity:"",
-       message:""
+        quantity: "",
+        message: ""
     });//state error
 
     const textLogin = useContext(LoginContext);// dung de load lai cart o header
 
-    const addToCart = ()=>{
-        let data= {
+    const addToCart = () => {
+        let data = {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
-            "productId":Number(id),
-            "quantity": (quantityBuy==="") ? -1 : quantityBuy,
-            "operator":"add"
+            "productId": Number(id),
+            "quantity": (quantityBuy === "") ? -1 : quantityBuy,
+            "operator": "add"
         }
-        cartServiceUser.addProductToCartService(data).then((dataResponse)=>{
+        cartServiceUser.addProductToCartService(data).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setErrorResponse({
-                quantity:"",
-                message:""
+                quantity: "",
+                message: ""
             })
             textLogin.setLoadPage(2);
             alert(dataShow["message"]);
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err)
             let errorShow = err.response.data;
             setErrorResponse(errorShow);
@@ -52,12 +52,12 @@ const ProductDetail = () => {
     return (
         <>
             <Container>
-                <Row>
-                    <Col md={6}>
+                <Row style={{ marginTop: "10px", }}>
+                    <Col sm={6}>
                         <img src={productDetail.productImage} alt={"ok"} className="img-fluid"
-                            style={{ width: "100%", height: "70%", objectFit: "contain" }} />
+                            style={{ width: "65%", height: "110%", objectFit: "contain", boxSizing: "border-box" }} />
                     </Col>
-                    <Col md={6}>
+                    <Col sm={6}>
                         <h2>{productDetail.productName}</h2>
                         <p className="lead">Giá: {productDetail.unitPrice} VND
                             - Giảm: {productDetail.discount}%
@@ -65,24 +65,29 @@ const ProductDetail = () => {
                         <p className="lead">Loại sản phẩm: {productDetail.isCategory}</p>
                         <p className="lead">Nhà sản xuất: {productDetail.isSupplier}</p>
                         <p className="lead">Số lượng: Còn {productDetail.quantity} sản phẩm</p>
-                        <div style={{marginBottom:"2px"}}>
-                            <p style={{marginBottom:"0px"}}>Mô tả:</p>
+                        <div style={{ marginBottom: "2px" }}>
+                            <p style={{ marginBottom: "0px" }}>Mô tả:</p>
                             <div dangerouslySetInnerHTML={{ __html: productDetail.descriptionProduct }} />
                         </div>
-                        <div style={{ display: "flex" , justifyContent: "left"}}> 
-                            <input type="number" min={1} max={productDetail.quantity} value={quantityBuy} 
-                             onChange={(e)=>{
-                                setErrorResponse({
-                                    quantity:"",
-                                    message:""
-                                })
-                                setQuantityBuy(e.target.value);
-                                }} style={{marginRight:"5px", width:"10%"}} />
-                            <Button onClick={()=> addToCart()} variant="primary">Add to Cart</Button>
+                        <div style={{ display: "flex", justifyContent: "left", paddingBottom: "0px" }}>
+                            <input type="number" min={1} max={productDetail.quantity} value={quantityBuy}
+                                onChange={(e) => {
+                                    setErrorResponse({
+                                        quantity: "",
+                                        message: ""
+                                    })
+                                    setQuantityBuy(e.target.value);
+                                }} style={{ marginRight: "5px", width: "10%" }} />
+                            <Button onClick={() => addToCart()} variant="primary">Add to Cart</Button>
                         </div>
                         <ValidationMessage errorResponse={errorResponse} field="quantity" />
                         <ValidationMessage errorResponse={errorResponse} field="message" />
+
                     </Col>
+
+                </Row>
+                <Row>
+                    <div style={{height:"300px", width:"100%", backgroundColor:"blue"}}> </div>
                 </Row>
             </Container>
         </>
