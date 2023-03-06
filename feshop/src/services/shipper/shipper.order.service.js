@@ -7,8 +7,14 @@ const getAllOrderByShipper = async (shipperId) => {
     return response;
 }
 
+const confirmOrderService = async (data) => {
+    const response = await axios.put(API_COMMON + "order/shipper/received", data)
+    return response;
+}
+
 const orderShipperService = {
     getAllOrderByShipper,
+    confirmOrderService
 }
 
 
