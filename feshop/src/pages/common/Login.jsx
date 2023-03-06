@@ -30,11 +30,14 @@ const Login = () => {
             if(getcurrentUser.roleName==="ROLE_CUSTOMER"){
               nav("/")
             }
+            if(getcurrentUser.roleName==="ROLE_SHIPPER"){
+              nav("/shipper")
+            }
         }
         
       }).catch((err) => {
         let errorShow = err.response.data;
-        alert(errorShow);
+        alert(errorShow["message"]);
     })
 
   }

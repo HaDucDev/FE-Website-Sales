@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import orderService from "../../../services/admin/admin.order.jservice";
 import orderDeailServiceUser from "../../../services/user/user.order.detail.service";
-import orderServiceUser from "../../../services/user/user.order.service";
 import convert_vi_to_en from "../../../utils/utils";
 
 
-const HistoryOrder = () => {
+const AdminOrder = () => {
 
     const [orderList, setOrderList] = useState([]);// state datatable
     const [intiText, setText] = useState("");// state search
@@ -29,11 +30,10 @@ const HistoryOrder = () => {
     const [load, setLoadTable] = useState(false);// state load khi huy thanh cong
 
     useEffect(() => {
-        orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
+        orderService.getAllOrder().then((response) => {
             setOrderList(response.data)
         }).catch(error => alert("Lỗi " + error.response.data + ". Bạn hãy quay lại sau."));
     }, [intiText, initFilter,load]);
-
 
     const searchAndFilter = (data) => {
 
@@ -78,7 +78,18 @@ const HistoryOrder = () => {
     }
 
     const cancelOrder = (id)=>{
-        orderServiceUser.cancelOrderService(id).then((dataResponse)=>{
+        orderService.cancelOrderService(id).then((dataResponse)=>{
+            let result = dataResponse.data;
+            setLoadTable(!load)
+            alert(result["message"])
+        })
+    }
+
+    const acceptOrder =(id) =>{
+        let dataRequest = {
+            "ordersId": id
+        }
+        orderService.acceptOrderService(dataRequest).then((dataResponse)=>{
             let result = dataResponse.data;
             setLoadTable(!load)
             alert(result["message"])
@@ -90,7 +101,7 @@ const HistoryOrder = () => {
             name: "Mã đơn hàng",
             selector: row => row.ordersId,
             sortable: true, // nha ten cot thi sort
-            center: true
+            center: true,
         },
         {
             name: "Người nhận",
@@ -104,8 +115,11 @@ const HistoryOrder = () => {
         },
         {
             name: "Trạng thái thanh toán",
-            selector: row => row.note,
-            center: true
+            selector: row => (<div title={row.note}>{row.note}</div>),
+            center: true,
+            style: {
+                width: "100px",
+            },
         }
         , {
             name: "Tình trạng đơn hàng",
@@ -116,10 +130,28 @@ const HistoryOrder = () => {
             name: "Action",
             cell: (row) => {
                 return <>
-                    <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
-                        <Button variant="outline-dark" onClick={() => handleGetListOrderDetailByOrdersId(row.ordersId)}>Chi tiết</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-success" onClick={()=> cancelOrder(row.ordersId)}
-                        disabled={(row.statusOrder !== "Đang chờ") ? true : false}>Hủy đơn</button>
+                    <div style={{ margin: "auto", fontSize: "1%", justifyContent: "center", padding:"15px"}}>
+                        <div>
+                            <Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
+                            onClick={() => handleGetListOrderDetailByOrdersId(row.ordersId)}
+                            >Chi tiết</Button>
+                            {
+                                (row.statusOrder === "Đang chờ") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
+                                    onClick={() => acceptOrder(row.ordersId)}
+                                >Duyệt đơn</Button>)
+
+                            }
+                            {/* {
+                                (row.statusOrder === "Đang giao") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
+                                //onClick={() => cancelOrder(row.ordersId)}
+                                >Xác nhận đã giao</Button>)
+                            } */}
+                            {
+                                (row.statusOrder === "Đang chờ") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
+                                onClick={() => cancelOrder(row.ordersId)}
+                                >Hủy đơn</Button>)
+                            }
+                        </div>
                     </div>
                 </>
             },
@@ -140,8 +172,6 @@ const HistoryOrder = () => {
         },
 
     };
-
-
 
     const colunmnsOrderDetail = [
         {
@@ -188,10 +218,12 @@ const HistoryOrder = () => {
     };
 
 
+    
+
     return (
         <>
             <div style={{ width: "90%", margin: "auto" }}>
-                <h4>Lịch sử đơn hàng</h4>
+                <h4>Quản lý đơn hàng</h4>
                 <DataTable
                     //title="Lịch sử đơn hàng"
                     columns={colunmnsOrder}
@@ -218,22 +250,22 @@ const HistoryOrder = () => {
                                 onClick={() => {
                                     setIsClickedColor("button2")
                                     setFilter("Đang chờ")
-                                }}>Đơn hàng đang chờ duyệt</Button>
+                                }}>Đơn đang chờ duyệt</Button>
                             <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button3" ? "dark" : "outline-dark"}
                                 onClick={() => {
                                     setIsClickedColor("button3")
                                     setFilter("Đang giao")
-                                }}>Đơn hàng đang giao</Button>
+                                }}>Đơn đang giao</Button>
                             <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button4" ? "dark" : "outline-dark"}
                                 onClick={() => {
                                     setIsClickedColor("button4")
                                     setFilter("Đã giao")
-                                }}>Đơn hàng đã nhận</Button>
+                                }}>Đơn đã nhận</Button>
                             <Button style={{ marginLeft: "10px" }} variant={isClickedColor === "button5" ? "dark" : "outline-dark"}
                                 onClick={() => {
                                     setIsClickedColor("button5")
                                     setFilter("Đã hủy")
-                                }}>Đơn hàng đã hủy</Button>
+                                }}>Đơn đã hủy</Button>
                         </>
                     }
                     subHeaderAlign="right"
@@ -242,8 +274,8 @@ const HistoryOrder = () => {
             </div>
 
 
-            {/* Modal chi tiet don hang*/}
-            <Modal show={showOrderDetailModal} onHide={() => setShowOrderDetailMOdal(false)} size="lg">
+             {/* Modal chi tiet don hang*/}
+             <Modal show={showOrderDetailModal} onHide={() => setShowOrderDetailMOdal(false)} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Chi tiết đơn hàng </Modal.Title>
                 </Modal.Header>
@@ -292,12 +324,15 @@ const HistoryOrder = () => {
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Ngày tạo</Form.Label>
                                                 <Form.Control type="text" placeholder="Ngày tạo" readOnly
-                                                    defaultValue={inforOrderInOrderDetail.createdDate} />
+                                                    defaultValue={inforOrderInOrderDetail.createdDate} 
+                                                    />
                                             </Form.Group></Col>
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Ngày nhận</Form.Label>
-                                                <Form.Control type="text"  readOnly defaultValue={inforOrderInOrderDetail.receivedDate}  />
+                                                <Form.Control type="text"  readOnly 
+                                                defaultValue={inforOrderInOrderDetail.receivedDate}  
+                                                />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -307,21 +342,24 @@ const HistoryOrder = () => {
                                             <Form.Group controlId="formSdt">
                                                 <Form.Label>Trạng thái đơn hàng</Form.Label>
                                                 <Form.Control type="text" placeholder="Trạng thái đơn hàng" readOnly
-                                                defaultValue={inforOrderInOrderDetail.statusOrder}  />
+                                                defaultValue={inforOrderInOrderDetail.statusOrder}  
+                                                />
                                             </Form.Group>
                                         </Col>
                                         <Col>
                                             <Form.Group controlId="formName">
                                                 <Form.Label>Tình trạng thanh toán</Form.Label>
                                                 <Form.Control type="text" placeholder="Tình trạng thanh toán" readOnly
-                                                defaultValue={inforOrderInOrderDetail.note}  />
+                                                defaultValue={inforOrderInOrderDetail.note}  
+                                                />
                                             </Form.Group>
                                         </Col>
                                         <Col>
                                             <Form.Group controlId="formAddress">
                                                 <Form.Label>Shipper giao hàng</Form.Label>
                                                 <Form.Control type="text"  readOnly
-                                                   defaultValue={inforOrderInOrderDetail.shipperId} />
+                                                  defaultValue={inforOrderInOrderDetail.shipperId} 
+                                                   />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -354,6 +392,7 @@ const HistoryOrder = () => {
             </Modal>
         </>
     )
+
 }
 
-export default HistoryOrder;
+export default AdminOrder;

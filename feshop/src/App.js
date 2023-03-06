@@ -14,6 +14,8 @@ import ListProductCommon from './components/user/ListProductCommon/ListProductCo
 import Cart from './pages/home/cart/Cart';
 import ConfirmOrder from './pages/home/confirm-order/ConfirmOrder';
 import HistoryOrder from './pages/home/history-order/HistoryOrder';
+import AdminOrder from './components/admin/order/AdminOrder';
+import Shipper from './pages/shipper/Shipper';
 
 
 
@@ -50,7 +52,11 @@ function App() {
               <Route path="category" element={<AdminCategory />}></Route>
               <Route path="supplier" element={<AdminSupplier />}></Route>
               <Route path="product" element={<AdminProduct />}></Route>
+              <Route path="orders" element={<AdminOrder />}></Route>
             </Route>
+
+            <Route path="/shipper" element={<Shipper />}></Route>
+          
           </Routes>
         </BrowserRouter>
       </LoginContext.Provider>
