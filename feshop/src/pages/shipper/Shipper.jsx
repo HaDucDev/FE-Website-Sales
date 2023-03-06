@@ -72,6 +72,18 @@ const Shipper = () => {
         })
     }
 
+    const removedlOrder  =  (ordersId)=>{
+        let dataRequest = {
+            "shipperId": JSON.parse(localStorage.getItem("currentUser")).userId,
+            "orderId": ordersId
+        }
+        orderShipperService.removedOrderService(dataRequest).then((dataResponse) => {
+            let result = dataResponse.data;
+            setLoadTable(!load)
+            alert(result["message"])
+        })
+    }
+
 
     const searchAndFilter = (data) => {
 
@@ -139,7 +151,7 @@ const Shipper = () => {
                             }
                             {
                                 (row.statusOrder === "Đang giao") && (<Button variant="outline-success" style={{ marginLeft: "5px", transform: "scale(0.8)", width: "100px" }}
-                                //onClick={() => cancelOrder(row.ordersId)}
+                                    onClick={() => removedlOrder(row.ordersId)}
                                 >Không nhận đơn</Button>)
                             }
                         </div>

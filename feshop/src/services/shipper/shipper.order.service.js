@@ -7,14 +7,22 @@ const getAllOrderByShipper = async (shipperId) => {
     return response;
 }
 
+//don hang da giao thanh cong
 const confirmOrderService = async (data) => {
     const response = await axios.put(API_COMMON + "order/shipper/received", data)
     return response;
 }
 
+// shipper khong nhan don
+const removedOrderService = async (data) => {
+    const response = await axios.put(API_COMMON + "order/shipper/removed", data)
+    return response;
+}
+
 const orderShipperService = {
     getAllOrderByShipper,
-    confirmOrderService
+    confirmOrderService,
+    removedOrderService
 }
 
 
