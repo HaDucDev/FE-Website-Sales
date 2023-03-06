@@ -5,6 +5,7 @@ import orderDeailServiceUser from "../../../services/user/user.order.detail.serv
 import orderServiceUser from "../../../services/user/user.order.service";
 import convert_vi_to_en from "../../../utils/utils";
 import StarRatings from "react-star-ratings";
+import reviewServiceUser from "../../../services/user/user.review.service";
 
 const HistoryOrder = () => {
 
@@ -29,9 +30,10 @@ const HistoryOrder = () => {
     })
 
     const [load, setLoadTable] = useState(false);// state load khi huy thanh cong
-    const [rating, setRating] = useState(5);// danh gia sao
 
-    const [stateInfor, setStateInfor] = useState(Object);// giu gia tri khi chuyen tu 
+    const [rating, setRating] = useState(5);// danh gia sao
+    const [stateInfor, setStateInfor] = useState(Object);// giu gia tri khi chuyen tu modal chi tiet sang modal danh gia sp
+    const [textarea, setTextarea] = useState("");
 
     useEffect(() => {
         orderServiceUser.getAllOrderByUserId(JSON.parse(localStorage.getItem("currentUser")).userId).then((response) => {
@@ -99,10 +101,31 @@ const HistoryOrder = () => {
         setShowOrderDetailMOdal(false);
     }
 
-    const changeRating = (newRating) => {
+
+    const changeRating = (newRating) => {//sao thay doi
         console.log(newRating);
         setRating(newRating);
     };
+
+    const addReviewProduct= (e)=>{
+        e.preventDefault();
+        let dataRequest ={
+            "userId":JSON.parse(localStorage.getItem("currentUser")).userId,
+            "productId": stateInfor.productId,
+            "ordersId":stateInfor.ordersId,
+            "comment":textarea,
+            "rating":rating
+        }
+        reviewServiceUser.addReviewPropductService(dataRequest).then((dataResponse)=>{
+            let response =dataResponse.data;
+            alert(response["message"]);
+            setReviewModal(false);
+            //setShowOrderDetailMOdal(true);
+            handleGetListOrderDetailByOrdersId(stateInfor.ordersId);
+        })
+    }
+
+
 
     const colunmnsOrder = [
         {
@@ -396,7 +419,7 @@ const HistoryOrder = () => {
             {/* Modal danh gia san pham*/}
             <Modal show={reviewModal} onHide={() => setReviewModal(false)} >
                 <Modal.Header closeButton>
-                    <Modal.Title>Đánh giá sản phẩm</Modal.Title>
+                    <Modal.Title>Đánh giá sản phẩm id: {stateInfor.productId} của đơn hàng {stateInfor.ordersId}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>Hãy chọn đánh giá</p>
@@ -406,7 +429,7 @@ const HistoryOrder = () => {
                                 rating={rating}
                                 starRatedColor="yellow"
                                 changeRating={changeRating}
-                                numberOfStars={5}
+                                numberOfStars={5} // tong so sao tuy y
                                 name='rating'
                             />
                         </div>
@@ -416,10 +439,7 @@ const HistoryOrder = () => {
                         <Form>
                             <Form.Group controlId="exampleForm.ControlTextarea1">
                                 <Form.Label>Bình luận sản phẩm</Form.Label>
-                                <Form.Control as="textarea" rows={3}
-                                //value={text} 
-                                // onChange={handleTextChange} 
-                                />
+                                <Form.Control as="textarea" rows={3} value={textarea} onChange={(e)=>setTextarea(e.target.value)}/>
                             </Form.Group>
                         </Form>
                     </div>
@@ -429,7 +449,7 @@ const HistoryOrder = () => {
                         Đóng
                     </Button>
                     <Button variant="primary"
-                    //onClick={() => handleDeleteProduct()}
+                        onClick={addReviewProduct}
                     >
                         Đánh giá
                     </Button>
