@@ -85,6 +85,10 @@ const HistoryOrder = () => {
         })
     }
 
+    const hanleReviewProduct = (productId, ordersId) =>{
+        
+    }
+
     const colunmnsOrder = [
         {
             name: "Mã đơn hàng",
@@ -171,6 +175,23 @@ const HistoryOrder = () => {
             selector: (row) => <div>{row.amount} đ</div>,
             center: true
         },
+        {
+            name: "Action",
+            cell: (row) => {
+                return <>
+                {
+                    ((row.order.statusOrder).includes("Đã giao")) ? (
+                        <div style={{ margin: "auto", display: "flex", fontSize: "1%" }}>
+                        <button style={{ marginLeft: "5px" }} className="btn btn-success" 
+                        onClick={()=> hanleReviewProduct(row.id.productId,row.id.ordersId)}
+                        disabled={(row.isReview) ? true : false}>Đánh giá</button>
+                    </div>
+                    ): ""
+                }                   
+                </>
+            },
+            center: true
+        }
     ];
 
     const customStylesOrderDetail = {// css datatable
