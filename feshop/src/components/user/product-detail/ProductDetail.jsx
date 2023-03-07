@@ -2,9 +2,11 @@ import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import { useParams } from 'react-router';
+import StarRatings from 'react-star-ratings';
 import { LoginContext } from '../../../App';
 import cartServiceUser from '../../../services/user/user.cart.service';
 import productServiceUser from '../../../services/user/user.product.service';
+import reviewServiceUser from '../../../services/user/user.review.service';
 import ValidationMessage from '../../acommon-component/ValidationMessage';
 
 const ProductDetail = () => {
@@ -12,11 +14,18 @@ const ProductDetail = () => {
     const { id } = useParams();// bien phai trung vs ten cua bien tren link
 
     const [productDetail, setProductDetail] = useState({})
+    const [reviewList, setReviewList] = useState([])
 
     useEffect(() => {
         productServiceUser.getDetailProductService(id).then((dataResponse) => {
             setProductDetail(dataResponse.data);
+        }).catch(error => alert("Lỗi review" + error + ". Bạn hãy quay lại sau."));
+
+        reviewServiceUser.getReviewAllByProductIdService(id).then((dataResponse) => {
+            console.log(dataResponse.data)
+            setReviewList(dataResponse.data);
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+
     }, [id]);
 
     const [quantityBuy, setQuantityBuy] = useState(1);
@@ -87,32 +96,35 @@ const ProductDetail = () => {
 
                 </Row>
                 <Row>
-                    <div style={{marginBottom:"20px", border:"1px solid blue"}}>This is some text within a card body. </div>
+                    <div style={{ display: "flex", borderTop:"1px solid blue", marginTop:"30px" }}>
+                    <div style={{ float: "left", fontSize:"35px" }}>Sao đánh giá: {productDetail.rating}</div>
+                        <div style={{ float: "right" }}>
+                            <StarRatings
+                                rating={productDetail.rating}
+                                starRatedColor="yellow"
+                                //changeRating={changeRating}
+                                numberOfStars={5} // tong so sao tuy y
+                                name='rating'
+                            />
+                        </div>                       
+                    </div>
                 </Row>
-                <Row>
-                    <Col sm={1}>
-                        <div style={{ width: "100px", height: "100px" }}>
-                            <img src={JSON.parse(localStorage.getItem("currentUser")).avatar} alt="123" style={{ width: "75%", borderRadius: "50%" }} />
-                        </div>
-                    </Col>
-                    <Col sm={11}>
-                        <Card body>This is some text within a card body. </Card>
-                    </Col>
-                    {/* style={{ height: "300px", width: "100%", backgroundColor: "blue" }} */}
+                {
+                    reviewList.map((item, index) => (
+                        <Row key={index}>
+                            <Col sm={1}>
+                                <div style={{ width: "100px", height: "100px" }}>
+                                    <img src={JSON.parse(localStorage.getItem("currentUser")).avatar} alt="123" style={{ width: "75%", borderRadius: "50%" }} />
+                                </div>
+                            </Col>
+                            <Col sm={11}>
+                                {/* <Card header>Featured</Card> */}
+                                <Card body>{item.comments}</Card>
+                            </Col>
+                            {/* style={{ height: "300px", width: "100%", backgroundColor: "blue" }} */}
 
-                </Row>
-                <Row>
-                    <Col sm={1}>
-                        <div style={{ width: "100px", height: "100px" }}>
-                            <img src={JSON.parse(localStorage.getItem("currentUser")).avatar} alt="123" style={{ width: "75%", borderRadius: "50%" }} />
-                        </div>
-                    </Col>
-                    <Col sm={11}>
-                        <Card body>This is some text within a card body. </Card>
-                    </Col>
-                    {/* style={{ height: "300px", width: "100%", backgroundColor: "blue" }} */}
-
-                </Row>
+                        </Row>
+                    ))}
             </Container>
         </>
     )
