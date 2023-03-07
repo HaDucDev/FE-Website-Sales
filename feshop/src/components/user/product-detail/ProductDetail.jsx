@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import { useParams } from 'react-router';
 import StarRatings from 'react-star-ratings';
 import { LoginContext } from '../../../App';
@@ -16,6 +17,12 @@ const ProductDetail = () => {
     const [productDetail, setProductDetail] = useState({})
     const [reviewList, setReviewList] = useState([])
 
+
+    const [currentPage, setCurrentPage] = useState(0); // lưu trữ trang hiện tại
+    const itemsPerPage = 4; // số lượng items trên mỗi trang
+    const pagesVisited = currentPage * itemsPerPage;
+    const currentItems = reviewList.slice(pagesVisited, pagesVisited + itemsPerPage);
+
     useEffect(() => {
         productServiceUser.getDetailProductService(id).then((dataResponse) => {
             setProductDetail(dataResponse.data);
@@ -26,7 +33,12 @@ const ProductDetail = () => {
             setReviewList(dataResponse.data);
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
 
-    }, [id]);
+    }, [id, currentPage]);
+
+    const onPageChange = ({ selected }) => {
+        console.log(selected)
+        setCurrentPage(selected);
+    };
 
     const [quantityBuy, setQuantityBuy] = useState(1);
     const [errorResponse, setErrorResponse] = useState({
@@ -67,9 +79,9 @@ const ProductDetail = () => {
                             style={{ width: "65%", height: "110%", objectFit: "contain", boxSizing: "border-box" }} />
                     </Col>
                     <Col sm={6}>
-                        <h2>{productDetail.productName}</h2>
-                        <p className="lead">Giá: {productDetail.unitPrice} VND
-                            - Giảm: {productDetail.discount}%
+                        <h3>{productDetail.productName}</h3>
+                        <p className="lead">Giá: {productDetail.unitPrice-(productDetail.unitPrice*productDetail.discount/100)}đ <s>{productDetail.unitPrice} đ  </s>
+                               Giảm: {productDetail.discount}%
                         </p>
                         <p className="lead">Loại sản phẩm: {productDetail.isCategory}</p>
                         <p className="lead">Nhà sản xuất: {productDetail.isSupplier}</p>
@@ -96,8 +108,8 @@ const ProductDetail = () => {
 
                 </Row>
                 <Row>
-                    <div style={{ display: "flex", borderTop:"1px solid blue", marginTop:"30px" }}>
-                    <div style={{ float: "left", fontSize:"35px" }}>Sao đánh giá: {productDetail.rating}</div>
+                    <div style={{ display: "flex", borderTop: "1px solid blue", marginTop: "30px" }}>
+                        <div style={{ float: "left", fontSize: "35px" }}>Đánh giá: {productDetail.rating}/5  </div>
                         <div style={{ float: "right" }}>
                             <StarRatings
                                 rating={productDetail.rating}
@@ -106,26 +118,41 @@ const ProductDetail = () => {
                                 numberOfStars={5} // tong so sao tuy y
                                 name='rating'
                             />
-                        </div>                       
+                        </div>
                     </div>
                 </Row>
                 {
-                    reviewList.map((item, index) => (
+                    currentItems.map((item, index) => (
                         <Row key={index}>
                             <Col sm={1}>
                                 <div style={{ width: "100px", height: "100px" }}>
-                                    <img src={JSON.parse(localStorage.getItem("currentUser")).avatar} alt="123" style={{ width: "75%", borderRadius: "50%" }} />
+                                    <img src={item.user.avatar} alt="lỗi" style={{ width: "75%", borderRadius: "50%" }} />
+                                    {item.user.fullName}
                                 </div>
                             </Col>
                             <Col sm={11}>
-                                {/* <Card header>Featured</Card> */}
                                 <Card body>{item.comments}</Card>
                             </Col>
-                            {/* style={{ height: "300px", width: "100%", backgroundColor: "blue" }} */}
-
                         </Row>
                     ))}
+
+                <div style={{ justifyContent: "center" }}>
+                    <div style={{ float: "right", padding: "1px" }}>
+                        <ReactPaginate
+                            previousLabel={'Previous'}
+                            nextLabel={'Next'}
+                            pageCount={Math.ceil(reviewList.length / itemsPerPage)}
+                            onPageChange={onPageChange}
+                            containerClassName={'pagination'}
+                            previousLinkClassName={'pagination__link'}
+                            nextLinkClassName={'pagination__link'}
+                            disabledClassName={'pagination__link--disabled'}
+                            activeClassName={'pagination__link--active'}
+                        />
+                    </div>
+                </div>
             </Container>
+
         </>
     )
 }
