@@ -1,5 +1,6 @@
 import Chart from "react-google-charts";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import statisticalService from "../../../services/admin/admin.statistical.service";
 
 const AdminStatistical = () => {
 
@@ -11,23 +12,41 @@ const AdminStatistical = () => {
         return `rgb(${r}, ${g}, ${b})`;
     };
 
-    const data = [
-        ["name", "money", { role: "style" }],
-        ["John", 1000, generateColor()],
-        ["Mary", 2000, generateColor()],
-        ["Tom", 1500, generateColor()],
-        ["Lucy", 3000, generateColor()],
-        ["Bob", 1200, generateColor()],
-    ];
+    // const data = [
+    //     ["name", "money", { role: "style" }],
+    //     ["John", 1000, generateColor()],
+    //     ["Mary", 2000, generateColor()],
+    //     ["Tom", 1500, generateColor()],
+    //     ["Lucy", 3000, generateColor()],
+    //     ["Bob", 1200, generateColor()],
+    // ];
+
+    const [dataChart, setDataChart] = useState([]);
+
+
+    useEffect(() => {
+        statisticalService.getRevenueStatisticsService()
+          .then((res) => {
+            setDataChart(res.data);
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          });
+      }, []);
+
+    let showChartData = [["Sản phẩm", "Tổng tiền"]];
+    dataChart.forEach((e) => {
+        showChartData.push([e[Object.keys(e)[0]], e[Object.keys(e)[1]]]);
+      });
+
     return (
         <>Trang Thong Ke
-
             <Chart
                 width={800}
                 height={500}
                 chartType="ColumnChart"
                 loader={<div>Loading Chart</div>}
-                data={data}
+                data={showChartData}
                 options={{
                     title: "Doanh thu theo loại sản ph",
                     // Just add this option
