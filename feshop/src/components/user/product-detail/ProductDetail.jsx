@@ -26,8 +26,9 @@ const ProductDetail = () => {
     useEffect(() => {
         productServiceUser.getDetailProductService(id).then((dataResponse) => {
             setProductDetail(dataResponse.data);
+            
         }).catch(error => alert("Lỗi review" + error + ". Bạn hãy quay lại sau."));
-
+        //console.log(productDetail.rating)
         reviewServiceUser.getReviewAllByProductIdService(id).then((dataResponse) => {
             console.log(dataResponse.data)
             setReviewList(dataResponse.data);
@@ -109,7 +110,7 @@ const ProductDetail = () => {
                 </Row>
                 <Row>
                     <div style={{ display: "flex", borderTop: "1px solid blue", marginTop: "30px" }}>
-                        <div style={{ float: "left", fontSize: "35px" }}>Đánh giá: {productDetail.rating}/5  </div>
+                        <div style={{ float: "left", fontSize: "35px" }}>Đánh giá: {Number(productDetail.rating).toFixed(1)}/5  </div>
                         <div style={{ float: "right" }}>
                             <StarRatings
                                 rating={productDetail.rating}
