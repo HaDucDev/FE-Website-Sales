@@ -38,7 +38,7 @@ const sideBar = [
   },
   {
     id: 5,
-    link: "/admin/revenue",
+    link: "/admin/statistical",
     section: "supplier",
     text: "Thống kê",
 
