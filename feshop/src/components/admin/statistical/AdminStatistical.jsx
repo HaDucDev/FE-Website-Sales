@@ -34,9 +34,9 @@ const AdminStatistical = () => {
           });
       }, []);
 
-    let showChartData = [["Sản phẩm", "Tổng tiền"]];
-    dataChart.forEach((e) => {
-        showChartData.push([e[Object.keys(e)[0]], e[Object.keys(e)[1]]]);
+    let showChartData = [["Sản phẩm", "Tổng tiền", { role: "style" }]];
+    dataChart.forEach((item) => {
+        showChartData.push([   item["key"], item["value"]  , generateColor()     ]);
       });
 
     return (
@@ -48,7 +48,7 @@ const AdminStatistical = () => {
                 loader={<div>Loading Chart</div>}
                 data={showChartData}
                 options={{
-                    title: "Doanh thu theo loại sản ph",
+                    title: "Doanh thu theo loại sản phẩm",
                     // Just add this option
                     is3D: true,
                     //colors: colors,
