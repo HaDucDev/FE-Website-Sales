@@ -36,7 +36,7 @@ const HomeHeader = () => {
             <nav className="navbar">
                 <ul className="navbar-menu">
                     <li className="navbar-item">
-                        <a href="/" className="navbar-link navbar-logo">Trang chủ</a>
+                        <a href="khongdung" className="navbar-link navbar-logo" onClick={(e)=>{e.preventDefault(); nav("/")}}>Trang chủ</a>
                     </li>
                     <li className="navbar-item">
                         <a href="/" className="navbar-link">Danh mục</a>
@@ -72,10 +72,10 @@ const HomeHeader = () => {
                         </ul>
                     </li>
                     <li className="navbar-item">
-                        <a href="/policy" className="navbar-link">Chính sách bán hàng</a>
+                        <a href="/policy" className="navbar-link" onClick={(e)=>{e.preventDefault(); nav("/")}}>Chính sách bán hàng</a>
                     </li>
                     <li className="navbar-item">
-                        <a href="/contact" className="navbar-link">Liên hệ</a>
+                        <a href="/contact" className="navbar-link" onClick={(e)=>{e.preventDefault(); nav("/")}}>Liên hệ</a>
                     </li>
                 </ul>
             </nav>
