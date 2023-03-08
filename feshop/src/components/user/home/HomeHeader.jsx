@@ -5,6 +5,8 @@ const HomeHeader = () => {
 
     const nav = useNavigate();
 
+    let ok=1
+
     return (
         <>
             <nav class="navbar">
@@ -18,8 +20,8 @@ const HomeHeader = () => {
                             <li class="navbar-submenu-item" style={{ width: "100px" }}>
                                 Danh mục 1
                                 <ul class="navbar-submenu-item-submenu">
-                                    <li class="navbar-submenu-item" style={{ width: "200px" }} onClick={()=>{nav("/login")}}>
-                                        Danh mục 1 Nhà cung cấp
+                                    <li class="navbar-submenu-item" style={{ width: "200px" }} onClick={()=>{nav(`/login?ma=${ok}`)}}>
+                                        Danh mục 1 Nhà 
                                     </li>
                                     <li class="navbar-submenu-item" style={{ width: "200px" }}>
                                         Danh mục 1 Nhà cung cấp
@@ -36,7 +38,7 @@ const HomeHeader = () => {
                                 Danh mục 2
                                 <ul class="navbar-submenu-item-submenu">
                                     <li class="navbar-submenu-item" style={{ width: "200px" }}>
-                                        Danh mục 2 Nhà cung cấp
+                                        Danh Nhà cung cấp
                                     </li>
                                     <li class="navbar-submenu-item" style={{ width: "200px" }}>
                                         Danh mục 2 Nhà cung cấp

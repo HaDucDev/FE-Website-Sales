@@ -47,6 +47,7 @@
     border-radius: 0.25rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
     z-index: 1;
+    list-style: none;  /*bo dau cham cua li*/
 }
 
 .navbar-item:hover .navbar-submenu {
@@ -67,32 +68,16 @@
     border-radius: 0.25rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
     z-index: 1;
+    list-style: none;  /*bo dau cham cua li*/
 }
 
 .navbar-submenu-item:hover .navbar-submenu-item-submenu {
     display: block;
 }
 
-/* .navbar a {
-    margin-right: 50%;
-}
-*/
 .navbar a:last-child {
     margin-right: 0;
 } 
-
-/* .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .navbar a {
-    flex-grow: 1;
-    text-align: center;
-  } */
-
-
 
 @media screen and (max-width: 768px) {
     .navbar {
