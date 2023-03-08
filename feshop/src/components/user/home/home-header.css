@@ -1,126 +1,133 @@
-* {
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(6, 6, 234);
+    color: #fff;
+    margin-bottom: 2rem;
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.navbar-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: sans-serif;
-  }
-  
-  header {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    color: #212529;
-  }
-  
-  .nav-area {
-    display: flex;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px 20px;
-  }
-  
-  .logo {
-    text-decoration: none;
-    font-size: 25px;
-    color: inherit;
-    margin-right: 20px;
-  }
-  
-  .menus {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    list-style: none;
-  }
-  
-  .menu-items {
+}
+
+.navbar-item {
     position: relative;
-    font-size: 14px;
-  }
-  
-  .menu-items a {
+    /* margin-left: 4%;
+    margin-right: 4%; */
+}
+
+.navbar-link {
     display: block;
-    font-size: inherit;
-    color: inherit;
+    padding: 0.5rem 5rem;
     text-decoration: none;
-  }
-  
-  .menu-items button {
-    display: flex;
-    align-items: center;
-    color: inherit;
-    font-size: inherit;
-    border: none;
-    background-color: transparent;
+    color: #fff;
     cursor: pointer;
-    width: 100%;
-  }
-  
-  button span {
-    margin-left: 3px;
-  }
-  
-  .menu-items > a, .menu-items button {
-    text-align: left;
-    padding: 0.7rem 1rem;
-  }
-  
-  .menu-items a:hover,
-  .menu-items button:hover {
-    background-color: #f2f2f2;
-  }
-  
-  .arrow::after {
-    content: "";
-    display: inline-block;
-    margin-left: 0.28em;
-    vertical-align: 0.09em;
-    border-top: 0.42em solid;
-    border-right: 0.32em solid transparent;
-    border-left: 0.32em solid transparent;
-  }
-  
-  .dropdown {
-    position: absolute;
-    right: 0;
-    left: auto;
-    box-shadow: 0 10px 15px -3px rgba(46, 41, 51, 0.08),
-      0 4px 6px -2px rgba(71, 63, 79, 0.16);
-    font-size: 0.875rem;
-    z-index: 9999;
-    min-width: 10rem;
-    padding: 0.5rem 0;
-    list-style: none;
-    background-color: #fff;
-    border-radius: 0.5rem;
+}
+
+.navbar-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-submenu {
     display: none;
-  }
-  
-  .dropdown.show {
-    display: block;
-  }
-  
-  .dropdown .dropdown-submenu {
     position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: blueviolet;
+    padding: 0.5rem 5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar-item:hover .navbar-submenu {
+    display: block;
+}
+
+.navbar-submenu-item {
+    position: relative;
+}
+
+.navbar-submenu-item-submenu {
+    display: none;
+    position: absolute;
+    top: 0;
     left: 100%;
-    top: -7px;
+    background-color: #1a1a1a;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar-submenu-item:hover .navbar-submenu-item-submenu {
+    display: block;
+}
+
+/* .navbar a {
+    margin-right: 50%;
+}
+*/
+.navbar a:last-child {
+    margin-right: 0;
+} 
+
+/* .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
-  /* content */
-  
-  .content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 20px;
-  }
-  
-  .content h2 {
-    margin-bottom: 1rem;
-  }
-  
-  .content a {
-    color: #cc3852;
-    margin-right: 10px;
-  }
+  .navbar a {
+    flex-grow: 1;
+    text-align: center;
+  } */
+
+
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar_logo {
+        margin-bottom: 20px;
+    }
+
+    .navbar_ul {
+        margin-top: 20px;
+    }
+
+    .menu-main {
+        margin: 0;
+    }
+
+    .menu-main-sub {
+        margin-left: 0;
+    }
+
+    .ulsecond {
+        width: 100%;
+    }
+
+    .menu-sub {
+        top: 100%;
+        left: 0;
+    }
+
+    .navbar_item {
+        width: 100%;
+        text-align: center;
+    }
+}
