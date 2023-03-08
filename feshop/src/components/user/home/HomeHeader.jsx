@@ -8,12 +8,10 @@ const HomeHeader = () => {
     const [inputValue, setInputValue] = useState("");// value thanh tim kiem
     const nav = useNavigate();
 
-    let ok = 1
-
     const handleSendText = (e)=>{
         if(e.key==='Enter'){
             console.log(inputValue);
-            
+            nav(`/search-filter?textSearch=${inputValue}`)
         }
     }
 
@@ -43,7 +41,7 @@ const HomeHeader = () => {
                             <li className="navbar-submenu-item" style={{ width: "100px" }}>
                                 Danh mục 1
                                 <ul className="navbar-submenu-item-submenu">
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }} onClick={() => { nav(`/login?ma=${ok}`) }}>
+                                    <li className="navbar-submenu-item" style={{ width: "200px" }} onClick={() => { nav(`/login`) }}>
                                         Danh mục 1 Nhà
                                     </li>
                                     <li className="navbar-submenu-item" style={{ width: "200px" }}>

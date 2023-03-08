@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Image } from 'react-bootstrap';
 import './list-product-search-filter.css'
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import productServiceUser from '../../../../services/user/user.product.service';
 import ReactPaginate from 'react-paginate';
 const ListProductSearchFilter = () => {
+
+    
 
     const [listProductSearchFilter, setListProductSearchFilter] = useState([])//state san pham trang home
     const [page, setPage] = useState(0);
@@ -12,13 +14,20 @@ const ListProductSearchFilter = () => {
     const sizes = [4, 8, 16];// so luong san pham 1 trang
     const [size, setSize] = useState(8);
 
+    const [params] = useSearchParams();
+    const textSearch = (params.get('textSearch') ? params.get('textSearch') : "");
+    console.log(textSearch)
+
+    const categoryId = (params.get('categoryId')) ? params.get('categoryId') : -1;
+    const supplierId = (params.get('supplierId')) ? params.get('supplierId') : -1;
 
     useEffect(() => {
-        productServiceUser.getAllHomeProductService(page, size).then((responseData) => {
+        productServiceUser.getAllSearchFilterProductService(page, size,categoryId,supplierId,textSearch).then((responseData) => {
+            console.log(responseData.data.content);
             setListProductSearchFilter(responseData.data.content);//data    
             setTotalPages(responseData.data.totalPages);//so trang   
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [page, size])
+    }, [page, size,textSearch,categoryId,supplierId])
 
 
     const onPageChange =({selected})=>{
