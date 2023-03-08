@@ -1,14 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import "./home-header.css";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 const HomeHeader = () => {
 
     const nav = useNavigate();
 
-    let ok=1
+    let ok = 1
 
     return (
         <>
+            <div className="search-container">
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Tìm kiếm sản phẩm..."
+                />
+                <button className="search-btn">
+                    <FontAwesomeIcon icon={faSearch} />
+                </button>
+            </div>
             <nav class="navbar">
                 <ul class="navbar-menu">
                     <li class="navbar-item">
@@ -20,8 +31,8 @@ const HomeHeader = () => {
                             <li class="navbar-submenu-item" style={{ width: "100px" }}>
                                 Danh mục 1
                                 <ul class="navbar-submenu-item-submenu">
-                                    <li class="navbar-submenu-item" style={{ width: "200px" }} onClick={()=>{nav(`/login?ma=${ok}`)}}>
-                                        Danh mục 1 Nhà 
+                                    <li class="navbar-submenu-item" style={{ width: "200px" }} onClick={() => { nav(`/login?ma=${ok}`) }}>
+                                        Danh mục 1 Nhà
                                     </li>
                                     <li class="navbar-submenu-item" style={{ width: "200px" }}>
                                         Danh mục 1 Nhà cung cấp
