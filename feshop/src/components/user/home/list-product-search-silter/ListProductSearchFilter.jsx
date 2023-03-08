@@ -1,32 +1,34 @@
-
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Image} from 'react-bootstrap';
-import './list-product-home.css';
-import productServiceUser from '../../../services/user/user.product.service';
-import Pagination from 'react-pagination-library';
-import 'react-pagination-library/build/css/index.css';
+import { Card, Button, Image } from 'react-bootstrap';
+import './list-product-search-filter.css'
 import { Link } from 'react-router-dom';
-const ListProductCommon = () => {
-    //npm i --save-dev @types/react-pagination-library
+import productServiceUser from '../../../../services/user/user.product.service';
+import ReactPaginate from 'react-paginate';
+const ListProductSearchFilter = () => {
 
-    const [listProductHome, setListProductHome] = useState([])//state san pham trang home
-    const [page, setPage] = useState(1);// number be +1
+    const [listProductSearchFilter, setListProductSearchFilter] = useState([])//state san pham trang home
+    const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);//tong so trang san pham
     const sizes = [4, 8, 16];// so luong san pham 1 trang
     const [size, setSize] = useState(8);
 
 
     useEffect(() => {
-        productServiceUser.getAllHomeProductService(page - 1, size).then((responseData) => {
-            setListProductHome(responseData.data.content);//data    
+        productServiceUser.getAllHomeProductService(page, size).then((responseData) => {
+            setListProductSearchFilter(responseData.data.content);//data    
             setTotalPages(responseData.data.totalPages);//so trang   
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     }, [page, size])
 
+
+    const onPageChange =({selected})=>{
+            setPage(selected);
+    }
+
     return (
         <>
             <div className="card-list-container" >
-                {listProductHome.map((item, index) => (
+                {listProductSearchFilter.map((item, index) => (
                     <Card key={index} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
@@ -48,16 +50,21 @@ const ListProductCommon = () => {
                         </option>
                     ))}
                 </select>
-                <Pagination style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "10px" }}
-                    currentPage={page}
-                    totalPages={totalPages}
-                    showFirstLastPages
-                    size="md"
-                    changeCurrentPage={(pageNumber) => { setPage(pageNumber); }} />
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={totalPages}
+                    onPageChange={onPageChange}
+                    containerClassName={'pagination'}
+                    previousLinkClassName={'pagination__link'}
+                    nextLinkClassName={'pagination__link'}
+                    disabledClassName={'pagination__link--disabled'}
+                    activeClassName={'pagination__link--active'} // mau cua phan trang
+                />
             </div>
         </>
     );
 
 }
 
-export default ListProductCommon;
+export default ListProductSearchFilter;
