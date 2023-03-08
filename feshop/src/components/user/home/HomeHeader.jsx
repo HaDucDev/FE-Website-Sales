@@ -26,7 +26,10 @@ const HomeHeader = () => {
                     //onKeyPress={handleKeyPress}
                     onKeyDown={handleSendText}
                 />
-                <button className="search-btn">
+                <button className="search-btn" onClick={(e)=>{
+                    e.preventDefault();
+                    nav(`/search-filter?textSearch=${inputValue}`)
+                }}>
                     <FontAwesomeIcon icon={faSearch} />
                 </button>
             </div>
