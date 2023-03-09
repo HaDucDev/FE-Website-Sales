@@ -65,7 +65,7 @@ const HomeHeader = () => {
                             {
                                 categoryList.map((item, index) => (
                                     <>
-                                        <li key={index} className="navbar-submenu-item" style={{ width: "100px" }}
+                                        <li key={index} className="navbar-submenu-item" style={{ width: "125px" }}
                                             onMouseEnter={() => handleMouseEnter(item.categoryId)}
                                             onClick={(e) => {e.preventDefault(); nav(`/search-filter?categoryId=${item.categoryId}`) }}>
                                             {item.categoryName}
