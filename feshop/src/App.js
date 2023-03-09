@@ -10,13 +10,15 @@ import HeaderApp from './pages/common/HeaderApp';
 import { createContext } from 'react';
 import { useState } from 'react';
 import ProductDetail from './components/user/product-detail/ProductDetail';
-import ListProductCommon from './components/user/ListProductCommon/ListProductCommon';
+//import ListProductCommon from './components/user/ListProductCommon/ListProductCommon';
 import Cart from './pages/home/cart/Cart';
 import ConfirmOrder from './pages/home/confirm-order/ConfirmOrder';
 import HistoryOrder from './pages/home/history-order/HistoryOrder';
 import AdminOrder from './components/admin/order/AdminOrder';
 import Shipper from './pages/shipper/Shipper';
 import AdminStatistical from './components/admin/statistical/AdminStatistical';
+import ListProductCommon from './components/user/home/list-product-common/ListProductCommon';
+import ListProductSearchFilter from './components/user/home/list-product-search-silter/ListProductSearchFilter';
 
 
 
@@ -41,6 +43,7 @@ function App() {
             <Route path="/" element={<Home />}>
               <Route path="" element={<ListProductCommon />} />
               <Route path="/product-detail/:id" element={<ProductDetail />} />
+              <Route path="/search-filter" element={<ListProductSearchFilter />} />
 
             </Route>
             <Route path="/login" element={<Login />}></Route>

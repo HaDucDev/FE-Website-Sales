@@ -7,7 +7,7 @@ const getAllCategoryService = async () => {
 }
 
 const getCategoryById = async (id) =>{
-    const response = await axios.get(API_COMMON + `category/${id}`)
+    const response = await axios.get(API_COMMON + `category/admin/${id}`)
     return response;
 }
 

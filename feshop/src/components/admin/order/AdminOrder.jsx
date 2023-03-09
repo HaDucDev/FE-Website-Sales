@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import DataTable from "react-data-table-component";
-import orderService from "../../../services/admin/admin.order.jservice";
+import orderService from "../../../services/admin/admin.order.service";
 import orderDeailServiceUser from "../../../services/user/user.order.detail.service";
 import convert_vi_to_en from "../../../utils/utils";
 
