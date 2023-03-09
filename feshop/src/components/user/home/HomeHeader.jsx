@@ -60,20 +60,20 @@ const HomeHeader = () => {
                         <a href="/khongdung" className="navbar-link navbar-logo" onClick={(e) => { e.preventDefault(); nav("/") }}>Trang chủ</a>
                     </li>
                     <li className="navbar-item" key={("navbar-item" + 2).toString()}>
-                        <a href="/" className="navbar-link">Danh mục</a>
+                        <a href="/" className="navbar-link" key={("navbar-item" + 7).toString()}>Danh mục</a>
                         <ul className="navbar-submenu" key={("navbar-item" + 3).toString()}>
                             {
                                 categoryList.map((item, index) => (
                                     <>
-                                        <li key={index} className="navbar-submenu-item" style={{ width: "125px" }}
+                                        <li key={item.categoryId} className="navbar-submenu-item" style={{ width: "125px" }}
                                             onMouseEnter={() => handleMouseEnter(item.categoryId)}
                                             onClick={(e) => {e.preventDefault(); nav(`/search-filter?categoryId=${item.categoryId}`) }}>
                                             {item.categoryName}
                                             <ul className="navbar-submenu-item-submenu" key={`${index}${item.categoryId}`}>
                                                 {
-                                                    supplierFormCategortList.map((item1, index1) => (
+                                                    supplierFormCategortList.map((item1) => (
                                                         <>
-                                                            <li key={`${item.categoryName}${index}${item1.supplierName}${index1}`}
+                                                            <li key={`${item1.supplierId}`}
                                                                 className="navbar-submenu-item" style={{ width: "200px" }}
                                                                 onClick={(e) => {e.preventDefault(); 
                                                                     e.stopPropagation(); // ngăn chặn sự kiện click của thẻ cha
@@ -96,10 +96,12 @@ const HomeHeader = () => {
                         </ul>
                     </li>
                     <li className="navbar-item" key={("navbar-item" + 4).toString()}>
-                        <a href="/policy" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}>Chính sách bán hàng</a>
+                        <a href="/policy" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}
+                        key={("navbar-item" + 8).toString()}>Chính sách bán hàng</a>
                     </li>
                     <li className="navbar-item" key={("navbar-item" + 5).toString()}>
-                        <a href="/contact" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}>Liên hệ</a>
+                        <a href="/contact" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}
+                        key={("navbar-item" + 9).toString()}>Liên hệ</a>
                     </li>
                 </ul>
             </nav>
