@@ -59,14 +59,10 @@ const ListProductSearchFilter = () => {
                                 as="select"
                                 name="categoryId"
                                 value={categoryId}
-                            // onChange={(e) => {
-                            //     setProductById({ ...productById, categoryId: e.target.value });
-                            //     setErrorResponse({
-                            //         ...errorResponse,
-                            //         categoryId: ""
-                            //     })
-                            //     setIsSubmitting(false);// mo nut
-                            // }}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    nav(`/search-filter?categoryId=${e.target.value}&supplierId=${supplierId}`)
+                                }}
                             >
                                 <option value={0}>Chọn category...</option>
                                 {
@@ -87,14 +83,10 @@ const ListProductSearchFilter = () => {
                                 as="select"
                                 name="supplierId"
                                 value={supplierId}
-                            // onChange={(e) => {
-                            //     setProductById({ ...productById, categoryId: e.target.value });
-                            //     setErrorResponse({
-                            //         ...errorResponse,
-                            //         categoryId: ""
-                            //     })
-                            //     setIsSubmitting(false);// mo nut
-                            // }}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    nav(`/search-filter?categoryId=${categoryId}&supplierId=${e.target.value}`)
+                                }}
                             >
                                 <option value={0}>Chọn supplier...</option>
                                 {
@@ -114,7 +106,7 @@ const ListProductSearchFilter = () => {
                     <Card key={("navbar-item" + 1 + index).toString()} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
-                            <Card.Title className="card-title" style={{ height: "28%" }}>{item.productName}</Card.Title>
+                            <Card.Title className="card-title" style={{ height: "28%", fontSize:"90%" }}>{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
                             <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>
                             <Link to={`/product-detail/${item.productId}`} className="btn-click">
