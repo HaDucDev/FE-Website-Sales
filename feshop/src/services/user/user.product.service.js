@@ -22,10 +22,20 @@ const getAllSearchFilterProductService = async (number,size, categoryId,supplier
 }
 
 
+// lay tat ca supplier from category
+const getAllSupplierFromCatgoryService = async (categoryId) => {
+    const response = await axios.get(API_COMMON +`product/filter-menu/${categoryId}`);
+    return response;
+}
+
+
+
+
  const productServiceUser = {
     getAllHomeProductService,
     getDetailProductService,
-    getAllSearchFilterProductService
+    getAllSearchFilterProductService,
+    getAllSupplierFromCatgoryService
 }
 
 export default productServiceUser;

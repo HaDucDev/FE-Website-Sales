@@ -46,44 +46,40 @@ const HomeHeader = () => {
                     onKeyDown={handleSendText}
                     key={"hd123456opk"}
                 />
-                <button key={("navbar-item"+6).toString()}
-                className="search-btn" onClick={(e) => {
-                    e.preventDefault();
-                    nav(`/search-filter?textSearch=${inputValue}`)
-                }}>
+                <button key={("navbar-item" + 6).toString()}
+                    className="search-btn" onClick={(e) => {
+                        e.preventDefault();
+                        nav(`/search-filter?textSearch=${inputValue}`)
+                    }}>
                     <FontAwesomeIcon icon={faSearch} />
                 </button>
             </div>
             <nav className="navbar">
                 <ul className="navbar-menu">
-                    <li className="navbar-item" key={("navbar-item"+1).toString()}>
+                    <li className="navbar-item" key={("navbar-item" + 1).toString()}>
                         <a href="/khongdung" className="navbar-link navbar-logo" onClick={(e) => { e.preventDefault(); nav("/") }}>Trang chủ</a>
                     </li>
-                    <li className="navbar-item" key={("navbar-item"+2).toString()}>
+                    <li className="navbar-item" key={("navbar-item" + 2).toString()}>
                         <a href="/" className="navbar-link">Danh mục</a>
-                        <ul className="navbar-submenu" key={("navbar-item"+3).toString()}>
+                        <ul className="navbar-submenu" key={("navbar-item" + 3).toString()}>
                             {
                                 categoryList.map((item, index) => (
                                     <>
-                                        <li key={index} className="navbar-submenu-item" style={{ width: "100px" }} onMouseEnter={() => handleMouseEnter(item.categoryId)}>
+                                        <li key={index} className="navbar-submenu-item" style={{ width: "100px" }}
+                                            onMouseEnter={() => handleMouseEnter(item.categoryId)}
+                                            onClick={(e) => {e.preventDefault(); nav(`/search-filter?categoryId=${item.categoryId}`) }}>
                                             {item.categoryName}
-                                            {
-                                                console.log(`${item.categoryName}` + index)
-                                            }
                                             <ul className="navbar-submenu-item-submenu" key={`${index}${item.categoryId}`}>
-                                                {
-                                                    console.log(`ul-check-${index}${item.categoryId}`)
-                                                }
                                                 {
                                                     supplierFormCategortList.map((item1, index1) => (
                                                         <>
-                                                            <li key={`${item.categoryName}${index}${item1.supplierName}${index1}`} 
-                                                            className="navbar-submenu-item" style={{ width: "200px" }}
-                                                                onClick={() => { nav(`/login`) }}>
+                                                            <li key={`${item.categoryName}${index}${item1.supplierName}${index1}`}
+                                                                className="navbar-submenu-item" style={{ width: "200px" }}
+                                                                onClick={(e) => {e.preventDefault(); 
+                                                                    e.stopPropagation(); // ngăn chặn sự kiện click của thẻ cha
+                                                                    nav(`/search-filter?categoryId=${item.categoryId}&supplierId=${item1.supplierId}`) }}
+                                                            >
                                                                 {item1.supplierName}
-                                                                {
-                                                                    console.log(`${item.categoryName}${index}${item1.supplierName}${index1}`)
-                                                                }
                                                             </li>
                                                         </>
                                                     ))
@@ -99,10 +95,10 @@ const HomeHeader = () => {
 
                         </ul>
                     </li>
-                    <li className="navbar-item" key={("navbar-item"+4).toString()}>
+                    <li className="navbar-item" key={("navbar-item" + 4).toString()}>
                         <a href="/policy" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}>Chính sách bán hàng</a>
                     </li>
-                    <li className="navbar-item" key={("navbar-item"+5).toString()}>
+                    <li className="navbar-item" key={("navbar-item" + 5).toString()}>
                         <a href="/contact" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}>Liên hệ</a>
                     </li>
                 </ul>

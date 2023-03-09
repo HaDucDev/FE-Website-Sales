@@ -38,7 +38,7 @@ const ListProductSearchFilter = () => {
         <>
             <div className="card-list-container" >
                 {listProductSearchFilter.map((item, index) => (
-                    <Card key={index} className="card-container">
+                    <Card key={("navbar-item"+1+index).toString()} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
                             <Card.Title className="card-title" style={{ height: "28%" }}>{item.productName}</Card.Title>
