@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Image } from 'react-bootstrap';
+import { Card, Button, Image, Form } from 'react-bootstrap';
 import './list-product-search-filter.css'
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import productServiceUser from '../../../../services/user/user.product.service';
 import ReactPaginate from 'react-paginate';
+import categoryService from '../../../../services/admin/admin.category.service';
+import supplierService from '../../../../services/admin/admin.supplier.service';
 const ListProductSearchFilter = () => {
 
-    
+    const nav = useNavigate();
+
 
     const [listProductSearchFilter, setListProductSearchFilter] = useState([])//state san pham trang home
     const [page, setPage] = useState(0);
@@ -14,37 +17,101 @@ const ListProductSearchFilter = () => {
     const sizes = [4, 8, 16];// so luong san pham 1 trang
     const [size, setSize] = useState(8);
 
-    const [cateId, setCateId] = useState(-1);
-
     const [params] = useSearchParams();
     const textSearch = (params.get('textSearch') ? params.get('textSearch') : "");
     console.log(textSearch)
 
-    //const categoryId = (params.get('categoryId')) ? params.get('categoryId') : -1;
+    const categoryId = (params.get('categoryId')) ? params.get('categoryId') : -1;
     const supplierId = (params.get('supplierId')) ? params.get('supplierId') : -1;
 
+    const [categorySelect, setCategorySelect] = useState([]);
+    const [supplierSelect, setSupplierSelect] = useState([]);
+
     useEffect(() => {
-        console.log(params.get('categoryId'))
-        if(params.get('categoryId')){
-            setCateId(params.get('categoryId'));
-        }
-        productServiceUser.getAllSearchFilterProductService(page, size,cateId,supplierId,textSearch).then((responseData) => {
+        categoryService.getAllCategoryService().then((responseData) => {
+            setCategorySelect(responseData.data);
+        }).catch(error => alert("Lỗi load category list " + error + ". Bạn hãy quay lại sau."));
+        supplierService.getAllSupplierService().then((responseData) => {
+            setSupplierSelect(responseData.data);
+        }).catch(error => alert("Lỗi load supplier list" + error + ". Bạn hãy quay lại sau."));
+        // console.log(params.get('categoryId'))
+        productServiceUser.getAllSearchFilterProductService(page, size, categoryId, supplierId, textSearch).then((responseData) => {
             console.log(responseData.data.content);
             setListProductSearchFilter(responseData.data.content);//data    
             setTotalPages(responseData.data.totalPages);//so trang   
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [page, size,textSearch,cateId,supplierId,params])
+    }, [page, size, textSearch, categoryId, supplierId, params])
 
 
-    const onPageChange =({selected})=>{
-            setPage(selected);
+    const onPageChange = ({ selected }) => {
+        setPage(selected);
     }
 
     return (
         <>
+            <div style={{ float: "left", marginLeft: "5%" }}>
+                <div style={{ backgroundColor: "green", color: "white", textAlign: "center" }}>Lọc sản phẩm</div>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
+                    <Form.Label>Chọn loại hàng</Form.Label>
+                    {
+                        (<>
+                            <Form.Control
+                                as="select"
+                                name="categoryId"
+                                value={categoryId}
+                            // onChange={(e) => {
+                            //     setProductById({ ...productById, categoryId: e.target.value });
+                            //     setErrorResponse({
+                            //         ...errorResponse,
+                            //         categoryId: ""
+                            //     })
+                            //     setIsSubmitting(false);// mo nut
+                            // }}
+                            >
+                                <option value={0}>Chọn category...</option>
+                                {
+                                    categorySelect.map((category) => (
+                                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
+                                    ))
+                                }
+                            </Form.Control>
+                        </>)
+                    }
+
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
+                    <Form.Label>Chọn nhà sản xuất</Form.Label>
+                    {
+                        (<>
+                            <Form.Control
+                                as="select"
+                                name="supplierId"
+                                value={supplierId}
+                            // onChange={(e) => {
+                            //     setProductById({ ...productById, categoryId: e.target.value });
+                            //     setErrorResponse({
+                            //         ...errorResponse,
+                            //         categoryId: ""
+                            //     })
+                            //     setIsSubmitting(false);// mo nut
+                            // }}
+                            >
+                                <option value={0}>Chọn supplier...</option>
+                                {
+                                    supplierSelect.map((suppliser) => (
+                                        <option key={suppliser.supplierId} value={suppliser.supplierId}>{suppliser.supplierName}</option>
+                                    ))
+                                }
+                            </Form.Control>
+                        </>)
+                    }
+
+                </Form.Group>
+            </div>
+
             <div className="card-list-container" >
                 {listProductSearchFilter.map((item, index) => (
-                    <Card key={("navbar-item"+1+index).toString()} className="card-container">
+                    <Card key={("navbar-item" + 1 + index).toString()} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
                             <Card.Title className="card-title" style={{ height: "28%" }}>{item.productName}</Card.Title>
