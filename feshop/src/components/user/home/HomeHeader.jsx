@@ -2,18 +2,37 @@ import { useNavigate } from "react-router-dom";
 import "./home-header.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import categoryService from "../../../services/admin/admin.category.service";
+import productServiceUser from "../../../services/user/user.product.service";
 const HomeHeader = () => {
 
     const [inputValue, setInputValue] = useState("");// value thanh tim kiem
+    const [categoryList, setCategoryList] = useState([]);
+    const [supplierFormCategortList, setSupplierFromCatgoryList] = useState([])
+
+
     const nav = useNavigate();
 
-    const handleSendText = (e)=>{
-        if(e.key==='Enter'){
+    const handleSendText = (e) => {
+        if (e.key === 'Enter') {
             console.log(inputValue);
             nav(`/search-filter?textSearch=${inputValue}`)
         }
     }
+
+
+    const handleMouseEnter = (id) => {
+        productServiceUser.getAllSupplierFromCatgoryService(id).then((dataResponse) => {
+            setSupplierFromCatgoryList(dataResponse.data);
+        }).catch((e) => alert(e.response.data))
+    };
+
+    useEffect(() => {
+        categoryService.getAllCategoryService().then((dataResponse) => {
+            setCategoryList(dataResponse.data);
+        }).catch((e) => alert(e.response.data));
+    }, [])
 
     return (
         <>
@@ -22,11 +41,13 @@ const HomeHeader = () => {
                     type="text"
                     className="search-input"
                     placeholder="Tìm kiếm sản phẩm..."
-                    onChange={(e)=>{setInputValue(e.target.value)}}
+                    onChange={(e) => { setInputValue(e.target.value) }}
                     //onKeyPress={handleKeyPress}
                     onKeyDown={handleSendText}
+                    key={"hd123456opk"}
                 />
-                <button className="search-btn" onClick={(e)=>{
+                <button key={("navbar-item"+6).toString()}
+                className="search-btn" onClick={(e) => {
                     e.preventDefault();
                     nav(`/search-filter?textSearch=${inputValue}`)
                 }}>
@@ -35,47 +56,54 @@ const HomeHeader = () => {
             </div>
             <nav className="navbar">
                 <ul className="navbar-menu">
-                    <li className="navbar-item">
-                        <a href="khongdung" className="navbar-link navbar-logo" onClick={(e)=>{e.preventDefault(); nav("/")}}>Trang chủ</a>
+                    <li className="navbar-item" key={("navbar-item"+1).toString()}>
+                        <a href="/khongdung" className="navbar-link navbar-logo" onClick={(e) => { e.preventDefault(); nav("/") }}>Trang chủ</a>
                     </li>
-                    <li className="navbar-item">
+                    <li className="navbar-item" key={("navbar-item"+2).toString()}>
                         <a href="/" className="navbar-link">Danh mục</a>
-                        <ul className="navbar-submenu">
-                            <li className="navbar-submenu-item" style={{ width: "100px" }}>
-                                Danh mục 1
-                                <ul className="navbar-submenu-item-submenu">
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }} onClick={() => { nav(`/login`) }}>
-                                        Danh mục 1 Nhà
-                                    </li>
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }}>
-                                        Danh mục 1 Nhà cung cấp
-                                    </li>
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }}>
-                                        Danh mục 1 Nhà cung cấp
-                                    </li>
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }}>
-                                        Danh mục 1 Nhà cung cấp
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="navbar-submenu-item" style={{ width: "100px" }}>
-                                Danh mục 2
-                                <ul className="navbar-submenu-item-submenu">
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }}>
-                                        Danh Nhà cung cấp
-                                    </li>
-                                    <li className="navbar-submenu-item" style={{ width: "200px" }}>
-                                        Danh mục 2 Nhà cung cấp
-                                    </li>
-                                </ul>
-                            </li>
+                        <ul className="navbar-submenu" key={("navbar-item"+3).toString()}>
+                            {
+                                categoryList.map((item, index) => (
+                                    <>
+                                        <li key={index} className="navbar-submenu-item" style={{ width: "100px" }} onMouseEnter={() => handleMouseEnter(item.categoryId)}>
+                                            {item.categoryName}
+                                            {
+                                                console.log(`${item.categoryName}` + index)
+                                            }
+                                            <ul className="navbar-submenu-item-submenu" key={`${index}${item.categoryId}`}>
+                                                {
+                                                    console.log(`ul-check-${index}${item.categoryId}`)
+                                                }
+                                                {
+                                                    supplierFormCategortList.map((item1, index1) => (
+                                                        <>
+                                                            <li key={`${item.categoryName}${index}${item1.supplierName}${index1}`} 
+                                                            className="navbar-submenu-item" style={{ width: "200px" }}
+                                                                onClick={() => { nav(`/login`) }}>
+                                                                {item1.supplierName}
+                                                                {
+                                                                    console.log(`${item.categoryName}${index}${item1.supplierName}${index1}`)
+                                                                }
+                                                            </li>
+                                                        </>
+                                                    ))
+                                                }
+
+                                            </ul>
+                                        </li>
+                                    </>
+                                )
+
+                                )
+                            }
+
                         </ul>
                     </li>
-                    <li className="navbar-item">
-                        <a href="/policy" className="navbar-link" onClick={(e)=>{e.preventDefault(); nav("/")}}>Chính sách bán hàng</a>
+                    <li className="navbar-item" key={("navbar-item"+4).toString()}>
+                        <a href="/policy" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}>Chính sách bán hàng</a>
                     </li>
-                    <li className="navbar-item">
-                        <a href="/contact" className="navbar-link" onClick={(e)=>{e.preventDefault(); nav("/")}}>Liên hệ</a>
+                    <li className="navbar-item" key={("navbar-item"+5).toString()}>
+                        <a href="/contact" className="navbar-link" onClick={(e) => { e.preventDefault(); nav("/") }}>Liên hệ</a>
                     </li>
                 </ul>
             </nav>
