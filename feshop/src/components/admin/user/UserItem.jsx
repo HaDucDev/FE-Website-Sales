@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { Button } from "react-bootstrap"
 
 
 const UserItem = ({ data }) => {
+
+    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal xem/sua
+    const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
+
     return (
         <tr key={(data.userId).toString()}>
             <td>{data.userId}</td>

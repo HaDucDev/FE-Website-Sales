@@ -4,6 +4,7 @@ import userService from '../../../services/admin/admin.user.service';
 import ReactPaginate from 'react-paginate';
 import UserItem from './UserItem';
 import { Button, Form, Modal, Spinner } from 'react-bootstrap';
+import convert_vi_to_en from '../../../utils/utils';
 const AdminUser = () => {
 
     const [userList, setUserList] = useState([]);
@@ -25,17 +26,27 @@ const AdminUser = () => {
         phone: "",
         roleId: 0
     });
+    const [intiText, setText] = useState("");// state search
 
     const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
     const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
 
     useEffect(() => {
-        userService.getAllUserService(page, size).then((dataResponse) => {
-            console.log(dataResponse.data);
-            setUserList(dataResponse.data.content)
-            setTotalPages(dataResponse.data.totalPages)
-        })
-    }, [page, size,load])
+        if (intiText !== "") {
+            userService.getAllUserService(0, 100).then((dataResponse) => {
+                console.log(dataResponse.data);
+                setUserList(dataResponse.data.content)
+                setTotalPages(dataResponse.data.totalPages)
+            })
+        }
+        else {
+            userService.getAllUserService(page, size).then((dataResponse) => {
+                console.log(dataResponse.data);
+                setUserList(dataResponse.data.content)
+                setTotalPages(dataResponse.data.totalPages)
+            })
+        }
+    }, [page, size, load, intiText])
 
 
     const onPageChange = ({ selected }) => {
@@ -53,7 +64,7 @@ const AdminUser = () => {
     const addUser = () => {
         setIsSubmitting(true);
         setIsLoading(true);// mo quay tron
-        userService.createUserService(userValue).then((dataResponse)=>{
+        userService.createUserService(userValue).then((dataResponse) => {
             let dataShow = dataResponse.data;
             setUserValue({
                 email: "",
@@ -69,10 +80,21 @@ const AdminUser = () => {
         }).catch(error => alert("Lỗi " + error + "Khi thêm người dùng. Bạn hãy quay lại sau."));
     }
 
+
+    const search = (data) => {
+        return data.filter(row => convert_vi_to_en(row.username.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
+            || row.fullName.toString().includes(intiText)
+            || convert_vi_to_en(row.email.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
+            || convert_vi_to_en(row.roleName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
+            || row.address.toString().includes(intiText));
+    }
+
     return (
         <>
             <div style={{ margin: "5%", width: "90%" }}>
                 <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginBottom: "10px" }}>
+                    <input type="text" placeholder="search here" className="w-25 form-control"
+                        value={intiText} onChange={(e) => setText(e.target.value)} />
                     <Button style={{ width: "20%" }} onClick={() => handleAddUser()}>Thêm người dùng</Button>
                 </div>
                 <Table striped bordered hover size="sm" responsive>
@@ -90,7 +112,7 @@ const AdminUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userList.map((item) => <UserItem key={item.userId} data={item} />)}
+                        {(search(userList)).map((item) => <UserItem key={item.userId} data={item} />)}
                     </tbody>
                 </Table>
                 <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px" }}>
