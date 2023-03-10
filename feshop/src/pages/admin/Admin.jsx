@@ -6,47 +6,40 @@ import "./css/admin.css";
 const sideBar = [
   {
     id: 0,
-    link: "/admin/users",
-    section: "users",
-    text: "Tài khoản",
+    link: "/admin/user",
+    text: "Tài khoản người dùng",
 
   },
   {
     id: 1,
     link: "/admin/category",
-    section: "category",
     text: "Danh mục",
   },
   {
     id: 2,
     link: "/admin/supplier",
-    section: "supplier",
     text: "Nhà cung cấp",
 
   },
   {
     id: 3,
     link: "/admin/product",
-    section: "products",
     text: "Sản phẩm",
   },
   {
     id: 4,
     link: "/admin/orders",
-    section: "orders",
     text: "Đơn hàng",
   },
   {
     id: 5,
     link: "/admin/statistical",
-    section: "supplier",
     text: "Thống kê",
 
   },
   {
     id: 6,
     link: "/admin/reviews",
-    section: "reviews",
     text: "Đánh giá",
   },
 ];
@@ -75,8 +68,8 @@ const Admin = () => {
           <div className="admin" style={{ marginTop: "0px", marginRight: "0px" }}>
             <div className="sidebar" style={{}}>
               <div className="sidebar_menu" >
-                <img style={{ margin: "auto", marginBottom: "0px", marginTop: "0px" }}
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwbGozsS9QP10p16rZiCrQD0koXVkI4c7LwUHab9dkmFRcN0VqCkB37f2y0EnySItwykg&usqp=CAU"
+                <img style={{ margin: "auto", marginBottom: "5px", marginTop: "0px",borderRadius: "50%"  }}
+                  src={ user ? user.avatar : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwbGozsS9QP10p16rZiCrQD0koXVkI4c7LwUHab9dkmFRcN0VqCkB37f2y0EnySItwykg&usqp=CAU"}
                   alt=""
                   width="200"
                   height="200"
