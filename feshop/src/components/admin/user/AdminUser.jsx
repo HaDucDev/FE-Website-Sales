@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import userService from '../../../services/admin/admin.user.service';
 import ReactPaginate from 'react-paginate';
-import UserItem from './UserItem';
 import { Button, Form, Modal, Spinner } from 'react-bootstrap';
 import convert_vi_to_en from '../../../utils/utils';
 const AdminUser = () => {
@@ -86,7 +85,6 @@ const AdminUser = () => {
                 address: "",
                 phone: "",
                 roleId: 0,
-                roleName:""
             });
             setLoadTable(!load);
             alert(dataShow["message"]);
@@ -107,23 +105,20 @@ const AdminUser = () => {
 
         userService.getUserByIdService(id).then((dataResponse) => {
             let dataUser = dataResponse.data;
+            console.log(dataUser)
             setUserById({
                 userId: dataUser.userId,
                 email: dataUser.email,
                 fullName: dataUser.fullName,
                 address: dataUser.address,
                 phone: dataUser.phone,
-                roleId: 0,
-                roleName: dataUser.roleName
+                roleId: dataUser.roleId,
             });
-        }).catch(error => alert("Lỗi " + error + "Khi lấy user theo id. Bạn hãy quay lại sau."));
 
+        }).catch(error => alert("Lỗi " + error + "Khi lấy user theo id. Bạn hãy quay lại sau."));
         userService.getAllRoleService().then((dataResponse) => {
             setRoleList(dataResponse.data);
         }).catch(error => alert("Lỗi " + error + "Khi lấy tất cả quyền. Bạn hãy quay lại sau."));
-
-        let roleId = (roleList.filter(item => item.roleName === userById.roleName)[0]).roleId
-        setUserById({...userById, roleId: roleId});
         setShowUpdateModal(true);
     }
 
@@ -150,7 +145,27 @@ const AdminUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(search(userList)).map((item) => <UserItem key={item.userId} data={item} openUpdateModal={functionUpdate} />)}
+                        {(search(userList)).map((data) => (
+                            <tr key={(data.userId).toString()}>
+                                <td>{data.userId}</td>
+                                <td>
+                                    <img src={(data.avatar) ? data.avatar : "https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png"} alt='lỗi'
+                                        style={{ height: "40px", width: "40px", objectFit: "cover", borderRadius: "50%" }} />
+                                </td>
+                                <td>{data.email}</td>
+                                <td>{data.fullName}</td>
+                                {/* <td>{data.username}</td> */}
+                                {/* <td>{data.address}</td> */}
+                                {/* <td>{data.phone}</td> */}
+                                <td>{data.roleName}</td>
+                                <td>
+                                    <div style={{ display: "flex", justifyContent: "center" }}>
+                                        <Button variant="outline-primary" style={{ marginRight: "10px" }} onClick={() => { functionUpdate(data.userId) }}>Xem/Sửa</Button>
+                                        <Button variant="outline-primary"> Xóa </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
                 <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px" }}>
@@ -320,10 +335,29 @@ const AdminUser = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>Id:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập email"
+                            defaultValue={userById.userId}
+                            readOnly
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, email: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     productName: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        />
+                        {/* <ValidationMessage errorResponse={errorResponse} field="productName" /> */}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Email:</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Nhập email"
+                            defaultValue={userById.email}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, email: e.target.value });
                                 // setErrorResponse({
@@ -342,6 +376,7 @@ const AdminUser = () => {
                         <Form.Control
                             type="text"
                             placeholder="Nhập fullName"
+                            defaultValue={userById.fullName}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, fullName: e.target.value });
                                 // setErrorResponse({
@@ -353,27 +388,12 @@ const AdminUser = () => {
                         />
                         {/* <ValidationMessage errorResponse={errorResponse} field="quantity" /> */}
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ marginLeft: "10px", }}>
-                        <Form.Label>Tên đăng nhập:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhập username"
-                            onChange={(e) => {
-                                setUserValue({ ...userValue, username: e.target.value });
-                                // setErrorResponse({
-                                //     ...errorResponse,
-                                //     discount: ""
-                                // })
-                                // setIsSubmitting(false);// mo nut
-                            }}
-                        />
-                        {/* <ValidationMessage errorResponse={errorResponse} field="discount" /> */}
-                    </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
                         <Form.Label>Địa chỉ</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Nhập địa chỉ:"
+                            defaultValue={userById.address}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, address: e.target.value });
                                 // setErrorResponse({
@@ -390,6 +410,7 @@ const AdminUser = () => {
                         <Form.Control
                             type="text"
                             placeholder="Nhập số điện thoại:"
+                            defaultValue={userById.phone}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, phone: e.target.value });
                                 // setErrorResponse({
@@ -406,7 +427,7 @@ const AdminUser = () => {
                         <Form.Control
                             as="select"
                             name="roleId"
-                            value={userValue.roleId}
+                            defaultValue={userById.roleId}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, roleId: e.target.value });
                                 // setErrorResponse({
@@ -419,7 +440,7 @@ const AdminUser = () => {
                             <option value={0}>Chọn role...</option>
                             {
                                 roleList.map((role) => (
-                                    <option key={role.id} value={role.id}>{role.name}</option>
+                                    <option key={role.id} value={userById.roleId}>{role.name}</option>
                                 ))
                             }
                         </Form.Control>
