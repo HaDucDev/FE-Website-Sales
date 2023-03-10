@@ -1,3 +1,4 @@
+import { Button } from "react-bootstrap"
 
 
 const UserItem = ({ data }) => {
@@ -10,10 +11,16 @@ const UserItem = ({ data }) => {
             </td>
             <td>{data.email}</td>
             <td>{data.fullName}</td>
-            <td>{data.username}</td>
-            <td>{data.address}</td>
-            <td>{data.phone}</td>
+            {/* <td>{data.username}</td> */}
+            {/* <td>{data.address}</td> */}
+            {/* <td>{data.phone}</td> */}
             <td>{data.roleName}</td>
+            <td>
+                <div style={{ display:"flex" , justifyContent:"center"}}>
+                    <Button variant="outline-primary" style={{marginRight:"10px"}}>Xem/Sửa</Button>
+                    <Button variant="outline-primary"> Xóa </Button>
+                </div>
+            </td>
         </tr>
 
     )
