@@ -102,10 +102,10 @@ const AdminUser = () => {
     }
 
     const functionUpdate = (id) => {
-
         userService.getUserByIdService(id).then((dataResponse) => {
             let dataUser = dataResponse.data;
             console.log(dataUser)
+
             setUserById({
                 userId: dataUser.userId,
                 email: dataUser.email,
@@ -116,10 +116,12 @@ const AdminUser = () => {
             });
 
         }).catch(error => alert("Lỗi " + error + "Khi lấy user theo id. Bạn hãy quay lại sau."));
+        
         userService.getAllRoleService().then((dataResponse) => {
             setRoleList(dataResponse.data);
+            setShowUpdateModal(true);
         }).catch(error => alert("Lỗi " + error + "Khi lấy tất cả quyền. Bạn hãy quay lại sau."));
-        setShowUpdateModal(true);
+        
     }
 
     return (
@@ -145,22 +147,25 @@ const AdminUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(search(userList)).map((data) => (
-                            <tr key={(data.userId).toString()}>
-                                <td>{data.userId}</td>
+                        {(search(userList)).map((item) => (
+                            <tr key={item.userId}>
+                                <td>{item.userId}</td>
                                 <td>
-                                    <img src={(data.avatar) ? data.avatar : "https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png"} alt='lỗi'
+                                    <img src={(item.avatar) ? item.avatar : "https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png"} alt='lỗi'
                                         style={{ height: "40px", width: "40px", objectFit: "cover", borderRadius: "50%" }} />
                                 </td>
-                                <td>{data.email}</td>
-                                <td>{data.fullName}</td>
-                                {/* <td>{data.username}</td> */}
-                                {/* <td>{data.address}</td> */}
-                                {/* <td>{data.phone}</td> */}
-                                <td>{data.roleName}</td>
+                                <td>{item.email}</td>
+                                <td>{item.fullName}</td>
+                                {/* <td>{item.username}</td> */}
+                                {/* <td>{item.address}</td> */}
+                                {/* <td>{item.phone}</td> */}
+                                <td>{item.roleName}</td>
                                 <td>
                                     <div style={{ display: "flex", justifyContent: "center" }}>
-                                        <Button variant="outline-primary" style={{ marginRight: "10px" }} onClick={() => { functionUpdate(data.userId) }}>Xem/Sửa</Button>
+                                        <Button variant="outline-primary" style={{ marginRight: "10px" }} onClick={(e) => {
+                                            e.preventDefault();
+                                            functionUpdate(item.userId)
+                                        }}>Xem/Sửa</Button>
                                         <Button variant="outline-primary"> Xóa </Button>
                                     </div>
                                 </td>
@@ -168,7 +173,7 @@ const AdminUser = () => {
                         ))}
                     </tbody>
                 </Table>
-                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px" }}>
+                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginTop:"10px" }}>
                     <select onChange={(e) => { setSize(e.target.value); }} value={size} style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "8%" }}>
                         {sizes.map((size) => (
                             <option key={size} value={size}>
@@ -440,7 +445,7 @@ const AdminUser = () => {
                             <option value={0}>Chọn role...</option>
                             {
                                 roleList.map((role) => (
-                                    <option key={role.id} value={userById.roleId}>{role.name}</option>
+                                    <option key={role.id} value={role.id}>{role.name}</option>
                                 ))
                             }
                         </Form.Control>
