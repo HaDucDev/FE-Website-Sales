@@ -18,10 +18,17 @@ const createUserService = async (user) => {
     return response;
 }
 
+const getUserByIdService = async (id) => {
+    const response = await axios.get(API_COMMON +`user/${id}`);
+    return response;
+}
+
+
 const userService = {
     getAllUserService,
     getAllRoleService,// list role
-    createUserService
+    createUserService,
+    getUserByIdService
 }
 
 export default userService;

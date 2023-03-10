@@ -1,11 +1,11 @@
-import { useState } from "react";
+//import { useState } from "react";
 import { Button } from "react-bootstrap"
 
 
-const UserItem = ({ data }) => {
+const UserItem = ({ data, openUpdateModal}) => {
 
-    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal xem/sua
-    const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
+    // const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal xem/sua
+    // const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
 
     return (
         <tr key={(data.userId).toString()}>
@@ -22,7 +22,7 @@ const UserItem = ({ data }) => {
             <td>{data.roleName}</td>
             <td>
                 <div style={{ display:"flex" , justifyContent:"center"}}>
-                    <Button variant="outline-primary" style={{marginRight:"10px"}}>Xem/Sửa</Button>
+                    <Button variant="outline-primary" style={{marginRight:"10px"}} onClick={()=>openUpdateModal(data.userId)}>Xem/Sửa</Button>
                     <Button variant="outline-primary"> Xóa </Button>
                 </div>
             </td>

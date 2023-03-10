@@ -31,6 +31,19 @@ const AdminUser = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
     const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
 
+
+    //update
+    const [showUpdateModal, setShowUpdateModal] = useState(false);// state bat/tat modal update
+
+    const [userById, setUserById] = useState({
+        userId: 0,
+        email: "",
+        fullName: "",
+        address: "",
+        phone: "",
+        roleId: 0
+    })
+
     useEffect(() => {
         if (intiText !== "") {
             userService.getAllUserService(0, 100).then((dataResponse) => {
@@ -72,7 +85,8 @@ const AdminUser = () => {
                 username: "",
                 address: "",
                 phone: "",
-                roleId: 0
+                roleId: 0,
+                roleName:""
             });
             setLoadTable(!load);
             alert(dataShow["message"]);
@@ -87,6 +101,30 @@ const AdminUser = () => {
             || convert_vi_to_en(row.email.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || convert_vi_to_en(row.roleName.toLowerCase()).indexOf(convert_vi_to_en(intiText.toLowerCase())) > -1
             || row.address.toString().includes(intiText));
+    }
+
+    const functionUpdate = (id) => {
+
+        userService.getUserByIdService(id).then((dataResponse) => {
+            let dataUser = dataResponse.data;
+            setUserById({
+                userId: dataUser.userId,
+                email: dataUser.email,
+                fullName: dataUser.fullName,
+                address: dataUser.address,
+                phone: dataUser.phone,
+                roleId: 0,
+                roleName: dataUser.roleName
+            });
+        }).catch(error => alert("Lỗi " + error + "Khi lấy user theo id. Bạn hãy quay lại sau."));
+
+        userService.getAllRoleService().then((dataResponse) => {
+            setRoleList(dataResponse.data);
+        }).catch(error => alert("Lỗi " + error + "Khi lấy tất cả quyền. Bạn hãy quay lại sau."));
+
+        let roleId = (roleList.filter(item => item.roleName === userById.roleName)[0]).roleId
+        setUserById({...userById, roleId: roleId});
+        setShowUpdateModal(true);
     }
 
     return (
@@ -112,7 +150,7 @@ const AdminUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(search(userList)).map((item) => <UserItem key={item.userId} data={item} />)}
+                        {(search(userList)).map((item) => <UserItem key={item.userId} data={item} openUpdateModal={functionUpdate} />)}
                     </tbody>
                 </Table>
                 <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px" }}>
@@ -139,7 +177,7 @@ const AdminUser = () => {
 
 
 
-            {/* Modal them product*/}
+            {/* Modal them user*/}
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)} >
                 <Modal.Header closeButton style={{ width: "100%" }}>
                     <Modal.Title>Thêm người dùng</Modal.Title>
@@ -275,6 +313,141 @@ const AdminUser = () => {
                 </Modal.Footer>
             </Modal>
 
+            {/* Modal sua user*/}
+            <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)} >
+                <Modal.Header closeButton style={{ width: "100%" }}>
+                    <Modal.Title>Sửa người dùng</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>Email:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập email"
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, email: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     productName: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        />
+                        {/* <ValidationMessage errorResponse={errorResponse} field="productName" /> */}
+                    </Form.Group>
+
+
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+                        <Form.Label>Họ và tên:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập fullName"
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, fullName: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     quantity: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        />
+                        {/* <ValidationMessage errorResponse={errorResponse} field="quantity" /> */}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ marginLeft: "10px", }}>
+                        <Form.Label>Tên đăng nhập:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập username"
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, username: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     discount: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        />
+                        {/* <ValidationMessage errorResponse={errorResponse} field="discount" /> */}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
+                        <Form.Label>Địa chỉ</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập địa chỉ:"
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, address: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     unitPrice: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        />
+                        {/* <ValidationMessage errorResponse={errorResponse} field="unitPrice" /> */}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
+                        <Form.Label>Số điện thoại</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập số điện thoại:"
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, phone: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     unitPrice: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        />
+                        {/* <ValidationMessage errorResponse={errorResponse} field="unitPrice" /> */}
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
+                        <Form.Label>Chọn vai trò</Form.Label>
+                        <Form.Control
+                            as="select"
+                            name="roleId"
+                            value={userValue.roleId}
+                            onChange={(e) => {
+                                setUserValue({ ...userValue, roleId: e.target.value });
+                                // setErrorResponse({
+                                //     ...errorResponse,
+                                //     categoryId: ""
+                                // })
+                                // setIsSubmitting(false);// mo nut
+                            }}
+                        >
+                            <option value={0}>Chọn role...</option>
+                            {
+                                roleList.map((role) => (
+                                    <option key={role.id} value={role.id}>{role.name}</option>
+                                ))
+                            }
+                        </Form.Control>
+                        {/* <ValidationMessage errorResponse={errorResponse} field="categoryId" /> */}
+                    </Form.Group>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                        Đóng
+                    </Button>
+
+                    <Button variant="outline-primary"
+                        disabled={isSubmitting}
+                        style={{ zIndex: "1" }}
+                        onClick={() => addUser()}
+                    >
+                        {isLoading && (
+                            <Spinner
+                                style={{ margin: "auto", zIndex: "9" }}
+                                animation="border"
+                                variant="primary"
+                            />
+                        )}
+                        Lưu
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
         </>
     )
