@@ -68,7 +68,12 @@ const HeaderApp = () => {
                               nav("/history-order")
                             }
                           }>Lịch sử đơn hàng</NavDropdown.Item>
-                          <NavDropdown.Item href="#action4">
+                          <NavDropdown.Item href="#action4" onClick={
+                            (e) => {
+                              e.preventDefault();
+                              nav("/change-infor-user")
+                            }
+                          }>
                             Thông tin cá nhân
                           </NavDropdown.Item>
                           <NavDropdown.Divider />

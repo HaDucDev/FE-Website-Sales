@@ -28,8 +28,8 @@ const changePassService = async(user) =>{
     return response;
 }
 
-const inforUserByIdService = async(userId) =>{
-    const response = await axios.get( API_COMMON +`user/${userId}`);
+const inforUserByIdService = async(userId) =>{// chung get user admin
+    const response = await axios.get( API_COMMON +`user/${userId}`,{ headers: authHeader() });
     return response;
 }
 
@@ -38,8 +38,8 @@ const inforUserByIdService = async(userId) =>{
 const accountService = {
     loginService,
     registerService,
-    inforUserByIdService,
-    changePassService
+    changePassService,
+    inforUserByIdService
 }
 
 export default accountService;

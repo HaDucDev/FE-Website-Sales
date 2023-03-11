@@ -22,6 +22,7 @@ import ListProductSearchFilter from './components/user/home/list-product-search-
 import AdminUser from './components/admin/user/AdminUser';
 import Register from './pages/common/Register';
 import ChangePassword from './pages/common/ChangePassword';
+import ChangeInforUser from './pages/common/ChangeInforUser';
 
 
 
@@ -55,6 +56,7 @@ function App() {
             <Route path="/confirm-order" element={<ConfirmOrder />}></Route>
             <Route path="/history-order" element={<HistoryOrder/>}></Route>
             <Route path="/change-pasword" element={<ChangePassword/>}></Route>
+            <Route path="/change-infor-user" element={<ChangeInforUser/>}></Route>
 
             {/* admin */}
             <Route path="/admin" element={<Admin />} exact>
