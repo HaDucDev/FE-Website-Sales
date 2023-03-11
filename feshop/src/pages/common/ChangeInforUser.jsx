@@ -19,6 +19,11 @@ const ChangeInforUser = () => {
         roleName: ""
     })
 
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
+    const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
+
+    const [loadpage, setLoadPage] = useState(false);
 
     useEffect(() => {
         accountService.inforUserByIdService(JSON.parse(localStorage.getItem("currentUser")).userId).then((dataResponse) => {
@@ -36,7 +41,35 @@ const ChangeInforUser = () => {
                 roleName: dataUser.roleName
             });
         })
-    }, [])
+    }, [loadpage])
+
+    const handleSaveInfor = () => {
+        setIsSubmitting(true);// khoa nut
+        setIsLoading(true);// mo quay tron
+        let dataRequest = {
+                username: accountById.username,
+                email: accountById.email,
+                fullName: accountById.fullName,
+                address: accountById.address,
+                phone: accountById.phone,
+        };
+        let fileRequest = selectedFile;
+        accountService.updateInforUserService(dataRequest,fileRequest).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            setSelectedFile(null)
+            setLoadPage(!loadpage);
+            alert(dataShow["message"]);
+            setIsLoading(false);//tat spiner
+            setIsSubmitting(false);// mo nut
+            setopenInputUpdate(true);
+        })
+            .catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                console.log(errorShow["message"]);
+                setIsLoading(false);// tat spinner
+            })
+    }
 
     return (
         <>
@@ -69,9 +102,9 @@ const ChangeInforUser = () => {
                                 placeholder="Nhập tên email"
                                 defaultValue={accountById.email}
                                 readOnly={openInputUpdate}
-                            // onChange={e => {
-                            //     setRegisterAccount({ ...registerAccount, email: e.target.value })
-                            // }}
+                                onChange={e => {
+                                    setAccountById({ ...accountById, email: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -81,9 +114,9 @@ const ChangeInforUser = () => {
                                 placeholder="Nhập họ và tên"
                                 defaultValue={accountById.fullName}
                                 readOnly={openInputUpdate}
-                            // onChange={e => {
-                            //     setRegisterAccount({ ...registerAccount, fullName: e.target.value })
-                            // }}
+                                onChange={e => {
+                                    setAccountById({ ...accountById, fullName: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -93,9 +126,9 @@ const ChangeInforUser = () => {
                                 placeholder="Nhập địa chỉ"
                                 defaultValue={accountById.address}
                                 readOnly={openInputUpdate}
-                            // onChange={e => {
-                            //     setRegisterAccount({ ...registerAccount, address: e.target.value })
-                            // }}
+                                onChange={e => {
+                                    setAccountById({ ...accountById, address: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -105,9 +138,9 @@ const ChangeInforUser = () => {
                                 placeholder="Số điện thoại"
                                 defaultValue={accountById.phone}
                                 readOnly={openInputUpdate}
-                            // onChange={e => {
-                            //     setRegisterAccount({ ...registerAccount, phone: e.target.value })
-                            // }}
+                                onChange={e => {
+                                    setAccountById({ ...accountById, phone: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         {/* avatar */}
@@ -130,9 +163,9 @@ const ChangeInforUser = () => {
                                                 <Form.Label >Đổi ảnh</Form.Label>
                                                 <Form.Control
                                                     type="file"
-                                                // onChange={(e) => {
-                                                //     (setSelectedFile(e.target.files[0]));
-                                                // }}
+                                                    onChange={(e) => {
+                                                        (setSelectedFile(e.target.files[0]));
+                                                    }}
                                                 />
                                             </div>
                                         </>
@@ -151,15 +184,15 @@ const ChangeInforUser = () => {
                             </Button>) : (
                                 <>
                                     <Button variant="primary" type="submit" className="w-100 mt-3"
-                                    //onClick={handleRegister} disabled={isSubmitting}
+                                        onClick={handleSaveInfor} disabled={isSubmitting}
                                     >
-                                        {/* {isLoading && (
-                                        <Spinner
-                                            style={{ margin: "auto", zIndex: "9" }}
-                                            animation="border"
-                                            variant="warning"
-                                        />
-                                    )}  */}
+                                        {isLoading && (
+                                            <Spinner
+                                                style={{ margin: "auto", zIndex: "9" }}
+                                                animation="border"
+                                                variant="warning"
+                                            />
+                                        )}
                                         Lưu thay đổi</Button>
                                     <Button variant="outline-secondary" className="w-100 mt-3" onClick={(e) => { e.preventDefault(); setopenInputUpdate(true); }}>
                                         Đóng
