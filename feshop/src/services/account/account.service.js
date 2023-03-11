@@ -61,6 +61,11 @@ const forgetSendMailService = async (data) => {
     return response;
 }
 
+const cofirmCodeFromEmailService = async (data) => {
+    const response = await axios.post(API_COMMON + "confirm-code-send-new-pass", data);
+    return response;
+}
+
 
 const accountService = {
     loginService,
@@ -68,7 +73,8 @@ const accountService = {
     changePassService,
     inforUserByIdService,
     updateInforUserService,
-    forgetSendMailService
+    forgetSendMailService,
+    cofirmCodeFromEmailService
 }
 
 export default accountService;
