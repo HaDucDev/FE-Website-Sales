@@ -84,8 +84,8 @@ const Login = () => {
             </div>
             <Button variant="primary" type="submit" className="w-100 mt-3" onClick={handleLogin}> Đăng nhập</Button>
             <div>
-              <Link to="/" style={{ float: "left" }}>Đăng kí tài khoản</Link>
-              <Link to="/" style={{ float: "right" }}>Quên mật khẩu</Link>
+              <Link to="/register" style={{ float: "left" }}>Đăng kí tài khoản</Link>
+              <Link to="/forget-pass" style={{ float: "right" }}>Quên mật khẩu</Link>
             </div>
           </Form>
         </div>

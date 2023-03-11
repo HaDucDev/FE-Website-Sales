@@ -64,7 +64,7 @@ const HomeHeader = () => {
                         <ul className="navbar-submenu" key={("navbar-item" + 3).toString()}>
                             {
                                 categoryList.map((item, index) => (
-                                    <>
+                                
                                         <li key={item.categoryId} className="navbar-submenu-item" style={{ width: "125px" }}
                                             onMouseEnter={() => handleMouseEnter(item.categoryId)}
                                             onClick={(e) => {e.preventDefault(); nav(`/search-filter?categoryId=${item.categoryId}`) }}>
@@ -72,7 +72,7 @@ const HomeHeader = () => {
                                             <ul className="navbar-submenu-item-submenu" key={`${index}${item.categoryId}`}>
                                                 {
                                                     supplierFormCategortList.map((item1) => (
-                                                        <>
+                                                   
                                                             <li key={`${item1.supplierId}`}
                                                                 className="navbar-submenu-item" style={{ width: "200px" }}
                                                                 onClick={(e) => {e.preventDefault(); 
@@ -81,13 +81,13 @@ const HomeHeader = () => {
                                                             >
                                                                 {item1.supplierName}
                                                             </li>
-                                                        </>
+                                                    
                                                     ))
                                                 }
 
                                             </ul>
                                         </li>
-                                    </>
+                                  
                                 )
 
                                 )
