@@ -89,7 +89,7 @@ const HeaderApp = () => {
                         setCountCart(0);
                       }}>Đăng xuất</Button>
                     ) :
-                      (<Button variant="outline-success" onClick={(e) => { e.preventDefault(); nav("/login") }}>Đăng nhập</Button>)
+                      (<Button variant="outline-success" onClick={(e) => { e.preventDefault(); nav("/login") }}>Đăng nhập/Đăng kí</Button>)
                   }
                 </Nav>
               </Offcanvas.Body>

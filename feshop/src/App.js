@@ -20,6 +20,7 @@ import AdminStatistical from './components/admin/statistical/AdminStatistical';
 import ListProductCommon from './components/user/home/list-product-common/ListProductCommon';
 import ListProductSearchFilter from './components/user/home/list-product-search-silter/ListProductSearchFilter';
 import AdminUser from './components/admin/user/AdminUser';
+import Register from './pages/common/Register';
 
 
 
@@ -48,6 +49,7 @@ function App() {
 
             </Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="/register" element={<Register />}></Route>
             <Route path="/cart" element={<Cart />}></Route>
             <Route path="/confirm-order" element={<ConfirmOrder />}></Route>
             <Route path="/history-order" element={<HistoryOrder/>}></Route>
