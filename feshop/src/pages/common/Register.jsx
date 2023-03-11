@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import accountService from "../../services/account/account.service";
 
 
 const Register = () => {
 
+    const [isSubmitting, setIsSubmitting] = useState(false);// state nut chi nhan dc mot lan
+    const [isLoading, setIsLoading] = useState(false);// tao spiner quay de biet data dang gui, cham 1 ti
 
     const [registerAccount, setRegisterAccount] = useState({
         email: "",
@@ -19,8 +21,12 @@ const Register = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
+        setIsSubmitting(true);// khoa nut
+        setIsLoading(true);// mo quay tron
         accountService.registerService(registerAccount).then((dataResponse) => {
             let dataUser = dataResponse.data;
+            setIsLoading(false);//tat spiner
+            setIsSubmitting(false);// mo nut
             alert(dataUser["message"]);
             nav("/login");
         }).catch((err) => {
@@ -87,8 +93,14 @@ const Register = () => {
                             />
                         </Form.Group>
                         <Button variant="primary" type="submit" className="w-100 mt-3"
-                            onClick={handleRegister}
-                        > Đăng kí</Button>
+                            onClick={handleRegister} disabled={isSubmitting}>
+                            {isLoading && (
+                                <Spinner
+                                    style={{ margin: "auto", zIndex: "9" }}
+                                    animation="border"
+                                    variant="warning"
+                                />
+                            )} Đăng kí</Button>
                         <div>
                             <Link to="/" style={{ float: "left" }}>Quay lại đăng nhập</Link>
                             <Link to="/" style={{ float: "right" }}>Quên mật khẩu</Link>
