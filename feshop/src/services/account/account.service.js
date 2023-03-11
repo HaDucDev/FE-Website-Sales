@@ -56,6 +56,10 @@ const updateInforUserService = async (dataRequest, file) => {
     return response;
 }
 
+const forgetSendMailService = async (data) => {
+    const response = await axios.post(API_COMMON + "forget-send-code", data);
+    return response;
+}
 
 
 const accountService = {
@@ -63,7 +67,8 @@ const accountService = {
     registerService,
     changePassService,
     inforUserByIdService,
-    updateInforUserService
+    updateInforUserService,
+    forgetSendMailService
 }
 
 export default accountService;

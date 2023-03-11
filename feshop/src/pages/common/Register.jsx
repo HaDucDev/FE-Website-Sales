@@ -103,7 +103,7 @@ const Register = () => {
                             )} Đăng kí</Button>
                         <div>
                             <Link to="/" style={{ float: "left" }}>Quay lại đăng nhập</Link>
-                            <Link to="/" style={{ float: "right" }}>Quên mật khẩu</Link>
+                            <Link to="/forget-pass" style={{ float: "right" }}>Quên mật khẩu</Link>
                         </div>
                     </Form>
                 </div>
