@@ -28,12 +28,18 @@ const UpdateUserService = async (user) => {
     return response;
 }
 
+const deleteUserService = async (id) => {
+    const response = await axios.delete(API_COMMON + `user/admin/${id}`)
+    return response;
+}
+
 const userService = {
     getAllUserService,
     getAllRoleService,// list role
     createUserService,
     getUserByIdService,
-    UpdateUserService
+    UpdateUserService,
+    deleteUserService
 }
 
 export default userService;

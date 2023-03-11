@@ -44,6 +44,8 @@ const AdminUser = () => {
         roleName: ""
     })
     const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
+
+    const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     useEffect(() => {
         if (intiText !== "") {
             userService.getAllUserService(0, 100).then((dataResponse) => {
@@ -151,10 +153,29 @@ const AdminUser = () => {
         }).catch(error => alert("Lỗi " + error + "Khi thêm người dùng. Bạn hãy quay lại sau."));
     }
 
+    // xac nha xoa 
+    const comfirmDeleteUser = (id) => {
+        setUserById({ ...userById, userId: id })
+        setComfirmModal(true);
+    }
+
+    const handleDeleteUser = () => {
+        userService.deleteUserService(userById.userId).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            alert(dataShow["message"]);
+            setLoadTable(!load);
+            setComfirmModal(!confirmModal);
+        }).catch((err) => {
+            let errorShow = err.response.data;
+            alert(errorShow["message"]);
+            //setErrorResponse(errorShow);
+        })
+    }
+
     return (
         <>
             <div style={{ margin: "5%", width: "90%" }}>
-                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginBottom: "10px" }}>
+                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginBottom: "20px" }}>
                     <input type="text" placeholder="search here" className="w-25 form-control"
                         value={intiText} onChange={(e) => setText(e.target.value)} />
                     <Button style={{ width: "20%" }} onClick={() => handleAddUser()}>Thêm người dùng</Button>
@@ -193,14 +214,17 @@ const AdminUser = () => {
                                             e.preventDefault();
                                             functionUpdate(item.userId)
                                         }}>Xem/Sửa</Button>
-                                        <Button variant="outline-primary"> Xóa </Button>
+                                        <Button variant="outline-primary" onClick={(e) => {
+                                            e.preventDefault();
+                                            comfirmDeleteUser(item.userId);
+                                        }}> Xóa </Button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginTop: "10px" }}>
+                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginTop: "20px" }}>
                     <select onChange={(e) => { setSize(e.target.value); }} value={size} style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "8%" }}>
                         {sizes.map((size) => (
                             <option key={size} value={size}>
@@ -528,8 +552,23 @@ const AdminUser = () => {
                         )
                     }
 
-
-
+                </Modal.Footer>
+            </Modal>
+            {/* Modal Xác nhận user*/}
+            <Modal show={confirmModal} onHide={() => setComfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p> {`Bạn có muốn xóa sản phẩm "${userById.userId}" không?`}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setComfirmModal(!confirmModal)}>
+                        Không
+                    </Button>
+                    <Button variant="primary" onClick={() => handleDeleteUser()}>
+                        Có
+                    </Button>
                 </Modal.Footer>
             </Modal>
 
