@@ -64,15 +64,20 @@ const HeaderApp = () => {
                         <NavDropdown title={JSON.parse(doneLogin).username} id={`offcanvasNavbarDropdown-expand-${expand}`}>
                           <NavDropdown.Item href="#action3" onClick={
                             (e) => {
-                              e.preventDefault();   
-                              nav("/history-order")                          
+                              e.preventDefault();
+                              nav("/history-order")
                             }
                           }>Lịch sử đơn hàng</NavDropdown.Item>
                           <NavDropdown.Item href="#action4">
                             Thông tin cá nhân
                           </NavDropdown.Item>
                           <NavDropdown.Divider />
-                          <NavDropdown.Item href="#action5">
+                          <NavDropdown.Item href="#action5" onClick={
+                            (e) => {
+                              e.preventDefault();
+                              nav("/change-pasword")
+                            }
+                          }>
                             Đổi mật khẩu
                           </NavDropdown.Item>
                         </NavDropdown>
