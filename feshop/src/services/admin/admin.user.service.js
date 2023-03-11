@@ -23,12 +23,17 @@ const getUserByIdService = async (id) => {
     return response;
 }
 
+const UpdateUserService = async (user) => {
+    const response = await axios.put( API_COMMON +"user/admin",user)
+    return response;
+}
 
 const userService = {
     getAllUserService,
     getAllRoleService,// list role
     createUserService,
-    getUserByIdService
+    getUserByIdService,
+    UpdateUserService
 }
 
 export default userService;

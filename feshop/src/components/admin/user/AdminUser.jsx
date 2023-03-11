@@ -130,7 +130,25 @@ const AdminUser = () => {
     }
 
     const updateUser = () => {
-
+        setopenInputUpdate(true);
+        let dataRequest = {
+            userId: userById.userId,
+            email: userById.email,
+            fullName: userById.fullName,
+            address: userById.address,
+            phone: userById.phone,
+            roleId: userById.roleId,
+        }
+        setIsSubmitting(true);
+        setIsLoading(true);// mo quay tron
+        userService.UpdateUserService(dataRequest).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            setLoadTable(!load);
+            setIsLoading(false);
+            setIsSubmitting(false);
+            alert(dataShow["message"]);
+            setShowUpdateModal(false);
+        }).catch(error => alert("Lỗi " + error + "Khi thêm người dùng. Bạn hãy quay lại sau."));
     }
 
     return (
@@ -356,7 +374,7 @@ const AdminUser = () => {
                             defaultValue={userById.userId}
                             readOnly
                             onChange={(e) => {
-                                setUserValue({ ...userValue, email: e.target.value });
+                                setUserById({ ...userById, userId: e.target.value });
                                 // setErrorResponse({
                                 //     ...errorResponse,
                                 //     productName: ""
@@ -374,7 +392,7 @@ const AdminUser = () => {
                             defaultValue={userById.email}
                             readOnly={openInputUpdate}
                             onChange={(e) => {
-                                setUserValue({ ...userValue, email: e.target.value });
+                                setUserById({ ...userById, email: e.target.value });
                                 // setErrorResponse({
                                 //     ...errorResponse,
                                 //     productName: ""
@@ -394,7 +412,7 @@ const AdminUser = () => {
                             defaultValue={userById.fullName}
                             readOnly={openInputUpdate}
                             onChange={(e) => {
-                                setUserValue({ ...userValue, fullName: e.target.value });
+                                setUserById({ ...userById, fullName: e.target.value });
                                 // setErrorResponse({
                                 //     ...errorResponse,
                                 //     quantity: ""
@@ -412,7 +430,7 @@ const AdminUser = () => {
                             defaultValue={userById.address}
                             readOnly={openInputUpdate}
                             onChange={(e) => {
-                                setUserValue({ ...userValue, address: e.target.value });
+                                setUserById({ ...userById, address: e.target.value });
                                 // setErrorResponse({
                                 //     ...errorResponse,
                                 //     unitPrice: ""
@@ -430,7 +448,7 @@ const AdminUser = () => {
                             defaultValue={userById.phone}
                             readOnly={openInputUpdate}
                             onChange={(e) => {
-                                setUserValue({ ...userValue, phone: e.target.value });
+                                setUserById({ ...userById, phone: e.target.value });
                                 // setErrorResponse({
                                 //     ...errorResponse,
                                 //     unitPrice: ""
@@ -459,7 +477,7 @@ const AdminUser = () => {
                                     name="roleId"
                                     defaultValue={userById.roleId}
                                     onChange={(e) => {
-                                        setUserValue({ ...userValue, roleId: e.target.value });
+                                        setUserById({ ...userById, roleId: e.target.value });
                                         // setErrorResponse({
                                         //     ...errorResponse,
                                         //     categoryId: ""
