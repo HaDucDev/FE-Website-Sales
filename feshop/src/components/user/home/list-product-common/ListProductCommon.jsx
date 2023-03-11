@@ -1,11 +1,15 @@
 
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Image} from 'react-bootstrap';
+import { Card, Button, Image } from 'react-bootstrap';
 import './list-product-home.css';
 import productServiceUser from '../../../../services/user/user.product.service';
 import { Link } from 'react-router-dom';
-
 import ReactPaginate from 'react-paginate';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import StarRatings from 'react-star-ratings';
 const ListProductCommon = () => {
     //npm i --save-dev @types/react-pagination-library
 
@@ -14,7 +18,13 @@ const ListProductCommon = () => {
     const [totalPages, setTotalPages] = useState(1);//tong so trang san pham
     const sizes = [4, 8, 16];// so luong san pham 1 trang
     const [size, setSize] = useState(8);
+    const [listProductSelling, setListProductSelling] = useState([])//state san pham ban chay
 
+    useEffect(() => {
+        productServiceUser.getSellingTop10Service().then((responseData) => {
+            setListProductSelling(responseData.data);
+        }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+    }, [])
 
     useEffect(() => {
         productServiceUser.getAllHomeProductService(page, size).then((responseData) => {
@@ -27,15 +37,54 @@ const ListProductCommon = () => {
         setPage(selected);
     }
 
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1
+    };
+
     return (
         <>
+
+            <div style={{ marginBottom: "50px", width: "90%", margin: "5%" }}>
+                <h4 style={{ textAlign: "center" }}>Sản phẩm bán chạy</h4>
+                <Slider {...settings}>
+                    {listProductSelling.map((item, index) => (
+                        <Card key={index} className="card-container">
+                            <div>
+                                <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd', width: "40%", float: "left" }} />
+                                <Card.Text className="card-text">Giá gốc: <s>{item.unitPrice} đ</s></Card.Text>
+                                <div style={{backgroundColor:"blue", color:"white"}}>Giảm giá: {item.discount}%</div>
+                                <Card.Text className="card-text">Giá bán: {item.unitPrice-item.unitPrice*item.discount/100} đ</Card.Text>
+                                <div>{(item.rating).toFixed(1)}
+                                    <StarRatings
+                                        rating={1}
+                                        starRatedColor="yellow"
+                                        //changeRating={changeRating}
+                                        numberOfStars={1} // tong so sao tuy y
+                                        name='rating'
+                                    />
+                                </div>
+                            </div>
+                            <Card.Body style={{ clear: "both" }}>
+                                <div style={{}}>{item.productName}</div>
+                                <Link to={`/product-detail/${item.productId}`} className="btn-click">
+                                    <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>
+                                </Link>
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </Slider>
+            </div>
             <div className="card-list-container" >
                 {listProductHome.map((item, index) => (
                     <Card key={index} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
                             <Card.Title className="card-title" style={{ height: "28%" }}>{item.productName}</Card.Title>
-                            <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
+                            <Card.Text className="card-text">{item.unitPrice} đ</Card.Text>
                             <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>
                             <Link to={`/product-detail/${item.productId}`} className="btn-click">
                                 <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>

@@ -28,14 +28,19 @@ const getAllSupplierFromCatgoryService = async (categoryId) => {
     return response;
 }
 
-
+//producseliing top10
+const getSellingTop10Service = async () => {
+    const response = await axios.get(API_COMMON +`product/selling-top-10-product`);
+    return response;
+}
 
 
  const productServiceUser = {
     getAllHomeProductService,
     getDetailProductService,
     getAllSearchFilterProductService,
-    getAllSupplierFromCatgoryService
+    getAllSupplierFromCatgoryService,
+    getSellingTop10Service
 }
 
 export default productServiceUser;
