@@ -1,13 +1,35 @@
-import {  useState } from 'react';
+import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import accountService from '../../services/account/account.service';
 const ChangePassword = () => {
 
     const [isShow, setIsShow] = useState(false);
     const [changePass, setChangePass] = useState({
         passOld: "",
-        passnew: ""
-      })
+        passnew: "",
+        passConfirm: ""
+    })
+    const nav = useNavigate();
+
+    const handleChangePass = (e) => {
+        if (changePass.passnew === changePass.passConfirm) {
+            e.preventDefault();
+            let dataRequest = {
+                oldPassword: changePass.passOld,
+                newPassword: changePass.passnew,
+            }
+            accountService.changePassService(dataRequest).then((dataResponse) => {
+                let dataUser = dataResponse.data;
+                alert(dataUser["message"]);
+                nav("/login");
+            }).catch((err) => {
+                let errorShow = err.response.data;
+                alert(errorShow["message"]);
+            })
+
+        }
+    }
 
     return (
         <>
@@ -20,9 +42,9 @@ const ChangePassword = () => {
                             <Form.Control
                                 type={isShow ? "text" : "password"}
                                 placeholder="Mật khẩu cũ"
-                                // onChange={e => {
-                                //     setRegisterAccount({ ...registerAccount, email: e.target.value })
-                                // }}
+                                onChange={e => {
+                                    setChangePass({ ...changePass, passOld: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -30,9 +52,9 @@ const ChangePassword = () => {
                             <Form.Control
                                 type={isShow ? "text" : "password"}
                                 placeholder="Mật khẩu mới"
-                                // onChange={e => {
-                                //     setRegisterAccount({ ...registerAccount, fullName: e.target.value })
-                                // }}
+                                onChange={e => {
+                                    setChangePass({ ...changePass, passnew: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -40,9 +62,9 @@ const ChangePassword = () => {
                             <Form.Control
                                 type={isShow ? "text" : "password"}
                                 placeholder="Nhập lại mật khẩu mới"
-                                // onChange={e => {
-                                //     setRegisterAccount({ ...registerAccount, username: e.target.value })
-                                // }}
+                                onChange={e => {
+                                    setChangePass({ ...changePass, passConfirm: e.target.value })
+                                }}
                             />
                         </Form.Group>
                         <div>
@@ -56,7 +78,7 @@ const ChangePassword = () => {
                             <label htmlFor="checkbox">  Hiển thị mật khẩu</label>
                         </div>
                         <Button variant="primary" type="submit" className="w-100 mt-3"
-                        // onClick={handleRegister} 
+                            onClick={handleChangePass}
                         >
                             Đổi mật khẩu</Button>
                     </Form>
