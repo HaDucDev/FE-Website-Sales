@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, Button, Image, Form } from 'react-bootstrap';
 import './list-product-search-filter.css'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -6,6 +6,8 @@ import productServiceUser from '../../../../services/user/user.product.service';
 import ReactPaginate from 'react-paginate';
 import categoryService from '../../../../services/admin/admin.category.service';
 import supplierService from '../../../../services/admin/admin.supplier.service';
+import cartServiceUser from '../../../../services/user/user.cart.service';
+import { LoginContext } from '../../../../App';
 const ListProductSearchFilter = () => {
 
     const nav = useNavigate();
@@ -45,6 +47,24 @@ const ListProductSearchFilter = () => {
 
     const onPageChange = ({ selected }) => {
         setPage(selected);
+    }
+    const textLogin = useContext(LoginContext);
+    const  addProductToCart = (id)=>{
+        let data = {
+            "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+            "productId": Number(id),
+            "quantity": 1,
+            "operator": "add"
+        }
+        cartServiceUser.addProductToCartService(data).then((dataResponse) => {
+            let dataShow = dataResponse.data;
+            textLogin.setLoadPage(Math.floor(Math.random() * 10) +1);
+            alert(dataShow["message"]);
+        }).catch((err) => {
+            console.log(err)
+            let errorShow = err.response.data;
+            alert(errorShow["message"]);
+        })
     }
 
     return (
@@ -106,9 +126,10 @@ const ListProductSearchFilter = () => {
                     <Card key={("navbar-item" + 1 + index).toString()} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
-                            <Card.Title className="card-title" style={{ height: "28%", fontSize:"90%" }}>{item.productName}</Card.Title>
+                            <Card.Title className="card-title" style={{ height: "28%", fontSize: "90%" }}>{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
-                            <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>
+                            <Button variant="primary" className="card-button"
+                                onClick={ ()=> addProductToCart(item.productId) }>Thêm vào giỏ hàng</Button>
                             <Link to={`/product-detail/${item.productId}`} className="btn-click">
                                 <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>
                             </Link>
