@@ -55,9 +55,9 @@ const ListProductCommon = () => {
                         <Card key={index} className="card-container">
                             <div>
                                 <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd', width: "40%", float: "left" }} />
-                                <Card.Text className="card-text">Giá gốc: <s>{item.unitPrice} đ</s></Card.Text>
                                 <div style={{backgroundColor:"blue", color:"white"}}>Giảm giá: {item.discount}%</div>
-                                <Card.Text className="card-text">Giá bán: {item.unitPrice-item.unitPrice*item.discount/100} đ</Card.Text>
+                                <Card.Text className="card-text">Giá bán: {item.unitPrice-item.unitPrice*item.discount/100}đ  <s>{item.unitPrice} đ</s></Card.Text>
+                                <Card.Text className="card-text">Đã bán: {item.sumQuantity} sản phẩm</Card.Text>
                                 <div>{(item.rating).toFixed(1)}
                                     <StarRatings
                                         rating={1}
