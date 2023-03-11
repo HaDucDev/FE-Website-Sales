@@ -40,9 +40,10 @@ const AdminUser = () => {
         fullName: "",
         address: "",
         phone: "",
-        roleId: 0
+        roleId: 0,
+        roleName: ""
     })
-
+    const [openInputUpdate, setopenInputUpdate] = useState(true);// do thuoc tinh readOnly true ms khoa input
     useEffect(() => {
         if (intiText !== "") {
             userService.getAllUserService(0, 100).then((dataResponse) => {
@@ -87,6 +88,8 @@ const AdminUser = () => {
                 roleId: 0,
             });
             setLoadTable(!load);
+            setIsLoading(false);
+            setIsSubmitting(false);
             alert(dataShow["message"]);
             setShowAddModal(false);
         }).catch(error => alert("Lỗi " + error + "Khi thêm người dùng. Bạn hãy quay lại sau."));
@@ -101,7 +104,8 @@ const AdminUser = () => {
             || row.address.toString().includes(intiText));
     }
 
-    const functionUpdate = (id) => {
+    const functionUpdate = (id) => {//get data
+        setopenInputUpdate(true);
         userService.getUserByIdService(id).then((dataResponse) => {
             let dataUser = dataResponse.data;
             console.log(dataUser)
@@ -113,15 +117,20 @@ const AdminUser = () => {
                 address: dataUser.address,
                 phone: dataUser.phone,
                 roleId: dataUser.roleId,
+                roleName: dataUser.roleName
             });
 
         }).catch(error => alert("Lỗi " + error + "Khi lấy user theo id. Bạn hãy quay lại sau."));
-        
+
         userService.getAllRoleService().then((dataResponse) => {
             setRoleList(dataResponse.data);
             setShowUpdateModal(true);
         }).catch(error => alert("Lỗi " + error + "Khi lấy tất cả quyền. Bạn hãy quay lại sau."));
-        
+
+    }
+
+    const updateUser = () => {
+
     }
 
     return (
@@ -173,7 +182,7 @@ const AdminUser = () => {
                         ))}
                     </tbody>
                 </Table>
-                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginTop:"10px" }}>
+                <div style={{ display: "flex", justifyContent: "right", alignItems: "center", height: "30px", marginTop: "10px" }}>
                     <select onChange={(e) => { setSize(e.target.value); }} value={size} style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "8%" }}>
                         {sizes.map((size) => (
                             <option key={size} value={size}>
@@ -343,7 +352,7 @@ const AdminUser = () => {
                         <Form.Label>Id:</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Nhập email"
+                            placeholder="Nhập id"
                             defaultValue={userById.userId}
                             readOnly
                             onChange={(e) => {
@@ -363,6 +372,7 @@ const AdminUser = () => {
                             type="text"
                             placeholder="Nhập email"
                             defaultValue={userById.email}
+                            readOnly={openInputUpdate}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, email: e.target.value });
                                 // setErrorResponse({
@@ -382,6 +392,7 @@ const AdminUser = () => {
                             type="text"
                             placeholder="Nhập fullName"
                             defaultValue={userById.fullName}
+                            readOnly={openInputUpdate}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, fullName: e.target.value });
                                 // setErrorResponse({
@@ -399,6 +410,7 @@ const AdminUser = () => {
                             type="text"
                             placeholder="Nhập địa chỉ:"
                             defaultValue={userById.address}
+                            readOnly={openInputUpdate}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, address: e.target.value });
                                 // setErrorResponse({
@@ -416,6 +428,7 @@ const AdminUser = () => {
                             type="text"
                             placeholder="Nhập số điện thoại:"
                             defaultValue={userById.phone}
+                            readOnly={openInputUpdate}
                             onChange={(e) => {
                                 setUserValue({ ...userValue, phone: e.target.value });
                                 // setErrorResponse({
@@ -427,51 +440,78 @@ const AdminUser = () => {
                         />
                         {/* <ValidationMessage errorResponse={errorResponse} field="unitPrice" /> */}
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
-                        <Form.Label>Chọn vai trò</Form.Label>
-                        <Form.Control
-                            as="select"
-                            name="roleId"
-                            defaultValue={userById.roleId}
-                            onChange={(e) => {
-                                setUserValue({ ...userValue, roleId: e.target.value });
-                                // setErrorResponse({
-                                //     ...errorResponse,
-                                //     categoryId: ""
-                                // })
-                                // setIsSubmitting(false);// mo nut
-                            }}
-                        >
-                            <option value={0}>Chọn role...</option>
-                            {
-                                roleList.map((role) => (
-                                    <option key={role.id} value={role.id}>{role.name}</option>
-                                ))
-                            }
-                        </Form.Control>
-                        {/* <ValidationMessage errorResponse={errorResponse} field="categoryId" /> */}
-                    </Form.Group>
+                    {
+                        openInputUpdate ? (
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput4" style={{ marginLeft: "10px", }} >
+                                <Form.Label>Vai trò:</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập số điện thoại:"
+                                    defaultValue={userById.roleName}
+                                    readOnly={openInputUpdate}
+                                />
+                            </Form.Group>
+                        ) : (
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
+                                <Form.Label>Chọn vai trò</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    name="roleId"
+                                    defaultValue={userById.roleId}
+                                    onChange={(e) => {
+                                        setUserValue({ ...userValue, roleId: e.target.value });
+                                        // setErrorResponse({
+                                        //     ...errorResponse,
+                                        //     categoryId: ""
+                                        // })
+                                        // setIsSubmitting(false);// mo nut
+                                    }}
+                                >
+                                    <option value={0}>Chọn role...</option>
+                                    {
+                                        roleList.map((role) => (
+                                            <option key={role.id} value={role.id}>{role.name}</option>
+                                        ))
+                                    }
+                                </Form.Control>
+                                {/* <ValidationMessage errorResponse={errorResponse} field="categoryId" /> */}
+                            </Form.Group>
+                        )
+
+                    }
+
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                    <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
                         Đóng
                     </Button>
 
-                    <Button variant="outline-primary"
-                        disabled={isSubmitting}
-                        style={{ zIndex: "1" }}
-                        onClick={() => addUser()}
-                    >
-                        {isLoading && (
-                            <Spinner
-                                style={{ margin: "auto", zIndex: "9" }}
-                                animation="border"
-                                variant="primary"
-                            />
-                        )}
-                        Lưu
-                    </Button>
+                    {
+                        openInputUpdate ? (<Button variant="outline-primary" disabled={isSubmitting}
+                            style={{ zIndex: "1" }}
+                            onClick={() => setopenInputUpdate(!openInputUpdate)}>
+                            Sửa
+                        </Button>) : (
+                            <Button variant="outline-primary"
+                                disabled={isSubmitting}
+                                style={{ zIndex: "1" }}
+                                onClick={() => updateUser()}
+                            >
+                                {isLoading && (
+                                    <Spinner
+                                        style={{ margin: "auto", zIndex: "9" }}
+                                        animation="border"
+                                        variant="primary"
+                                    />
+                                )}
+                                Lưu
+                            </Button>
+                        )
+                    }
+
+
+
                 </Modal.Footer>
             </Modal>
 
