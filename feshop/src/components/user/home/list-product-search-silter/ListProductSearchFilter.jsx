@@ -1,4 +1,4 @@
-import React, {  useContext, useEffect,  useMemo,  useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Card, Button, Image, Form } from 'react-bootstrap';
 import './list-product-search-filter.css'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -19,25 +19,25 @@ const ListProductSearchFilter = () => {
     const sizes = [4, 8, 16];// so luong san pham 1 trang
     const [size, setSize] = useState(8);
 
-    const [params] = useSearchParams();
+    const [params, setParams] = useSearchParams();
     const textSearch = (params.get('textSearch') ? params.get('textSearch') : "");
     console.log(textSearch)
 
+    //const [categoryId, setCategoryId] = useSearchParams('categoryId');
     const categoryId = (params.get('categoryId')) ? params.get('categoryId') : "";
     const supplierId = (params.get('supplierId')) ? params.get('supplierId') : "";
 
     const priceList = useMemo(() => {
         const prices = params.getAll('price');
         return prices.length > 0 ? prices : [];
-      }, [params]);
+    }, [params]);
 
-    //const priceList =  params.getAll('price') ? params.getAll('price') : ["0_0"];
-    //const [priceList1, setpriceList1] = useState([])
-
+    
     const [categorySelect, setCategorySelect] = useState([]);
     const [supplierSelect, setSupplierSelect] = useState([]);
 
     useEffect(() => {
+       
         console.log(Math.random())
         console.log(priceList)
         categoryService.getAllCategoryService().then((responseData) => {
@@ -47,12 +47,12 @@ const ListProductSearchFilter = () => {
             setSupplierSelect(responseData.data);
         }).catch(error => alert("Lỗi load supplier list" + error + ". Bạn hãy quay lại sau."));
         // console.log(params.get('categoryId'))
-        productServiceUser.getAllSearchFilterProductService(page, size, categoryId, supplierId, textSearch,priceList).then((responseData) => {
+        productServiceUser.getAllSearchFilterProductService(page, size, categoryId, supplierId, textSearch, priceList).then((responseData) => {
             console.log(responseData.data.content);
             setListProductSearchFilter(responseData.data.content);//data    
             setTotalPages(responseData.data.totalPages);//so trang   
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [page, size, textSearch, categoryId, supplierId,priceList,params])
+    }, [page, size, textSearch, categoryId, supplierId, priceList, params])
 
 
     const onPageChange = ({ selected }) => {
@@ -91,7 +91,8 @@ const ListProductSearchFilter = () => {
                                 value={categoryId}
                                 onChange={(e) => {
                                     e.preventDefault();
-                                    nav(`/search-filter?categoryId=${e.target.value}&supplierId=${supplierId}`)
+                                    setParams(params.set("categoryId", e.target.value));
+                                    nav(`/search-filter?${params.toString()}`);
                                 }}
                             >
                                 <option value={0}>Chọn category...</option>
@@ -115,7 +116,9 @@ const ListProductSearchFilter = () => {
                                 value={supplierId}
                                 onChange={(e) => {
                                     e.preventDefault();
-                                    nav(`/search-filter?categoryId=${categoryId}&supplierId=${e.target.value}`)
+                                    //nav(`/search-filter?categoryId=${categoryId}&supplierId=${e.target.value}`)
+                                    setParams(params.set("supplierId", e.target.value));
+                                    nav(`/search-filter?${params.toString()}`);
                                 }}
                             >
                                 <option value={0}>Chọn supplier...</option>
@@ -134,44 +137,100 @@ const ListProductSearchFilter = () => {
                     <div>
                         <input type="checkbox"
                             name="checkbox1"
-                            //checked={checkboxValues.checkbox1}
-                            //checked=
+                            checked={priceList.includes("10000_100000") ? true : false}
                             value="10000_100000"
-                            onChange={(e)=>{
+                            onChange={(e) => {
                                 e.preventDefault();
-                                if(Array.isArray(priceList) &&!priceList.includes(e.target.value)){
-                                    priceList.push(e.target.value)
-                                    
-                                    let urlPrice = "";
-                                    priceList.forEach((value) => {
-                                        urlPrice = urlPrice +`&price=${value}`;
-                                    });
-                                    console.log(urlPrice);
-                                    nav(`/search-filter?categoryId=${categoryId}&supplierId=${supplierId}`+urlPrice)
+                                if (!priceList === false && priceList.length === 1 && priceList[0] === '') {
+                                    setParams(params.delete("price"));
+                                    nav(`/search-filter?${params.toString()}`);
                                 }
-                                //else
+                                if (priceList && !priceList.includes(e.target.value)) {
+                                        //setParams(params.delete("price"));
+                                        setParams(params.append("price", e.target.value));
+                                        nav(`/search-filter?${params.toString()}`);
+                                }
+                                else {
+                                    let temp = priceList.filter(price => price !== (e.target.value));
+                                    setParams(params.delete("price"));
+                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    //setParams(params.set("price", temp));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
                             }}
                             style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />10.000đ -100.000đ
                     </div>
                     <div>
                         <input type="checkbox"
                             name="checkbox2"
-                            //checked={checkboxValues.checkbox2}
-                            //onChange={handleCheckboxChange}
+                            checked={priceList.includes("100000_1000000") ? true : false}
+                            value="100000_1000000"
+                            onChange={(e) => {
+                                e.preventDefault();
+                                if (!priceList === false && priceList.length === 1 && priceList[0] === '') {
+                                    setParams(params.delete("price"));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                                if (priceList && !priceList.includes(e.target.value)) {
+                                    //setParams(params.set("price", [...priceList,e.target.value]));
+                                    setParams(params.append("price", e.target.value));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                                else {
+                                    let temp = priceList.filter(price => price !== (e.target.value));
+                                    setParams(params.delete("price"));
+                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                            }}
                             style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />1.000.000đ -10.000.000đ
                     </div>
                     <div>
                         <input type="checkbox"
                             name="checkbox3"
-                            //checked={checkboxValues.checkbox2}
-                            //onChange={handleCheckboxChange}
+                            checked={priceList.includes("10000000_20000000") ? true : false}
+                            value="10000000_20000000"
+                            onChange={(e) => {
+                                e.preventDefault();
+                                if (!priceList === false && priceList.length === 1 && priceList[0] === '') {
+                                    setParams(params.delete("price"));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                                if (priceList && !priceList.includes(e.target.value)) {
+                                        setParams(params.append("price", e.target.value));
+                                        nav(`/search-filter?${params.toString()}`);
+                                }
+                                else {
+                                    let temp = priceList.filter(price => price !== (e.target.value));
+                                    setParams(params.delete("price"));
+                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                            }}
                             style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />10.000.000đ -20.000.000đ
                     </div>
                     <div>
                         <input type="checkbox"
                             name="checkbox4"
-                            //checked={checkboxValues.checkbox2}
-                            //onChange={handleCheckboxChange}
+                            checked={priceList.includes("20000000_0") ? true : false}
+                            value="20000000_0"
+                            onChange={(e) => {
+                                e.preventDefault();
+                                if (!priceList === false && priceList.length === 1 && priceList[0] === '') {
+                                    setParams(params.delete("price"));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                                if (priceList && !priceList.includes(e.target.value)) {
+                                        setParams(params.append("price", e.target.value));
+                                        nav(`/search-filter?${params.toString()}`);
+                                }
+                                else {
+                                    let temp = priceList.filter(price => price !== (e.target.value));
+                                    setParams(params.delete("price"));
+                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    nav(`/search-filter?${params.toString()}`);
+                                }
+                            }}
                             style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />Trên 20.000.000đ
                     </div>
 

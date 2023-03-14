@@ -14,28 +14,14 @@ const getDetailProductService = async (id) => {
 
 // api search filter san pham
 const getAllSearchFilterProductService = async (number,size, categoryId,supplierId,text,priceList) => {
-    let url= API_COMMON+`product/search-filter?`;
-    if(number===0 || number){
-        url = url + `number=${number}&`;
-    }
-    if(size){
-        url = url + `size=${size}&`;
-    }
-    if(categoryId ===-1 || categoryId){
-        url = url + `categoryId=${categoryId}&`;
-    }
-    if(supplierId === -1 || supplierId){
-        url = url + `supplierId=${supplierId}&`;
-    }
-    if(text){
-        url = url + `textSearch=${text}&`;
-    }
-
+    let url= API_COMMON 
+    +`product/search-filter?number=${number}&size=${size}&categoryId=${categoryId}&supplierId=${supplierId}&textSearch=${text}`;
+    
     let urlPrice = "";
     // Thêm từng giá trị price vào đối tượng params
     if(priceList){
         priceList.forEach((value) => {
-            urlPrice = urlPrice +`price=${value}&`;
+            urlPrice = urlPrice +`&price=${value}`;
         });
         url = url+urlPrice;
     }
