@@ -23,7 +23,6 @@ const ListProductSearchFilter = () => {
     const textSearch = (params.get('textSearch') ? params.get('textSearch') : "");
     console.log(textSearch)
 
-    //const [categoryId, setCategoryId] = useSearchParams('categoryId');
     const categoryId = (params.get('categoryId')) ? params.get('categoryId') : "";
     const supplierId = (params.get('supplierId')) ? params.get('supplierId') : "";
 
@@ -46,7 +45,6 @@ const ListProductSearchFilter = () => {
         supplierService.getAllSupplierService().then((responseData) => {
             setSupplierSelect(responseData.data);
         }).catch(error => alert("Lỗi load supplier list" + error + ". Bạn hãy quay lại sau."));
-        // console.log(params.get('categoryId'))
         productServiceUser.getAllSearchFilterProductService(page, size, categoryId, supplierId, textSearch, priceList).then((responseData) => {
             console.log(responseData.data.content);
             setListProductSearchFilter(responseData.data.content);//data    
@@ -79,7 +77,7 @@ const ListProductSearchFilter = () => {
 
     return (
         <>
-            <div style={{ float: "left", marginLeft: "5%" }}>
+            <div style={{ float: "left", marginLeft: "5%", width:"15%" }}>
                 <div style={{ backgroundColor: "green", color: "white", textAlign: "center" }}>Lọc sản phẩm</div>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
                     <Form.Label>Chọn loại hàng</Form.Label>
