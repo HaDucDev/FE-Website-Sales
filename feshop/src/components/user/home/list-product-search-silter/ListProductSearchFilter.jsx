@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {  useContext, useEffect,  useMemo,  useState } from 'react';
 import { Card, Button, Image, Form } from 'react-bootstrap';
 import './list-product-search-filter.css'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -23,13 +23,23 @@ const ListProductSearchFilter = () => {
     const textSearch = (params.get('textSearch') ? params.get('textSearch') : "");
     console.log(textSearch)
 
-    const categoryId = (params.get('categoryId')) ? params.get('categoryId') : -1;
-    const supplierId = (params.get('supplierId')) ? params.get('supplierId') : -1;
+    const categoryId = (params.get('categoryId')) ? params.get('categoryId') : "";
+    const supplierId = (params.get('supplierId')) ? params.get('supplierId') : "";
+
+    const priceList = useMemo(() => {
+        const prices = params.getAll('price');
+        return prices.length > 0 ? prices : [];
+      }, [params]);
+
+    //const priceList =  params.getAll('price') ? params.getAll('price') : ["0_0"];
+    //const [priceList1, setpriceList1] = useState([])
 
     const [categorySelect, setCategorySelect] = useState([]);
     const [supplierSelect, setSupplierSelect] = useState([]);
 
     useEffect(() => {
+        console.log(Math.random())
+        console.log(priceList)
         categoryService.getAllCategoryService().then((responseData) => {
             setCategorySelect(responseData.data);
         }).catch(error => alert("Lỗi load category list " + error + ". Bạn hãy quay lại sau."));
@@ -37,12 +47,12 @@ const ListProductSearchFilter = () => {
             setSupplierSelect(responseData.data);
         }).catch(error => alert("Lỗi load supplier list" + error + ". Bạn hãy quay lại sau."));
         // console.log(params.get('categoryId'))
-        productServiceUser.getAllSearchFilterProductService(page, size, categoryId, supplierId, textSearch).then((responseData) => {
+        productServiceUser.getAllSearchFilterProductService(page, size, categoryId, supplierId, textSearch,priceList).then((responseData) => {
             console.log(responseData.data.content);
             setListProductSearchFilter(responseData.data.content);//data    
             setTotalPages(responseData.data.totalPages);//so trang   
         }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [page, size, textSearch, categoryId, supplierId, params])
+    }, [page, size, textSearch, categoryId, supplierId,priceList,params])
 
 
     const onPageChange = ({ selected }) => {
@@ -125,7 +135,22 @@ const ListProductSearchFilter = () => {
                         <input type="checkbox"
                             name="checkbox1"
                             //checked={checkboxValues.checkbox1}
-                            //onChange={handleCheckboxChange}
+                            //checked=
+                            value="10000_100000"
+                            onChange={(e)=>{
+                                e.preventDefault();
+                                if(Array.isArray(priceList) &&!priceList.includes(e.target.value)){
+                                    priceList.push(e.target.value)
+                                    
+                                    let urlPrice = "";
+                                    priceList.forEach((value) => {
+                                        urlPrice = urlPrice +`&price=${value}`;
+                                    });
+                                    console.log(urlPrice);
+                                    nav(`/search-filter?categoryId=${categoryId}&supplierId=${supplierId}`+urlPrice)
+                                }
+                                //else
+                            }}
                             style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />10.000đ -100.000đ
                     </div>
                     <div>
