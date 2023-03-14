@@ -49,7 +49,7 @@ const ListProductSearchFilter = () => {
         setPage(selected);
     }
     const textLogin = useContext(LoginContext);
-    const  addProductToCart = (id)=>{
+    const addProductToCart = (id) => {
         let data = {
             "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
             "productId": Number(id),
@@ -58,7 +58,7 @@ const ListProductSearchFilter = () => {
         }
         cartServiceUser.addProductToCartService(data).then((dataResponse) => {
             let dataShow = dataResponse.data;
-            textLogin.setLoadPage(Math.floor(Math.random() * 10) +1);
+            textLogin.setLoadPage(Math.floor(Math.random() * 10) + 1);
             alert(dataShow["message"]);
         }).catch((err) => {
             console.log(err)
@@ -119,6 +119,40 @@ const ListProductSearchFilter = () => {
                     }
 
                 </Form.Group>
+                <div style={{ padding: "2%" }}>
+                    <div>Chọn khoảng giá</div>
+                    <div>
+                        <input type="checkbox"
+                            name="checkbox1"
+                            //checked={checkboxValues.checkbox1}
+                            //onChange={handleCheckboxChange}
+                            style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />10.000đ -100.000đ
+                    </div>
+                    <div>
+                        <input type="checkbox"
+                            name="checkbox2"
+                            //checked={checkboxValues.checkbox2}
+                            //onChange={handleCheckboxChange}
+                            style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />1.000.000đ -10.000.000đ
+                    </div>
+                    <div>
+                        <input type="checkbox"
+                            name="checkbox3"
+                            //checked={checkboxValues.checkbox2}
+                            //onChange={handleCheckboxChange}
+                            style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />10.000.000đ -20.000.000đ
+                    </div>
+                    <div>
+                        <input type="checkbox"
+                            name="checkbox4"
+                            //checked={checkboxValues.checkbox2}
+                            //onChange={handleCheckboxChange}
+                            style={{ transform: "scale(2)", marginRight: "10px", boxSizing: "border-box" }} />Trên 20.000.000đ
+                    </div>
+
+
+
+                </div>
             </div>
 
             <div className="card-list-container" >
@@ -129,7 +163,7 @@ const ListProductSearchFilter = () => {
                             <Card.Title className="card-title" style={{ height: "28%", fontSize: "90%" }}>{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} VND</Card.Text>
                             <Button variant="primary" className="card-button"
-                                onClick={ ()=> addProductToCart(item.productId) }>Thêm vào giỏ hàng</Button>
+                                onClick={() => addProductToCart(item.productId)}>Thêm vào giỏ hàng</Button>
                             <Link to={`/product-detail/${item.productId}`} className="btn-click">
                                 <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>
                             </Link>
