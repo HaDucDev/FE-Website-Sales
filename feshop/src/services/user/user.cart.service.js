@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_COMMON} from "../../utils/utils";
+import { API_COMMON, configJson} from "../../utils/utils";
 
 const getCountProductCategoryService = async (userId) => {
     const response = await axios.get(API_COMMON +`cart/count-cart/${userId}`);
@@ -7,24 +7,24 @@ const getCountProductCategoryService = async (userId) => {
 }
 
 const getAllProductInCartService = async (userId) => {
-    const response = await axios.get(API_COMMON +`cart/all-product/${userId}`);
+    const response = await axios.get(API_COMMON +`cart/all-product/${userId}`,configJson);
     return response;
 }
 
 const addProductToCartService = async (data) => {// dung chung them va sua
-    const response = await axios.post( API_COMMON +"cart",data)
+    const response = await axios.post( API_COMMON +"cart",data,configJson)
     return response;
 }
 
 
 
 const deleteCartService = async (data) => {
-    const response = await axios.delete( API_COMMON +"cart",{data:data})
+    const response = await axios.delete( API_COMMON +"cart",{data:data},configJson)
     return response;
 }
 
 const checkProductQuantityCartService = async (data) => {// dung chung them va sua
-    const response = await axios.post( API_COMMON +"cart/check",data)
+    const response = await axios.post( API_COMMON +"cart/check",data,configJson)
     return response;
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_COMMON, config, convertObjectBlob } from "../../utils/utils";
+import { API_COMMON, configFormData, configJson, convertObjectBlob } from "../../utils/utils";
 
 
 const getAllSupplierService = async () => {
@@ -8,7 +8,7 @@ const getAllSupplierService = async () => {
 }
 
 const getSupplierById = async (id) => {
-    const response = await axios.get(API_COMMON + `supplier/admin/${id}`);
+    const response = await axios.get(API_COMMON + `supplier/admin/${id}`,configJson);
     return response;
 }
 
@@ -18,7 +18,7 @@ const createCSupplierService = async (dataRequest, file) => {
     const formData = new FormData();
     formData.append('createSupplierRequest', blob);
     formData.append('supplierFile', file);
-    const response = await axios.post(API_COMMON + "supplier/admin", formData, config);
+    const response = await axios.post(API_COMMON + "supplier/admin", formData, configFormData);
     return response;
 }
 
@@ -27,11 +27,11 @@ const updateSupplierService = async (dataRequest, file) => {
     const formData = new FormData();
     formData.append('updateSupplierRequest', blob);
     formData.append('supplierFile', file);
-    const response = await axios.put(API_COMMON + "supplier/admin", formData, config);
+    const response = await axios.put(API_COMMON + "supplier/admin", formData, configFormData);
     return response;
 }
 const deleteSupplierService = async (id) => {
-    const response = await axios.delete(API_COMMON + `supplier/admin/${id}`)
+    const response = await axios.delete(API_COMMON + `supplier/admin/${id}`,configJson)
     return response;
 }
 

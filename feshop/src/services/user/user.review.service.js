@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_COMMON} from "../../utils/utils";
+import { API_COMMON, configJson} from "../../utils/utils";
 
 
 const addReviewPropductService = async (data) => {// dung chung them va sua
-    const response = await axios.post( API_COMMON +"reviews",data)
+    const response = await axios.post( API_COMMON +"reviews",data,configJson)
     return response;
 }
 

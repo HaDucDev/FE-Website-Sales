@@ -1,29 +1,6 @@
 import axios from "axios";
-import { API_COMMON, convertObjectBlob } from "../../utils/utils";
+import { API_COMMON, configFormData, configJson, convertObjectBlob } from "../../utils/utils";
 
-
-function authHeader() {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-
-    if (user && user.jwtToken) {
-        return { Authorization: "Bearer " + user.jwtToken };
-    } else {
-        return {};
-    }
-}
-
-function authHeaderFormData() {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-
-    if (user && user.jwtToken) {
-        return { 
-            Authorization: "Bearer " + user.jwtToken,
-            'Content-Type': 'multipart/form-data' 
-        };
-    } else {
-        return {};
-    }
-}
 
 const loginService = async (user) => {
     const response = await axios.post(API_COMMON + "login", user);
@@ -37,12 +14,12 @@ const registerService = async (user) => {
 
 
 const changePassService = async (user) => {
-    const response = await axios.put(API_COMMON + "change-pass", user, { headers: authHeader() });
+    const response = await axios.put(API_COMMON + "change-pass", user, configJson);
     return response;
 }
 
 const inforUserByIdService = async (userId) => {// chung get user admin
-    const response = await axios.get(API_COMMON + `user/${userId}`, { headers: authHeader() });
+    const response = await axios.get(API_COMMON + `user/${userId}`, configJson);
     return response;
 }
 
@@ -52,7 +29,7 @@ const updateInforUserService = async (dataRequest, file) => {
     const formData = new FormData();
     formData.append('changeInforAccountRequest', blob);
     formData.append('avatar', file);
-    const response = await axios.put(API_COMMON + "change-account-info", formData,{ headers: authHeaderFormData() });
+    const response = await axios.put(API_COMMON + "change-account-info", formData,configFormData);
     return response;
 }
 

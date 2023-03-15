@@ -1,11 +1,38 @@
 export const API_COMMON= "http://localhost:8080/api/"
 
-// send file and object 
-export const config = {
-    headers: {
-        'Content-Type': 'multipart/form-data'
+function authHeaderJson() {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+  
+    if (user && user.jwtToken) {
+      return { Authorization: "Bearer " + user.jwtToken };
+    } else {
+      return {};
     }
+  }
+  
+  function authHeaderFormData() {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+  
+    if (user && user.jwtToken) {
+        return { 
+            Authorization: "Bearer " + user.jwtToken,
+            'Content-Type': 'multipart/form-data' 
+        };
+    } else {
+        return {};
+    }
+  }
+
+// send json-header
+export const configJson = {
+    headers: authHeaderJson()
 }
+//send form-data-header (file and object)
+export const configFormData = {
+    headers: authHeaderFormData()
+}
+
+
 export const convertObjectBlob = (data) => {
     const json = JSON.stringify(data);
     const blob = new Blob([json], {
