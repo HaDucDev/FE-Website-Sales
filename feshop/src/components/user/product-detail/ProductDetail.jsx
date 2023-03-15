@@ -26,7 +26,7 @@ const ProductDetail = () => {
     useEffect(() => {
         productServiceUser.getDetailProductService(id).then((dataResponse) => {
             setProductDetail(dataResponse.data);
-            
+
         }).catch(error => alert("Lỗi review" + error + ". Bạn hãy quay lại sau."));
         //console.log(productDetail.rating)
         reviewServiceUser.getReviewAllByProductIdService(id).then((dataResponse) => {
@@ -50,25 +50,30 @@ const ProductDetail = () => {
     const textLogin = useContext(LoginContext);// dung de load lai cart o header
 
     const addToCart = () => {
-        let data = {
-            "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
-            "productId": Number(id),
-            "quantity": (quantityBuy === "") ? -1 : quantityBuy,
-            "operator": "add"
+        if (!localStorage.getItem("currentUser")) {
+            alert("Bạn phải đăng nhập mới có thể thêm sản phẩm vào giỏ hàng")
         }
-        cartServiceUser.addProductToCartService(data).then((dataResponse) => {
-            let dataShow = dataResponse.data;
-            setErrorResponse({
-                quantity: "",
-                message: ""
+        else {
+            let data = {
+                "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+                "productId": Number(id),
+                "quantity": (quantityBuy === "") ? -1 : quantityBuy,
+                "operator": "add"
+            }
+            cartServiceUser.addProductToCartService(data).then((dataResponse) => {
+                let dataShow = dataResponse.data;
+                setErrorResponse({
+                    quantity: "",
+                    message: ""
+                })
+                textLogin.setLoadPage(2);
+                alert(dataShow["message"]);
+            }).catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                setErrorResponse(errorShow);
             })
-            textLogin.setLoadPage(2);
-            alert(dataShow["message"]);
-        }).catch((err) => {
-            console.log(err)
-            let errorShow = err.response.data;
-            setErrorResponse(errorShow);
-        })
+        }
     }
 
     return (
@@ -81,8 +86,8 @@ const ProductDetail = () => {
                     </Col>
                     <Col sm={6}>
                         <h3>{productDetail.productName}</h3>
-                        <p className="lead">Giá: {productDetail.unitPrice-(productDetail.unitPrice*productDetail.discount/100)}đ <s>{productDetail.unitPrice} đ  </s>
-                               Giảm: {productDetail.discount}%
+                        <p className="lead">Giá: {productDetail.unitPrice - (productDetail.unitPrice * productDetail.discount / 100)}đ <s>{productDetail.unitPrice} đ  </s>
+                            Giảm: {productDetail.discount}%
                         </p>
                         <p className="lead">Loại sản phẩm: {productDetail.isCategory}</p>
                         <p className="lead">Nhà sản xuất: {productDetail.isSupplier}</p>

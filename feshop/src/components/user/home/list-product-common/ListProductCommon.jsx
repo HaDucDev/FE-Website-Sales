@@ -10,6 +10,9 @@ import 'slick-carousel/slick/slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import StarRatings from 'react-star-ratings';
+import cartServiceUser from '../../../../services/user/user.cart.service';
+import { useContext } from 'react';
+import { LoginContext } from '../../../../App';
 const ListProductCommon = () => {
     //npm i --save-dev @types/react-pagination-library
 
@@ -44,6 +47,29 @@ const ListProductCommon = () => {
         slidesToShow: 3,
         slidesToScroll: 1
     };
+    const textLogin = useContext(LoginContext);
+    const addProductToCart = (id) => {
+        if (!localStorage.getItem("currentUser")) {
+            alert("Bạn phải đăng nhập mới có thể thêm sản phẩm vào giỏ hàng")
+        }
+        else {
+            let data = {
+                "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+                "productId": Number(id),
+                "quantity": 1,
+                "operator": "add"
+            }
+            cartServiceUser.addProductToCartService(data).then((dataResponse) => {
+                let dataShow = dataResponse.data;
+                textLogin.setLoadPage(Math.floor(Math.random() * 10) + 1);
+                alert(dataShow["message"]);
+            }).catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                alert(errorShow["message"]);
+            })
+        }
+    }
 
     return (
         <>
@@ -55,8 +81,8 @@ const ListProductCommon = () => {
                         <Card key={index} className="card-container">
                             <div>
                                 <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd', width: "40%", float: "left" }} />
-                                <div style={{backgroundColor:"blue", color:"white"}}>Giảm giá: {item.discount}%</div>
-                                <Card.Text className="card-text">Giá bán: {item.unitPrice-item.unitPrice*item.discount/100}đ  <s>{item.unitPrice} đ</s></Card.Text>
+                                <div style={{ backgroundColor: "blue", color: "white" }}>Giảm giá: {item.discount}%</div>
+                                <Card.Text className="card-text">Giá bán: {item.unitPrice - item.unitPrice * item.discount / 100}đ  <s>{item.unitPrice} đ</s></Card.Text>
                                 <Card.Text className="card-text">Đã bán: {item.sumQuantity} sản phẩm</Card.Text>
                                 <div>{(item.rating).toFixed(1)}
                                     <StarRatings
@@ -85,7 +111,8 @@ const ListProductCommon = () => {
                         <Card.Body>
                             <Card.Title className="card-title" style={{ height: "28%" }}>{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} đ</Card.Text>
-                            <Button variant="primary" className="card-button">Thêm vào giỏ hàng</Button>
+                            <Button variant="primary" className="card-button"
+                                onClick={() => addProductToCart(item.productId)}>Thêm vào giỏ hàng</Button>
                             <Link to={`/product-detail/${item.productId}`} className="btn-click">
                                 <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>
                             </Link>

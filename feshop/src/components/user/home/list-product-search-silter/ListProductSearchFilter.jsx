@@ -31,12 +31,12 @@ const ListProductSearchFilter = () => {
         return prices.length > 0 ? prices : [];
     }, [params]);
 
-    
+
     const [categorySelect, setCategorySelect] = useState([]);
     const [supplierSelect, setSupplierSelect] = useState([]);
 
     useEffect(() => {
-       
+
         console.log(Math.random())
         console.log(priceList)
         categoryService.getAllCategoryService().then((responseData) => {
@@ -58,26 +58,31 @@ const ListProductSearchFilter = () => {
     }
     const textLogin = useContext(LoginContext);
     const addProductToCart = (id) => {
-        let data = {
-            "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
-            "productId": Number(id),
-            "quantity": 1,
-            "operator": "add"
+        if (!localStorage.getItem("currentUser")) {
+            alert("Bạn phải đăng nhập mới có thể thêm sản phẩm vào giỏ hàng")
         }
-        cartServiceUser.addProductToCartService(data).then((dataResponse) => {
-            let dataShow = dataResponse.data;
-            textLogin.setLoadPage(Math.floor(Math.random() * 10) + 1);
-            alert(dataShow["message"]);
-        }).catch((err) => {
-            console.log(err)
-            let errorShow = err.response.data;
-            alert(errorShow["message"]);
-        })
+        else {
+            let data = {
+                "userId": JSON.parse(localStorage.getItem("currentUser")).userId,
+                "productId": Number(id),
+                "quantity": 1,
+                "operator": "add"
+            }
+            cartServiceUser.addProductToCartService(data).then((dataResponse) => {
+                let dataShow = dataResponse.data;
+                textLogin.setLoadPage(Math.floor(Math.random() * 10) + 1);
+                alert(dataShow["message"]);
+            }).catch((err) => {
+                console.log(err)
+                let errorShow = err.response.data;
+                alert(errorShow["message"]);
+            })
+        }
     }
 
     return (
         <>
-            <div style={{ float: "left", marginLeft: "5%", width:"15%" }}>
+            <div style={{ float: "left", marginLeft: "5%", width: "15%" }}>
                 <div style={{ backgroundColor: "green", color: "white", textAlign: "center" }}>Lọc sản phẩm</div>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
                     <Form.Label>Chọn loại hàng</Form.Label>
@@ -144,14 +149,14 @@ const ListProductSearchFilter = () => {
                                     nav(`/search-filter?${params.toString()}`);
                                 }
                                 if (priceList && !priceList.includes(e.target.value)) {
-                                        //setParams(params.delete("price"));
-                                        setParams(params.append("price", e.target.value));
-                                        nav(`/search-filter?${params.toString()}`);
+                                    //setParams(params.delete("price"));
+                                    setParams(params.append("price", e.target.value));
+                                    nav(`/search-filter?${params.toString()}`);
                                 }
                                 else {
                                     let temp = priceList.filter(price => price !== (e.target.value));
                                     setParams(params.delete("price"));
-                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    temp.forEach(it => setParams(params.append("price", it)));
                                     //setParams(params.set("price", temp));
                                     nav(`/search-filter?${params.toString()}`);
                                 }
@@ -177,7 +182,7 @@ const ListProductSearchFilter = () => {
                                 else {
                                     let temp = priceList.filter(price => price !== (e.target.value));
                                     setParams(params.delete("price"));
-                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    temp.forEach(it => setParams(params.append("price", it)));
                                     nav(`/search-filter?${params.toString()}`);
                                 }
                             }}
@@ -195,13 +200,13 @@ const ListProductSearchFilter = () => {
                                     nav(`/search-filter?${params.toString()}`);
                                 }
                                 if (priceList && !priceList.includes(e.target.value)) {
-                                        setParams(params.append("price", e.target.value));
-                                        nav(`/search-filter?${params.toString()}`);
+                                    setParams(params.append("price", e.target.value));
+                                    nav(`/search-filter?${params.toString()}`);
                                 }
                                 else {
                                     let temp = priceList.filter(price => price !== (e.target.value));
                                     setParams(params.delete("price"));
-                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    temp.forEach(it => setParams(params.append("price", it)));
                                     nav(`/search-filter?${params.toString()}`);
                                 }
                             }}
@@ -219,13 +224,13 @@ const ListProductSearchFilter = () => {
                                     nav(`/search-filter?${params.toString()}`);
                                 }
                                 if (priceList && !priceList.includes(e.target.value)) {
-                                        setParams(params.append("price", e.target.value));
-                                        nav(`/search-filter?${params.toString()}`);
+                                    setParams(params.append("price", e.target.value));
+                                    nav(`/search-filter?${params.toString()}`);
                                 }
                                 else {
                                     let temp = priceList.filter(price => price !== (e.target.value));
                                     setParams(params.delete("price"));
-                                    temp.forEach(it=>setParams(params.append("price", it)));
+                                    temp.forEach(it => setParams(params.append("price", it)));
                                     nav(`/search-filter?${params.toString()}`);
                                 }
                             }}
