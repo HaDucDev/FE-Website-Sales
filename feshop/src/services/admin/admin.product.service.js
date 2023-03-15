@@ -5,7 +5,7 @@ import { API_COMMON, configFormData, configJson, convertObjectBlob} from "../../
 
 
 const getAllProductService = async () => {
-    const response = await axios.get(API_COMMON + "product/admin",configJson);
+    const response = await axios.get(API_COMMON + "product/admin");//khong dung check token do load len qua cham
     return response;
 }
 

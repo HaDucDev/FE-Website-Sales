@@ -77,6 +77,11 @@ const AdminProduct = () => {
             || row.unitPrice.toString().includes(intiText));
     }
 
+    useEffect(() => {
+        productService.getAllProductService().then((response) => {
+            setProductList(response.data)
+        }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
+    }, [intiText, load])
 
     const getAllCategoryAndSupplier = () => {
         categoryService
@@ -92,13 +97,6 @@ const AdminProduct = () => {
             })
             .catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
     };
-
-
-    useEffect(() => {
-        productService.getAllProductService().then((response) => {
-            setProductList(response.data)
-        }).catch(error => alert("Lỗi " + error + ". Bạn hãy quay lại sau."));
-    }, [intiText, load])
 
     //them san pham
     const handleAddProduct = () => {
