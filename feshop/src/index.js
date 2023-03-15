@@ -14,7 +14,7 @@ const store = configureStore({
     "listProductBuy": selectproductBuyReducer
   }
 })
-
+//VERSION-1
 root.render(
   <Provider store={store}>
     {/* <React.StrictMode> */}
