@@ -4,6 +4,7 @@ function authHeaderJson() {
     const user = JSON.parse(localStorage.getItem("currentUser"));
   
     if (user && user.jwtToken) {
+        console.log("ok nhe"+user.jwtToken);
       return { Authorization: "Bearer " + user.jwtToken };
     } else {
       return {};
@@ -24,8 +25,20 @@ function authHeaderJson() {
   }
 
 // send json-header
-export const configJson = {
-    headers: authHeaderJson()
+export const configJson = () =>{
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+  
+    if (user && user.jwtToken) {
+        return {
+            headers : { 
+                Authorization: "Bearer " + user.jwtToken,
+                'Content-Type': 'multipart/form-data' 
+            }
+        }
+    } else {
+        return {};
+    }
+
 }
 //send form-data-header (file and object)
 export const configFormData = {
