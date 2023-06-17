@@ -14,11 +14,11 @@ import cartServiceUser from '../../services/user/user.cart.service';
 const HeaderApp = () => {
 
   const [countCart, setCountCart] = useState(0);
-
+  console.log("ok123456-render-header-app");
   const textLogin = useContext(LoginContext);
   useEffect(() => {
-    console.log("ok123456")
-    console.log(textLogin.loadPage)
+    console.log("ok123456");
+    console.log(textLogin.loadPage);
   }, [textLogin.loadPage]);
 
   const doneLogin = localStorage.getItem("currentUser");
@@ -32,7 +32,7 @@ const HeaderApp = () => {
   return (
     <>
       {['sm'].map((expand) => (
-        <Navbar key={expand} bg="light" expand={expand} className="mb-3">
+        <Navbar key={expand} bg="light" expand={expand} className="mb-3" style={{ zIndex: 100 }}>
           <Container fluid>
             <Navbar.Brand href="#" onClick={(e) => { e.preventDefault(); nav("/") }}><img src="https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676874555/hdshop_a8eqd5.png" alt='lỗi'
               style={{ height: "40px", width: "100%", objectFit: "cover", borderRadius: "50%" }} />

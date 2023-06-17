@@ -10,7 +10,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index:2;
     padding-top: 80px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }

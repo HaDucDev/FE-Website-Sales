@@ -75,20 +75,26 @@ const Admin = () => {
                   height="200"
                 />
                 {sideBar.length > 0 &&
-                  sideBar.map((nav, index) => (
-                    <Link
-                      to={nav.link}
+                  sideBar.map((item, index) => (
+                    <div
                       key={index}
                       className={`sidebar_menu_item ${activeIndex === index && "active"
                         } relative`}
-                      onClick={() => setActiveIndex(nav.id)}
+                      onClick={(e) => {
+                        e.preventDefault();                  
+                        setActiveIndex(item.id);
+                        nav(`${item.link}`)                    
+                      }}
                     >
-                      <div className="sidebar_menu_item_txt">{nav.text}</div>
-                    </Link>
+                      {item.text}
+                    </div>
                   ))}
               </div>
             </div>
             <div style={{ zIndex: "100", width: "72%", marginLeft: "25%" }}>
+              {
+                console.log("ok nhes")
+              }
               <Outlet /> {/* Hien thi cac trang con */}
             </div>
           </div>

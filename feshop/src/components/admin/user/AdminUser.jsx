@@ -47,11 +47,13 @@ const AdminUser = () => {
 
     const [confirmModal, setComfirmModal] = useState(false);//state bat/tat modal comfirm
     useEffect(() => {
-        if (intiText !== "") {
+        console.log("chạy day roi nhe");
+        console.log("day la tyhong tin" + localStorage.getItem("currentUser"));
+        if (intiText !== "" && page ==0 && totalPages ==1 && size==4) {
             userService.getAllUserService(0, 100).then((dataResponse) => {
                 console.log(dataResponse.data);
                 setUserList(dataResponse.data.content)
-                setTotalPages(dataResponse.data.totalPages)
+                setTotalPages(Math.floor(userList.length/4))
             })
         }
         else {
