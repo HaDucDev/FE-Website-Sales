@@ -49,11 +49,13 @@ const AdminUser = () => {
     useEffect(() => {
         console.log("chạy day roi nhe");
         console.log("day la tyhong tin" + localStorage.getItem("currentUser"));
-        if (intiText !== "" && page ==0 && totalPages ==1 && size==4) {
+        if (intiText !== "" && page ===0 && totalPages === 1 && size===4 ) {
             userService.getAllUserService(0, 100).then((dataResponse) => {
                 console.log(dataResponse.data);
-                setUserList(dataResponse.data.content)
-                setTotalPages(Math.floor(userList.length/4))
+                setUserList(dataResponse.data.content);
+                let listUserGet = dataResponse.data.content;
+                let countUser = Math.ceil(listUserGet.length/4);
+                setTotalPages(countUser);
             })
         }
         else {
@@ -63,7 +65,7 @@ const AdminUser = () => {
                 setTotalPages(dataResponse.data.totalPages)
             })
         }
-    }, [page, size, load, intiText])
+    }, [page, size, load, intiText,totalPages])
 
 
     const onPageChange = ({ selected }) => {
