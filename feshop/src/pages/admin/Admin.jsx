@@ -37,11 +37,11 @@ const sideBar = [
     text: "Thống kê",
 
   },
-  {
-    id: 6,
-    link: "/admin/reviews",
-    text: "Đánh giá",
-  },
+  // {
+  //   id: 6,
+  //   link: "/admin/reviews",
+  //   text: "Đánh giá",
+  // },
 ];
 
 const Admin = () => {

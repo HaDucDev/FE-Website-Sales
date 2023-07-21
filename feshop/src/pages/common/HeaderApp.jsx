@@ -60,8 +60,19 @@ const HeaderApp = () => {
                       <>
                         <img src={JSON.parse(doneLogin).avatar ? JSON.parse(doneLogin).avatar : "https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676872862/avatar-default-9_rv6k1c.png"} alt='lỗi'
                           style={{ height: "40px", width: "40px", objectFit: "cover", borderRadius: "50%" }} />
-
                         <NavDropdown title={JSON.parse(doneLogin).username} id={`offcanvasNavbarDropdown-expand-${expand}`}>
+                          {
+
+                            (JSON.parse(doneLogin).roleName === "ROLE_ADMIN") ? (
+                              <>
+                                <NavDropdown.Item href="#action0" onClick={
+                                  (e) => {
+                                    e.preventDefault();
+                                    nav("/admin")
+                                  }
+                                }>Trang quản trị</NavDropdown.Item></>
+                            ) : ''
+                          }
                           <NavDropdown.Item href="#action3" onClick={
                             (e) => {
                               e.preventDefault();
