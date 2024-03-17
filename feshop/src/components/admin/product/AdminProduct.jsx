@@ -150,7 +150,7 @@ const AdminProduct = () => {
                 category: productDetail.category,
                 supplier: productDetail.supplier,
                 categoryId: productDetail.category.categoryId,
-                supplierId:productDetail.supplier.supplierId
+                supplierId: productDetail.supplier.supplierId
             });
             setDescriptionProduct(productDetail.descriptionProduct)
             setShowUpdateModal(true);
@@ -158,7 +158,7 @@ const AdminProduct = () => {
     }
 
     //update san pham
-    const handleUpdateProduct =() =>{
+    const handleUpdateProduct = () => {
         setIsSubmitting(true);// khoa nut
         setIsLoading(true);// mo quay tron
         let dataRequest = {
@@ -193,12 +193,12 @@ const AdminProduct = () => {
     }
 
     // xoa san pham
-    const comfirmDeleteProduct = (id) =>{
-        setProductById({...productById, productId: id})
+    const comfirmDeleteProduct = (id) => {
+        setProductById({ ...productById, productId: id })
         setComfirmModal(true);
     }
 
-    const handleDeleteProduct = () =>{
+    const handleDeleteProduct = () => {
         productService.deleteProductService(productById.productId).then((dataResponse) => {
             let dataShow = dataResponse.data;
             alert(dataShow["message"]);
@@ -266,7 +266,7 @@ const AdminProduct = () => {
                                 handleGetById(row.productId)
                             }
                         }>Xem</Button>
-                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteProduct(row.productId)}>XÓA</button> 
+                        <button style={{ marginLeft: "5px" }} className="btn btn-primary" onClick={() => comfirmDeleteProduct(row.productId)}>XÓA</button>
                     </div>
 
                 </>
@@ -306,6 +306,7 @@ const AdminProduct = () => {
                 subHeader
                 subHeaderComponent={
                     <>
+                        <Button style={{ marginRight: "10px" }} variant="outline-dark">XUẤT CSV</Button>
                         <input type="text" placeholder="search here" className="w-25 form-control"
                             value={intiText} onChange={(e) => setText(e.target.value)} />
                         <Button style={{ marginLeft: "10px" }} variant="outline-dark"
@@ -322,6 +323,7 @@ const AdminProduct = () => {
                                 getAllCategoryAndSupplier();//goi de them vo modal them
                                 setShowAddModal(true)
                             }}>THÊM</Button>
+
                     </>
                 }
                 subHeaderAlign="right"
@@ -506,7 +508,7 @@ const AdminProduct = () => {
                             type="text"
                             defaultValue={productById.productId}
                             readOnly
-                        />                   
+                        />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Tên sản phẩm</Form.Label>
@@ -735,7 +737,7 @@ const AdminProduct = () => {
                     <Modal.Title>Xác nhận</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p> {`Bạn có muốn xóa sản phẩm "${productById.productId}" không?`}</p>              
+                    <p> {`Bạn có muốn xóa sản phẩm "${productById.productId}" không?`}</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setComfirmModal(!confirmModal)}>

@@ -80,7 +80,7 @@ const ListProductCommon = () => {
                     {listProductSelling.map((item, index) => (
                         <Card key={index} className="card-container">
                             <div>
-                                <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd', width: "40%", float: "left" }} />
+                                <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd', width: "200px", float: "left" }} />
                                 <div style={{ backgroundColor: "blue", color: "white" }}>Giảm giá: {item.discount}%</div>
                                 <Card.Text className="card-text">Giá bán: {item.unitPrice - item.unitPrice * item.discount / 100}đ  <s>{item.unitPrice} đ</s></Card.Text>
                                 <Card.Text className="card-text">Đã bán: {item.sumQuantity} sản phẩm</Card.Text>
@@ -95,7 +95,7 @@ const ListProductCommon = () => {
                                 </div>
                             </div>
                             <Card.Body style={{ clear: "both" }}>
-                                <div style={{}}>{item.productName}</div>
+                                <div style={{fontSize:"15px"}}>{item.productName}</div>
                                 <Link to={`/product-detail/${item.productId}`} className="btn-click">
                                     <Button variant="primary" className="card-button">Chi tiết sản phẩm</Button>
                                 </Link>
@@ -109,7 +109,7 @@ const ListProductCommon = () => {
                     <Card key={index} className="card-container">
                         <Image src={item.productImage} fluid className="card-image" style={{ borderBottom: '2px solid #ddd' }} />
                         <Card.Body>
-                            <Card.Title className="card-title" style={{ height: "28%" }}>{item.productName}</Card.Title>
+                            <Card.Title className="card-title" style={{ height: "28%", fontSize:"15px" }}>{item.productName}</Card.Title>
                             <Card.Text className="card-text">{item.unitPrice} đ</Card.Text>
                             <Button variant="primary" className="card-button"
                                 onClick={() => addProductToCart(item.productId)}>Thêm vào giỏ hàng</Button>

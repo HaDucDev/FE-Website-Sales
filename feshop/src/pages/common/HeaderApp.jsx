@@ -34,7 +34,7 @@ const HeaderApp = () => {
       {['sm'].map((expand) => (
         <Navbar key={expand} bg="light" expand={expand} className="mb-3" style={{ zIndex: 100 }}>
           <Container fluid>
-            <Navbar.Brand href="#" onClick={(e) => { e.preventDefault(); nav("/") }}><img src="https://res.cloudinary.com/dkdyl2pcy/image/upload/v1676874555/hdshop_a8eqd5.png" alt='lỗi'
+            <Navbar.Brand href="#" onClick={(e) => { e.preventDefault(); nav("/") }}><img src="https://res.cloudinary.com/dyatpgcxn/image/upload/v1702689593/hdshop_yqzhf9.png" alt='lỗi'
               style={{ height: "40px", width: "100%", objectFit: "cover", borderRadius: "50%" }} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
