@@ -37,12 +37,18 @@ const deleteProductService = async (id) => {
     return response;
 }
 
+const getAllProductCSVService = async () => {
+    const response = await axios.get(API_COMMON + "product/download/file-product",{ headers: authHeaderJson() , responseType: 'blob' });
+    return response;
+}
+
 const productService = {
     getAllProductService,
     getProductById,
     createCProductService,
     updateProductService,
-    deleteProductService
+    deleteProductService,
+    getAllProductCSVService,
 }
 
 

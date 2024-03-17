@@ -210,6 +210,23 @@ const AdminProduct = () => {
         })
     }
 
+    // download csv
+    const handleDownloadProductCSV = async () => {
+        try {
+            const response = await productService.getAllProductCSVService();
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'data-product.csv');
+            document.body.appendChild(link);
+            link.click();
+            return response; // Trả về phản hồi từ API nếu cần
+        } catch (error) {
+            console.error('Error while downloading CSV file:', error);
+            throw error; // Ném lỗi nếu có lỗi xảy ra
+        }
+    };
+
     const colunmns = [
         {
             name: "Product id",
@@ -306,7 +323,7 @@ const AdminProduct = () => {
                 subHeader
                 subHeaderComponent={
                     <>
-                        <Button style={{ marginRight: "10px" }} variant="outline-dark">XUẤT CSV</Button>
+                        <Button style={{ marginRight: "10px" }} variant="outline-dark" onClick={handleDownloadProductCSV}>XUẤT CSV</Button>
                         <input type="text" placeholder="search here" className="w-25 form-control"
                             value={intiText} onChange={(e) => setText(e.target.value)} />
                         <Button style={{ marginLeft: "10px" }} variant="outline-dark"
